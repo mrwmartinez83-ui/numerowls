@@ -19,7 +19,7 @@ export interface AllProgress {
   [lessonId: string]: LessonProgress;
 }
 
-const STORAGE_KEY = "kangaroo_maths_progress";
+const STORAGE_KEY = "numerowls_progress";
 
 const defaultSection = (total: number): SectionProgress => ({
   attempted: 0,
