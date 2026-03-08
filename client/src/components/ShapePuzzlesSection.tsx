@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Lesson, ShapePuzzle } from "@/lib/lessonData";
+import { LessonProgress } from "@/hooks/useProgress";
 
 function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total: number) {
   const parts: string[] = [];
@@ -28,8 +29,9 @@ function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total:
   );
 }
 
-function PuzzleCard({ puzzle }: { puzzle: ShapePuzzle }) {
+function PuzzleCard({ puzzle, onAnswer }: { puzzle: ShapePuzzle; onAnswer: (c: boolean) => void }) {
   const [revealed, setRevealed] = useState(false);
+  const [answered, setAnswered] = useState(false);
 
   return (
     <div
@@ -76,7 +78,7 @@ function PuzzleCard({ puzzle }: { puzzle: ShapePuzzle }) {
 
       {/* Reveal */}
       {!revealed ? (
-        <button className="km-btn km-btn-teal" onClick={() => setRevealed(true)}>
+        <button className="km-btn km-btn-teal" onClick={() => { setRevealed(true); if (!answered) { setAnswered(true); onAnswer(true); } }}>
           👀 Show Answer
         </button>
       ) : (
@@ -142,12 +144,31 @@ function PuzzleCard({ puzzle }: { puzzle: ShapePuzzle }) {
   );
 }
 
-export default function ShapePuzzlesSection({ lesson }: { lesson: Lesson }) {
+interface Props {
+  lesson: Lesson;
+  lessonProgress: LessonProgress | null;
+  onAnswer: (isCorrect: boolean) => void;
+}
+
+export default function ShapePuzzlesSection({ lesson, lessonProgress, onAnswer }: Props) {
   const setA = lesson.shapePuzzles.filter((p) => p.difficulty === "A");
   const setB = lesson.shapePuzzles.filter((p) => p.difficulty === "B");
+  const sp = lessonProgress?.puzzles;
+  const pct = sp && sp.total > 0 ? Math.round((sp.correct / sp.total) * 100) : 0;
 
   return (
     <section id="puzzles">
+      {sp && sp.total > 0 && (
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+            <span style={{ fontWeight: 700, fontSize: 14, color: "#555" }}>Puzzles Progress</span>
+            <span style={{ fontWeight: 700, fontSize: 14, color: lesson.color }}>{sp.attempted}/{sp.total} solved</span>
+          </div>
+          <div style={{ background: "#e0e0e0", borderRadius: 99, height: 12, border: "2px solid #2D3436", overflow: "hidden" }}>
+            <div style={{ width: `${pct}%`, background: lesson.color, height: "100%", borderRadius: 99, transition: "width 0.5s ease" }} />
+          </div>
+        </div>
+      )}
       {/* Section header */}
       <div className="flex items-center gap-4 mb-6">
         <div
@@ -258,7 +279,7 @@ export default function ShapePuzzlesSection({ lesson }: { lesson: Lesson }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
           {setA.map((p) => (
-            <PuzzleCard key={p.id} puzzle={p} />
+            <PuzzleCard key={p.id} puzzle={p} onAnswer={onAnswer} />
           ))}
         </div>
       </div>
@@ -283,7 +304,7 @@ export default function ShapePuzzlesSection({ lesson }: { lesson: Lesson }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
           {setB.map((p) => (
-            <PuzzleCard key={p.id} puzzle={p} />
+            <PuzzleCard key={p.id} puzzle={p} onAnswer={onAnswer} />
           ))}
         </div>
       </div>

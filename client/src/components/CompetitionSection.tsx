@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Lesson, CompetitionQuestion } from "@/lib/lessonData";
+import { LessonProgress } from "@/hooks/useProgress";
 
 const POINT_COLORS: Record<number, { bg: string; border: string; shadow: string; label: string }> = {
   3: { bg: "#FF6B6B", border: "#c0392b", shadow: "#c0392b", label: "3 Points" },
@@ -7,9 +8,10 @@ const POINT_COLORS: Record<number, { bg: string; border: string; shadow: string;
   5: { bg: "#9B59B6", border: "#7d3c98", shadow: "#7d3c98", label: "5 Points" },
 };
 
-function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
+function QuestionCard({ q, index, onAnswer }: { q: CompetitionQuestion; index: number; onAnswer: (c: boolean) => void }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [hasAnswered, setHasAnswered] = useState(false);
   const colors = POINT_COLORS[q.points];
   const answered = selected !== null;
   const isCorrect = selected === q.correctLetter;
@@ -18,6 +20,10 @@ function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
     if (answered) return;
     setSelected(letter);
     setShowExplanation(true);
+    if (!hasAnswered) {
+      setHasAnswered(true);
+      onAnswer(letter === q.correctLetter);
+    }
   };
 
   const reset = () => {
@@ -80,12 +86,27 @@ function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
           fontWeight: 700,
           color: "#2D3436",
           lineHeight: 1.6,
-          marginBottom: 20,
+          marginBottom: q.svgDiagram ? 12 : 20,
           whiteSpace: "pre-line",
         }}
       >
         {q.text}
       </p>
+
+      {/* SVG Diagram */}
+      {q.svgDiagram && (
+        <div
+          style={{
+            background: "#f8f9fa",
+            border: "3px solid #e0e0e0",
+            borderRadius: 14,
+            padding: 12,
+            marginBottom: 16,
+            overflow: "hidden",
+          }}
+          dangerouslySetInnerHTML={{ __html: q.svgDiagram }}
+        />
+      )}
 
       {/* Options */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
@@ -157,10 +178,19 @@ function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
   );
 }
 
-export default function CompetitionSection({ lesson }: { lesson: Lesson }) {
+interface Props {
+  lesson: Lesson;
+  lessonProgress: LessonProgress | null;
+  onAnswer: (isCorrect: boolean) => void;
+}
+
+export default function CompetitionSection({ lesson, lessonProgress, onAnswer }: Props) {
   const q3 = lesson.competitionQuestions.filter((q) => q.points === 3);
   const q4 = lesson.competitionQuestions.filter((q) => q.points === 4);
   const q5 = lesson.competitionQuestions.filter((q) => q.points === 5);
+
+  const sp = lessonProgress?.competition;
+  const pct = sp && sp.attempted > 0 ? Math.round((sp.correct / sp.attempted) * 100) : 0;
 
   const groups = [
     { label: "3-Point Questions", emoji: "🟥", desc: "Warm-up — take your time!", color: "#FF6B6B", questions: q3, offset: 0 },
@@ -170,6 +200,24 @@ export default function CompetitionSection({ lesson }: { lesson: Lesson }) {
 
   return (
     <section id="competition">
+      {sp && sp.total > 0 && (
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+            <span style={{ fontWeight: 700, fontSize: 14, color: "#555" }}>Score</span>
+            <span style={{ fontWeight: 700, fontSize: 14, color: sp.attempted > 0 ? (pct >= 70 ? "#28a745" : "#FF6B6B") : "#555" }}>
+              {sp.correct}/{sp.attempted} correct ({sp.attempted > 0 ? pct : 0}%)
+            </span>
+          </div>
+          <div style={{ background: "#e0e0e0", borderRadius: 99, height: 12, border: "2px solid #2D3436", overflow: "hidden" }}>
+            <div style={{ width: `${pct}%`, background: pct >= 70 ? "#28a745" : "#FF6B6B", height: "100%", borderRadius: 99, transition: "width 0.5s ease" }} />
+          </div>
+          <div style={{ display: "flex", gap: 16, marginTop: 6 }}>
+            <span style={{ fontSize: 12, color: "#555", fontWeight: 600 }}>{sp.attempted}/{sp.total} attempted</span>
+            <span style={{ fontSize: 12, color: "#28a745", fontWeight: 700 }}>✅ {sp.correct} correct</span>
+            <span style={{ fontSize: 12, color: "#dc3545", fontWeight: 700 }}>❌ {sp.attempted - sp.correct} wrong</span>
+          </div>
+        </div>
+      )}
       {/* Section header */}
       <div className="flex items-center gap-4 mb-6">
         <div
@@ -222,7 +270,7 @@ export default function CompetitionSection({ lesson }: { lesson: Lesson }) {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
               {group.questions.map((q, i) => (
-                <QuestionCard key={q.id} q={q} index={group.offset + i} />
+                <QuestionCard key={q.id} q={q} index={group.offset + i} onAnswer={onAnswer} />
               ))}
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Lesson, HomeworkItem } from "@/lib/lessonData";
+import { LessonProgress } from "@/hooks/useProgress";
 
 function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total: number) {
   const parts: string[] = [];
@@ -18,9 +19,10 @@ function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total:
   );
 }
 
-function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
+function HomeworkCard({ item, index, onAnswer }: { item: HomeworkItem; index: number; onAnswer: (c: boolean) => void }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [hasAnswered, setHasAnswered] = useState(false);
 
   const isChallenge = item.type === "challenge";
   const isPuzzle = item.type === "puzzle";
@@ -31,6 +33,10 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
     if (selected !== null) return;
     setSelected(letter);
     setShowAnswer(true);
+    if (!hasAnswered) {
+      setHasAnswered(true);
+      onAnswer(letter === item.correctLetter);
+    }
   };
 
   const reset = () => {
@@ -89,6 +95,14 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
       <p style={{ fontSize: 17, fontWeight: 700, color: "#2D3436", lineHeight: 1.6, marginBottom: 16 }}>
         {item.text}
       </p>
+
+      {/* SVG Diagram */}
+      {item.svgDiagram && (
+        <div
+          style={{ background: "#f8f9fa", border: "3px solid #e0e0e0", borderRadius: 14, padding: 12, marginBottom: 16, overflow: "hidden" }}
+          dangerouslySetInnerHTML={{ __html: item.svgDiagram }}
+        />
+      )}
 
       {/* Puzzle equations */}
       {isPuzzle && item.emoji1 && item.emoji2 && item.row1 && item.row2 && (
@@ -172,7 +186,7 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
 
       {/* Puzzle reveal button */}
       {isPuzzle && !showAnswer && (
-        <button className="km-btn km-btn-teal" onClick={() => setShowAnswer(true)}>
+        <button className="km-btn km-btn-teal" onClick={() => { setShowAnswer(true); if (!hasAnswered) { setHasAnswered(true); onAnswer(true); } }}>
           👀 Show Answer
         </button>
       )}
@@ -239,13 +253,32 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
   );
 }
 
-export default function HomeworkSection({ lesson }: { lesson: Lesson }) {
+interface Props {
+  lesson: Lesson;
+  lessonProgress: LessonProgress | null;
+  onAnswer: (isCorrect: boolean) => void;
+}
+
+export default function HomeworkSection({ lesson, lessonProgress, onAnswer }: Props) {
   const puzzles = lesson.homeworkItems.filter((h) => h.type === "puzzle");
   const mcqs = lesson.homeworkItems.filter((h) => h.type === "mcq");
   const challenge = lesson.homeworkItems.filter((h) => h.type === "challenge");
+  const sp = lessonProgress?.homework;
+  const pct = sp && sp.total > 0 ? Math.round((sp.correct / sp.total) * 100) : 0;
 
   return (
     <section id="homework">
+      {sp && sp.total > 0 && (
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+            <span style={{ fontWeight: 700, fontSize: 14, color: "#555" }}>Homework Progress</span>
+            <span style={{ fontWeight: 700, fontSize: 14, color: lesson.color }}>{sp.correct}/{sp.total} completed</span>
+          </div>
+          <div style={{ background: "#e0e0e0", borderRadius: 99, height: 12, border: "2px solid #2D3436", overflow: "hidden" }}>
+            <div style={{ width: `${pct}%`, background: lesson.color, height: "100%", borderRadius: 99, transition: "width 0.5s ease" }} />
+          </div>
+        </div>
+      )}
       {/* Section header */}
       <div className="flex items-center gap-4 mb-6">
         <div
@@ -295,7 +328,7 @@ export default function HomeworkSection({ lesson }: { lesson: Lesson }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
           {puzzles.map((item, i) => (
-            <HomeworkCard key={item.id} item={item} index={i} />
+            <HomeworkCard key={item.id} item={item} index={i} onAnswer={onAnswer} />
           ))}
         </div>
       </div>
@@ -319,7 +352,7 @@ export default function HomeworkSection({ lesson }: { lesson: Lesson }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
           {mcqs.map((item, i) => (
-            <HomeworkCard key={item.id} item={item} index={puzzles.length + i} />
+            <HomeworkCard key={item.id} item={item} index={puzzles.length + i} onAnswer={onAnswer} />
           ))}
         </div>
       </div>
@@ -343,7 +376,7 @@ export default function HomeworkSection({ lesson }: { lesson: Lesson }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
           {challenge.map((item, i) => (
-            <HomeworkCard key={item.id} item={item} index={puzzles.length + mcqs.length + i} />
+            <HomeworkCard key={item.id} item={item} index={puzzles.length + mcqs.length + i} onAnswer={onAnswer} />
           ))}
         </div>
       </div>
