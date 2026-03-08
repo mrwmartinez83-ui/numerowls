@@ -7,6 +7,15 @@ import { useParams } from "wouter";
 import type { Question } from "@shared/questionBank";
 import { toast } from "sonner";
 
+type Difficulty = 0 | 1 | 2 | 3; // 0 = All
+
+const DIFFICULTY_CONFIG = {
+  0: { label: "All",    icon: "✨", color: "#B0C4DE", bg: "rgba(176,196,222,0.12)", border: "rgba(176,196,222,0.3)" },
+  1: { label: "Bronze", icon: "🥉", color: "#CD7F32", bg: "rgba(205,127,50,0.12)",  border: "rgba(205,127,50,0.4)" },
+  2: { label: "Silver", icon: "🥈", color: "#C0C0C0", bg: "rgba(192,192,192,0.12)", border: "rgba(192,192,192,0.4)" },
+  3: { label: "Gold",   icon: "🥇", color: "#FFD700", bg: "rgba(255,215,0,0.12)",   border: "rgba(255,215,0,0.4)" },
+} as const;
+
 export default function SkillPractice() {
   const { skillId } = useParams<{ skillId?: string }>();
   const { user, isAuthenticated } = useAuth();
@@ -15,8 +24,9 @@ export default function SkillPractice() {
   const [selectedSkill, setSelectedSkill] = useState<import("@shared/questionBank").SkillId>(
     (skillId as import("@shared/questionBank").SkillId) ?? SKILLS[0].id
   );
-  // Pre-fill year group from profile
   const [yearGroup, setYearGroup] = useState(user?.yearGroup ?? 2);
+  const [difficulty, setDifficulty] = useState<Difficulty>(0);
+  const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
@@ -40,16 +50,29 @@ export default function SkillPractice() {
     },
   });
 
-  // ── Reset on skill/year change ─────────────────────────────────────────────
+  // ── Load questions on skill/year change ───────────────────────────────────
   useEffect(() => {
     const qs = getQuestionsForSkill(selectedSkill, yearGroup);
+    setAllQuestions(qs);
+    resetSession(qs, difficulty);
+  }, [selectedSkill, yearGroup]);
+
+  // ── Filter on difficulty change ────────────────────────────────────────────
+  useEffect(() => {
+    const filtered = difficulty === 0
+      ? allQuestions
+      : allQuestions.filter(q => q.difficulty === difficulty);
+    resetSession(filtered, difficulty);
+  }, [difficulty]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function resetSession(qs: Question[], _diff: Difficulty) {
     setQuestions(qs);
     setAnswers({});
     setRevealed({});
     setScore({ correct: 0, attempted: 0 });
     sessionStartRef.current = Date.now();
     sessionSavedRef.current = false;
-  }, [selectedSkill, yearGroup]);
+  }
 
   // ── Save session result when all questions answered ────────────────────────
   useEffect(() => {
@@ -72,8 +95,6 @@ export default function SkillPractice() {
       certificateEarned: false,
     });
 
-    // Award "first_question" badge on first ever practice
-    saveResult.mutate; // already called above
     if (score.correct === questions.length && questions.length >= 3) {
       toast.success(`🌟 Perfect practice session! +${pts} points`);
     }
@@ -95,6 +116,10 @@ export default function SkillPractice() {
   const skill = SKILLS.find(s => s.id === selectedSkill)!;
   const allAnswered = questions.length > 0 && questions.every(q => revealed[q.id]);
 
+  // Count questions per difficulty for the toggle badges
+  const diffCounts: Record<number, number> = { 0: allQuestions.length, 1: 0, 2: 0, 3: 0 };
+  allQuestions.forEach(q => { diffCounts[q.difficulty] = (diffCounts[q.difficulty] ?? 0) + 1; });
+
   return (
     <div style={{ minHeight: "100vh", background: "#0F1B2D" }}>
       <NavBar />
@@ -110,7 +135,6 @@ export default function SkillPractice() {
               Answer every question to save your progress to the dashboard.
             </p>
           </div>
-          {/* Live score badge */}
           {score.attempted > 0 && (
             <div style={{
               padding: "10px 20px", borderRadius: "12px",
@@ -124,8 +148,8 @@ export default function SkillPractice() {
           )}
         </div>
 
-        {/* Controls */}
-        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "32px" }}>
+        {/* Controls row */}
+        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "flex-end", marginBottom: "24px" }}>
           <div>
             <label style={{ fontSize: "12px", fontWeight: 700, color: "#B0C4DE", display: "block", marginBottom: "6px" }}>SKILL</label>
             <select value={selectedSkill} onChange={e => setSelectedSkill(e.target.value as import("@shared/questionBank").SkillId)} className="no-select">
@@ -138,6 +162,53 @@ export default function SkillPractice() {
               {[1,2,3,4,5,6].map(y => <option key={y} value={y}>Year {y}</option>)}
             </select>
           </div>
+        </div>
+
+        {/* Difficulty toggle */}
+        <div style={{ marginBottom: "32px" }}>
+          <label style={{ fontSize: "12px", fontWeight: 700, color: "#B0C4DE", display: "block", marginBottom: "10px" }}>
+            DIFFICULTY
+          </label>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            {([0, 1, 2, 3] as Difficulty[]).map((d) => {
+              const cfg = DIFFICULTY_CONFIG[d];
+              const isActive = difficulty === d;
+              const count = diffCounts[d] ?? 0;
+              return (
+                <button
+                  key={d}
+                  onClick={() => setDifficulty(d)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: "7px",
+                    padding: "9px 18px", borderRadius: "10px", cursor: "pointer",
+                    fontWeight: 700, fontSize: "14px",
+                    background: isActive ? cfg.bg : "rgba(255,255,255,0.04)",
+                    border: `2px solid ${isActive ? cfg.border : "rgba(255,255,255,0.08)"}`,
+                    color: isActive ? cfg.color : "#6B7F99",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  <span style={{ fontSize: "16px" }}>{cfg.icon}</span>
+                  <span>{cfg.label}</span>
+                  <span style={{
+                    fontSize: "11px", fontWeight: 800,
+                    padding: "1px 7px", borderRadius: "20px",
+                    background: isActive ? `${cfg.border}` : "rgba(255,255,255,0.06)",
+                    color: isActive ? cfg.color : "#6B7F99",
+                  }}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {difficulty !== 0 && (
+            <p style={{ fontSize: "12px", color: "#6B7F99", marginTop: "8px", marginBottom: 0 }}>
+              {difficulty === 1 && "🥉 Bronze — warm-up questions to build confidence"}
+              {difficulty === 2 && "🥈 Silver — standard competition-level questions"}
+              {difficulty === 3 && "🥇 Gold — challenging questions for top competitors"}
+            </p>
+          )}
         </div>
 
         {/* Session complete banner */}
@@ -158,13 +229,10 @@ export default function SkillPractice() {
             </div>
             <button className="no-btn-gold" style={{ whiteSpace: "nowrap" }}
               onClick={() => {
-                sessionSavedRef.current = false;
-                const qs = getQuestionsForSkill(selectedSkill, yearGroup);
-                setQuestions(qs);
-                setAnswers({});
-                setRevealed({});
-                setScore({ correct: 0, attempted: 0 });
-                sessionStartRef.current = Date.now();
+                const qs = difficulty === 0
+                  ? getQuestionsForSkill(selectedSkill, yearGroup)
+                  : getQuestionsForSkill(selectedSkill, yearGroup).filter(q => q.difficulty === difficulty);
+                resetSession(qs, difficulty);
               }}>
               Try Again
             </button>
@@ -176,14 +244,21 @@ export default function SkillPractice() {
           {questions.length === 0 ? (
             <div className="no-card" style={{ textAlign: "center", padding: "48px" }}>
               <div style={{ fontSize: "48px", marginBottom: "12px" }}>🦉</div>
-              <p style={{ color: "#B0C4DE" }}>No questions found for this skill and year group yet. Try another combination!</p>
+              <p style={{ color: "#B0C4DE", marginBottom: "16px" }}>
+                No {difficulty !== 0 ? DIFFICULTY_CONFIG[difficulty].label : ""} questions found for this skill and year group.
+              </p>
+              <button className="no-btn-ghost" onClick={() => setDifficulty(0)}>
+                Show all difficulties
+              </button>
             </div>
           ) : questions.map((q, qi) => {
             const chosen = answers[q.id];
             const isRevealed = revealed[q.id];
+            const diffCfg = DIFFICULTY_CONFIG[q.difficulty as Difficulty];
             return (
               <div key={q.id} className="no-card">
                 <div style={{ display: "flex", gap: "12px", alignItems: "flex-start", marginBottom: "16px" }}>
+                  {/* Question number */}
                   <div style={{
                     minWidth: "28px", height: "28px", borderRadius: "8px",
                     background: isRevealed ? (chosen === q.answer ? "rgba(46,204,113,0.2)" : "rgba(231,76,60,0.2)") : "rgba(245,166,35,0.15)",
@@ -193,6 +268,7 @@ export default function SkillPractice() {
                   }}>
                     {isRevealed ? (chosen === q.answer ? "✓" : "✗") : qi + 1}
                   </div>
+
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: "16px", fontWeight: 700, color: "white", lineHeight: 1.5, marginBottom: q.diagram ? "16px" : "0" }}>
                       {q.text}
@@ -202,21 +278,27 @@ export default function SkillPractice() {
                         dangerouslySetInnerHTML={{ __html: q.diagram }} />
                     )}
                   </div>
-                  {q.points && (
-                    <div style={{ fontSize: "12px", fontWeight: 700, color: "#9B59B6", background: "rgba(155,89,182,0.12)", padding: "3px 8px", borderRadius: "6px", whiteSpace: "nowrap" }}>
-                      {q.points}pt
-                    </div>
-                  )}
+
+                  {/* Difficulty badge */}
+                  <div style={{
+                    fontSize: "11px", fontWeight: 700,
+                    padding: "3px 8px", borderRadius: "6px", whiteSpace: "nowrap",
+                    background: diffCfg.bg, border: `1px solid ${diffCfg.border}`, color: diffCfg.color,
+                  }}>
+                    {diffCfg.icon} {diffCfg.label}
+                  </div>
                 </div>
+
+                {/* Answer options */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                   {q.options.map((opt) => {
                     let bg     = "rgba(255,255,255,0.04)";
                     let border = "1.5px solid rgba(255,255,255,0.1)";
                     let color  = "white";
                     if (isRevealed) {
-                      if (opt === q.answer)   { bg = "rgba(46,204,113,0.15)";  border = "1.5px solid #2ECC71"; color = "#2ECC71"; }
-                      else if (opt === chosen) { bg = "rgba(231,76,60,0.15)";  border = "1.5px solid #E74C3C"; color = "#E74C3C"; }
-                    } else if (chosen === opt) { bg = "rgba(245,166,35,0.12)"; border = "1.5px solid #F5A623"; }
+                      if (opt === q.answer)    { bg = "rgba(46,204,113,0.15)";  border = "1.5px solid #2ECC71"; color = "#2ECC71"; }
+                      else if (opt === chosen) { bg = "rgba(231,76,60,0.15)";   border = "1.5px solid #E74C3C"; color = "#E74C3C"; }
+                    } else if (chosen === opt) { bg = "rgba(245,166,35,0.12)";  border = "1.5px solid #F5A623"; }
                     return (
                       <button key={opt} onClick={() => handleAnswer(q, opt)}
                         style={{ padding: "10px 14px", borderRadius: "10px", background: bg, border, color, fontSize: "14px", fontWeight: 600, cursor: isRevealed ? "default" : "pointer", textAlign: "left", transition: "all 0.15s" }}>
@@ -225,6 +307,8 @@ export default function SkillPractice() {
                     );
                   })}
                 </div>
+
+                {/* Explanation */}
                 {isRevealed && (
                   <div style={{ marginTop: "12px", padding: "10px 14px", borderRadius: "10px", background: chosen === q.answer ? "rgba(46,204,113,0.08)" : "rgba(231,76,60,0.08)", fontSize: "13px", color: "#B0C4DE", lineHeight: 1.5 }}>
                     {chosen === q.answer ? "✅ " : "❌ "}{q.explanation}

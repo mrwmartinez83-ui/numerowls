@@ -1354,6 +1354,177 @@ const timeQuestions: Question[] = [
   },
 ];
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AMC-8-INSPIRED QUESTIONS (2026) — adapted for primary pupils
+// Drawn from 2026 AMC 8 Problems 1–19; numbers and contexts simplified
+// ─────────────────────────────────────────────────────────────────────────────
+const amc8Questions: Question[] = [
+  // ── AMC 8 P1 style: alternating +/− sequence ──
+  {
+    id: "amc_y3_01", skill: "addition", year: 3, difficulty: 2, type: "mcq",
+    text: "What is the value of 1 + 2 − 3 + 4 + 5 − 6?",
+    options: ["1", "2", "3", "4", "5"],
+    answer: "3", explanation: "Group in threes: (1+2−3)=0, (4+5−6)=3. Total = 0 + 3 = 3.", points: 3,
+  },
+  {
+    id: "amc_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    text: "What is the value of 1 + 2 − 3 + 4 + 5 − 6 + 7 + 8 − 9?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "9", explanation: "Group in threes: (1+2−3)=0, (4+5−6)=3, (7+8−9)=6. Total = 0+3+6 = 9.", points: 4,
+  },
+  {
+    id: "amc_y5_01", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    text: "What is the value of 1 + 2 − 3 + 4 + 5 − 6 + 7 + 8 − 9 + 10 + 11 − 12?",
+    options: ["15", "16", "17", "18", "19"],
+    answer: "18", explanation: "Group in threes: (1+2−3)=0, (4+5−6)=3, (7+8−9)=6, (10+11−12)=9. Total = 0+3+6+9 = 18.", points: 5,
+  },
+  // ── AMC 8 P2 style: number grid sums ──
+  {
+    id: "amc_y2_01", skill: "addition", year: 2, difficulty: 1, type: "mcq",
+    text: "In a 3x3 grid, the centre square has the number 5. Every other square has the number 2. What is the sum of all 9 numbers?",
+    options: ["18", "19", "20", "21", "22"],
+    answer: "21", explanation: "8 outer squares x 2 = 16. Centre = 5. Total = 16 + 5 = 21.", points: 3,
+  },
+  {
+    id: "amc_y3_04", skill: "addition", year: 3, difficulty: 2, type: "mcq",
+    text: "In a 3x3 grid, the centre square has the number 3. The 4 edge squares each have the number 2. The 4 corner squares each have the number 1. What is the sum of all 9 numbers?",
+    options: ["13", "14", "15", "16", "17"],
+    answer: "15", explanation: "Centre: 3. Edges: 4 x 2 = 8. Corners: 4 x 1 = 4. Total = 3 + 8 + 4 = 15.", points: 3,
+  },
+  // ── AMC 8 P3 style: perimeter of shapes ──
+  {
+    id: "amc_y3_03", skill: "shapes", year: 3, difficulty: 1, type: "mcq",
+    text: "A piece of wire is 24 cm long. It is bent into a square. What is the side length of the square?",
+    options: ["4 cm", "5 cm", "6 cm", "7 cm", "8 cm"],
+    answer: "6 cm", explanation: "A square has 4 equal sides. 24 / 4 = 6 cm per side.", points: 3,
+  },
+  {
+    id: "amc_y4_05", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    text: "A piece of wire is 30 cm long. It is bent into a regular hexagon (6 equal sides). What is the side length?",
+    options: ["4 cm", "5 cm", "6 cm", "7 cm", "8 cm"],
+    answer: "5 cm", explanation: "30 / 6 = 5 cm per side.", points: 3,
+  },
+  {
+    id: "amc_y5_09", skill: "shapes", year: 5, difficulty: 2, type: "mcq",
+    text: "A wire of length 36 cm is bent into a right triangle. The three sides are in the ratio 3:4:5. What is the length of the longest side?",
+    options: ["10 cm", "12 cm", "15 cm", "18 cm", "20 cm"],
+    answer: "15 cm", explanation: "The ratio 3:4:5 adds to 12 parts. Scale factor = 36 / 12 = 3. Longest side = 5 x 3 = 15 cm.", points: 4,
+  },
+  // ── AMC 8 P4 style: percentage change ──
+  {
+    id: "amc_y5_02", skill: "fractions", year: 5, difficulty: 2, type: "mcq",
+    text: "Priya's pocket money decreased by 20% in January, then increased by 50% in February. Her pocket money is now what percentage of the original amount?",
+    options: ["80%", "90%", "100%", "110%", "120%"],
+    answer: "120%", explanation: "After 20% decrease: 80% remains. After 50% increase on 80%: 80% x 1.5 = 120%.", points: 4,
+  },
+  {
+    id: "amc_y6_01", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
+    text: "A shop reduces a price by 25%, then increases the sale price by 20%. The final price is what percentage of the original price?",
+    options: ["80%", "85%", "90%", "95%", "100%"],
+    answer: "90%", explanation: "After 25% decrease: 75% remains. After 20% increase: 75% x 1.2 = 90%.", points: 5,
+  },
+  // ── AMC 8 P5 style: speed/distance/time with a break ──
+  {
+    id: "amc_y5_03", skill: "measurement", year: 5, difficulty: 2, type: "mcq",
+    text: "A cyclist rides 60 km, stopping only for one rest break. The total trip takes 3 hours and her average cycling speed is 25 km/h. How long (in minutes) was her rest break?",
+    options: ["12 min", "24 min", "30 min", "36 min", "48 min"],
+    answer: "36 min", explanation: "Cycling time = 60 / 25 = 2.4 hours = 144 minutes. Total time = 3 hours = 180 minutes. Rest = 180 - 144 = 36 minutes.", points: 4,
+  },
+  {
+    id: "amc_y6_02", skill: "measurement", year: 6, difficulty: 3, type: "mcq",
+    text: "A car travels 100 miles on a motorway. The total journey time is 2 hours 30 minutes, including a 30-minute stop. What was the average driving speed in miles per hour?",
+    options: ["40 mph", "45 mph", "50 mph", "55 mph", "60 mph"],
+    answer: "50 mph", explanation: "Driving time = 2 h 30 min - 30 min = 2 hours. Speed = 100 / 2 = 50 mph.", points: 5,
+  },
+  // ── AMC 8 P6 style: area of a border/frame ──
+  {
+    id: "amc_y4_02", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    text: "A rectangular garden is 10 m long and 6 m wide. A path 1 m wide runs all the way around the inside edge. What is the area of the path?",
+    options: ["24 m2", "26 m2", "28 m2", "30 m2", "32 m2"],
+    answer: "28 m2", explanation: "Total area = 10 x 6 = 60 m2. The inner garden is (10-2) x (6-2) = 8 x 4 = 32 m2. Path area = 60 - 32 = 28 m2.", points: 4,
+  },
+  {
+    id: "amc_y5_04", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    text: "A rectangular field is 10 m long and 8 m wide. A farmer can reach any fruit within 1 m of the edge. What fraction of the field can the farmer reach?",
+    options: ["1/4", "2/5", "1/2", "3/5", "3/4"],
+    answer: "2/5", explanation: "Total area = 10 x 8 = 80 m2. Inner area (not reachable) = (10-2) x (8-2) = 8 x 6 = 48 m2. Reachable = 80 - 48 = 32 m2. Fraction = 32/80 = 2/5.", points: 5,
+  },
+  // ── AMC 8 P8 style: smallest number satisfying a percentage ──
+  {
+    id: "amc_y5_05", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
+    text: "In a class survey, exactly 40% of pupils said they liked broccoli. What is the smallest number of pupils who could have been surveyed?",
+    options: ["4", "5", "8", "10", "20"],
+    answer: "5", explanation: "40% = 2/5. The total must be a multiple of 5. The smallest is 5 (with 2 pupils liking broccoli).", points: 4,
+  },
+  {
+    id: "amc_y6_03", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
+    text: "Exactly 35% of people at a party said they liked jazz music. What is the fewest number of people who could have been at the party?",
+    options: ["7", "14", "20", "35", "100"],
+    answer: "20", explanation: "35% = 7/20. The total must be a multiple of 20. The smallest is 20 (with 7 people liking jazz).", points: 5,
+  },
+  // ── AMC 8 P10 style: ordering by clues (logic/deduction) ──
+  {
+    id: "amc_y3_02", skill: "logic", year: 3, difficulty: 2, type: "mcq",
+    text: "Five friends ran a race: Ali, Beth, Cal, Dan, and Ed. Cal finished 1st. Ed finished 5th. Dan finished 3rd. Ali finished 2 places behind Beth. In what place did Beth finish?",
+    options: ["1st", "2nd", "3rd", "4th", "5th"],
+    answer: "2nd", explanation: "Cal=1st, Dan=3rd, Ed=5th. Remaining places: 2nd and 4th for Beth and Ali. Ali is 2 places behind Beth, so Beth=2nd and Ali=4th.", points: 3,
+  },
+  {
+    id: "amc_y4_03", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    text: "Five children finished a spelling test: Asha, Ben, Cara, Dev, and Eve. Ben scored 3 more than Dev. Cara scored 2 less than Ben. Eve scored the same as Dev. Asha scored 1 more than Cara. Who scored the most?",
+    options: ["Asha", "Ben", "Cara", "Dev", "Eve"],
+    answer: "Ben", explanation: "Let Dev = d. Ben = d+3. Cara = d+1. Eve = d. Asha = d+2. Ben (d+3) is the highest score.", points: 4,
+  },
+  {
+    id: "amc_y5_06", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    text: "Five runners finished a race: Luke, Mel, Nico, Olivia, and Pedro. Nico finished 11 minutes behind Pedro. Olivia finished 2 minutes ahead of Mel, but 3 minutes behind Pedro. Olivia finished 6 minutes ahead of Luke. Who finished fourth?",
+    options: ["Luke", "Mel", "Nico", "Olivia", "Pedro"],
+    answer: "Luke", explanation: "Times from Pedro: Pedro=0, Olivia=+3, Mel=+5, Luke=+9, Nico=+11. Order: Pedro, Olivia, Mel, Luke, Nico. Luke is 4th.", points: 5,
+  },
+  // ── AMC 8 P14 style: equally spaced numbers ──
+  {
+    id: "amc_y4_04", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    text: "Three equally spaced numbers are written in order. The sum of the first and second is 14. The sum of the second and third is 22. What is the sum of all three numbers?",
+    options: ["25", "26", "27", "28", "29"],
+    answer: "27", explanation: "Let the numbers be a, a+d, a+2d. Then 2a+d=14 and 2a+3d=22. Subtracting: 2d=8, d=4. Then a=5. Numbers: 5, 9, 13. Sum = 27.", points: 4,
+  },
+  {
+    id: "amc_y5_07", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    text: "Three equally spaced integers are on a number line. The sum of the first two is 40 and the sum of the last two is 60. What is the sum of all three?",
+    options: ["70", "75", "80", "85", "90"],
+    answer: "75", explanation: "Let the numbers be a, a+d, a+2d. First two: 2a+d=40. Last two: 2a+3d=60. Subtract: 2d=20, d=10. Then a=15. Numbers: 15, 25, 35. Sum = 75.", points: 5,
+  },
+  // ── AMC 8 P7 style: fraction of total from one part ──
+  {
+    id: "amc_y5_08", skill: "fractions", year: 5, difficulty: 2, type: "mcq",
+    text: "An electric scooter uses 1/3 of its full battery to travel 10 miles. How many miles can the scooter travel on a full battery?",
+    options: ["20 miles", "25 miles", "30 miles", "35 miles", "40 miles"],
+    answer: "30 miles", explanation: "1/3 of the battery covers 10 miles. So a full battery covers 10 x 3 = 30 miles.", points: 4,
+  },
+  // ── AMC 8 P19 style: dog fetching a ball (ratio of speeds) ──
+  {
+    id: "amc_y6_04", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    text: "Sam throws a ball to a tree 30 m away and keeps walking. His dog Rex runs 3 times as fast as Sam walks. Rex fetches the ball and runs back to Sam. What fraction of the 30 m has Sam walked by the time Rex returns?",
+    options: ["1/4", "1/3", "1/2", "2/3", "3/4"],
+    answer: "1/2", explanation: "Together Sam and Rex cover 2 x 30 = 60 m total. Rex runs 3x as fast, so Sam covers 60 / (1+3) x 1 = 15 m. Fraction = 15/30 = 1/2.", points: 5,
+  },
+  // ── AMC 8 P17 style: seating arrangements ──
+  {
+    id: "amc_y6_05", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    text: "Three children - Anna, Ben, and Cara - sit in a row. They rearrange so that no child sits next to anyone they sat next to before. How many different new arrangements are possible?",
+    options: ["1", "2", "3", "4", "5"],
+    answer: "2", explanation: "Original: A B C. Pairs who were neighbours: (A,B) and (B,C). New arrangements must avoid both pairs. Only valid: C A B and B C A. That is 2 arrangements.", points: 5,
+  },
+  // ── AMC 8 P20 style: coin stacking combinations ──
+  {
+    id: "amc_y5_10", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    text: "Gold coins are 2 mm thick and silver coins are 3 mm thick. In how many different ways (order matters) can you make a stack exactly 6 mm tall?",
+    options: ["1", "2", "3", "4", "5"],
+    answer: "2", explanation: "Option 1: 3 gold coins (GGG) = 6 mm. Option 2: 2 silver coins (SS) = 6 mm. No other whole-number combinations work. Total = 2 ways.", points: 5,
+  },
+];
+
 // ─── Derived exports ───────────────────────────────────────────────────────
 
 export const QUESTIONS: Question[] = [
@@ -1366,6 +1537,7 @@ export const QUESTIONS: Question[] = [
   ...puzzleQuestions,
   ...measurementQuestions,
   ...timeQuestions,
+  ...amc8Questions,
 ];
 
 export const ALL_QUESTIONS: Question[] = QUESTIONS;
@@ -1395,7 +1567,7 @@ export function getSkillById(skillId: SkillId): Skill | undefined {
   return SKILLS.find(s => s.id === skillId);
 }
 
-// Alias for backwards compatibility — accepts optional year parameter
+// Alias for backwards compatibility - accepts optional year parameter
 export function getQuestionsForSkill(skillId: SkillId, year?: number): Question[] {
   if (year) return getQuestionsBySkillAndYear(skillId, year);
   return getQuestionsBySkill(skillId);
