@@ -1,83 +1,76 @@
-# Kangaroo Maths Lesson Pack — Design Ideas
+# NumerOwls — Platform Plan & Brand Guide
 
-## Response 1
-<response>
-<text>
-**Design Movement:** Retro Arcade / Game Cartridge UI
+## Brand Identity
+- **Name:** NumerOwls
+- **Tagline:** "Be wise. Be sharp. Be a NumerOwl."
+- **Mascot:** Ollie the Owl — a friendly, wide-eyed owl wearing a graduation cap, holding a pencil
+- **Domain:** NumerOwls.com
 
-**Core Principles:**
-- Pixel-art inspired borders and chunky UI elements
-- Bright primary colours on a dark navy background
-- Everything feels like a "level" in a video game
-- Score/progress tracking metaphors throughout
+## Design Philosophy: "Midnight Academy"
+A rich, deep-night sky aesthetic — deep navy/indigo backgrounds with warm amber/gold accents,
+star/moon motifs, and a sense of a magical school for brilliant young mathematicians.
+Feels premium, not childish — like a real competition platform.
 
-**Color Philosophy:** Deep navy (#0F1B2D) background with neon coral (#FF4757), electric teal (#00D2D3), and sunshine yellow (#FFF200) as accent colours. The darkness creates contrast that makes the bright colours pop like a retro game screen.
+### Color Palette (OKLCH for Tailwind 4)
+- Background: #0F1B2D (deep navy)
+- Surface card: #1A2E4A
+- Surface hover: #243B55
+- Primary Accent: #F5A623 (warm amber/gold)
+- Secondary Accent: #4ECDC4 (teal)
+- Success: #2ECC71
+- Error: #E74C3C
+- Text Primary: #FFFFFF
+- Text Secondary: #B0C4DE (light steel blue)
+- Star/Sparkle: #FFD700
+- Purple accent: #9B59B6
 
-**Layout Paradigm:** Vertical "level" scroll — each section is a distinct "level" with a numbered badge. Wide asymmetric cards with thick pixel-style borders.
+### Typography
+- Display + Body: "Nunito" (rounded, friendly, readable for children)
+- Numbers/Code: "Space Grotesk" (crisp maths numbers)
 
-**Signature Elements:** Pixel-art kangaroo mascot, chunky 4px solid borders with offset box shadows, "LEVEL 1 / LEVEL 2" section headers.
+### Signature Elements
+- Owl mascot SVG
+- Star/sparkle decorations (✦ ✧ ⭐)
+- Gold badge/medal motifs
+- Night sky gradient backgrounds
+- Subtle constellation dot patterns on hero sections
 
-**Interaction Philosophy:** Clicking answers triggers a "coin collect" animation. Correct answers show a green flash; wrong answers show a red shake.
+## Page Structure (Routes via Wouter)
+1. `/` — Landing page (hero with Ollie, features, how it works, CTA)
+2. `/practice` — Practice Arena (lesson tabs: Numbers, Shapes, Logic, Mock)
+3. `/starter` — Starter Activity (separate warm-up page, "Crack the Code")
+4. `/badges` — Badge cabinet + progress dashboard
+5. `/compete` — Coming Soon placeholder
 
-**Animation:** Entrance animations with a "slide-in from left" effect per card. Hover states lift cards with a shadow shift.
+## Badge System
+Badges earned by completing sections and hitting score thresholds:
 
-**Typography System:** "Press Start 2P" (Google Fonts) for headers (pixel font), "Nunito" for body text. Headers at 24px, body at 16px.
-</text>
-<probability>0.07</probability>
-</response>
+### Tier 1 — Bronze (easy to earn, encouraging)
+- 🦉 "First Hoot" — Complete your first starter activity
+- 🔥 "On Fire" — 3 correct competition answers in a row
+- 🧩 "Puzzle Starter" — Solve your first shape puzzle
 
-## Response 2
-<response>
-<text>
-**Design Movement:** Constructivist Poster / Bold Geometric
+### Tier 2 — Silver (moderate effort)
+- ⭐ "Star Pupil" — Get 5 competition questions correct in one lesson
+- 🎯 "Sharp Shooter" — Get 10 competition questions correct total
+- 📚 "Bookworm" — Complete all homework in any lesson
 
-**Core Principles:**
-- Strong diagonal lines and geometric shapes as structural elements
-- Flat colour blocks with no gradients
-- Typography as a primary visual element
-- High contrast black outlines on everything
+### Tier 3 — Gold (real achievement)
+- 🏆 "Top of the Tree" — Score 100% on any full lesson
+- 💎 "Diamond Owl" — Complete all homework across all 4 lessons
+- 🌙 "Night Owl" — Complete all 4 lessons
+- 🌟 "Gold Standard" — Score 80%+ on Lesson 4 Mock Competition
 
-**Color Philosophy:** Warm cream (#FDFBF7) background with bold coral (#FF6B6B), teal (#4ECDC4), and charcoal (#2D3436). Inspired by Bauhaus educational posters — serious but playful.
+## SVG Diagram Rules
+- ADD diagrams for: counting objects, balance scales, clock faces, sharing/grouping, 
+  grid/pattern questions, spatial arrangements, frog/animal jumps
+- DO NOT add for: pure number sequences, arithmetic, simple word problems that are clear without a visual
+- Number lines: viewBox min 320px wide, numbers spaced 35px+ apart, font-size ≤ 11px for labels,
+  always test at max-width:320px to avoid overlap
 
-**Layout Paradigm:** Asymmetric grid with large section numbers as decorative elements. Cards have thick 3-4px borders and solid offset drop shadows (no blur).
-
-**Signature Elements:** Large decorative numerals behind section titles, thick-bordered cards with solid colour shadows, bold geometric dividers.
-
-**Interaction Philosophy:** Answers are revealed by clicking "Show Answer" buttons. Multiple choice options highlight on hover with a colour fill.
-
-**Animation:** Subtle scale-up on card hover. Answer reveal uses a smooth height expansion.
-
-**Typography System:** "Fredoka One" for display/headers, "Quicksand" for body. Playful but structured.
-</text>
-<probability>0.08</probability>
-</response>
-
-## Response 3
-<response>
-<text>
-**Design Movement:** Sticker-Book / Scrapbook Collage
-
-**Core Principles:**
-- Elements appear slightly rotated as if stuck on a page
-- Textured paper background
-- Handwritten-style annotations alongside printed text
-- Warm, tactile feel
-
-**Color Philosophy:** Off-white (#FFF8F0) paper texture background, with pastel accents — mint (#B8F0E6), lavender (#D4B8F0), peach (#F0C8B8). Feels like a child's exercise book.
-
-**Signature Elements:** Slightly rotated cards, washi-tape style decorative strips at the top of sections, pencil-sketch style borders.
-
-**Interaction Philosophy:** Answers hidden under a "sticky note" that flips up on click.
-
-**Animation:** Cards enter with a slight rotation settle. Sticky notes flip with a CSS 3D transform.
-
-**Typography System:** "Caveat" (handwritten) for labels and annotations, "Nunito" for question text.
-</text>
-<probability>0.06</probability>
-</response>
-
----
-
-## Chosen Design: Response 2 — Constructivist Poster / Bold Geometric
-
-**Rationale:** This style directly mirrors the visual language already established in the slides (Fredoka One + Quicksand, coral + teal + charcoal, thick borders with solid shadows). It is child-friendly without being babyish, and the high-contrast layout makes questions easy to read. The interactive answer-reveal mechanic suits the lesson format perfectly.
+## Future Roadmap (not built yet — show as "Coming Soon")
+- Teacher portal: create classes, add pupils, view progress reports
+- Parent portal: purchase subscription, child gets login
+- Competition mode: timed, scored, leaderboard
+- Certificates: auto-generated PDF on completion
+- "Ask Ollie" AI hint system

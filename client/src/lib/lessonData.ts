@@ -1,9 +1,11 @@
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 export interface StarterStep {
+  id?: string;
   clue: string;
   hint: string;
   answer: string | number;
+  explanation?: string;
 }
 
 export interface ShapePuzzle {
