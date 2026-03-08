@@ -4,27 +4,32 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Landing from "./pages/Landing";
-import Practice from "./pages/Practice";
-import StarterPage from "./pages/StarterPage";
-import BadgesPage from "./pages/BadgesPage";
-import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
+import PupilDashboard from "./pages/PupilDashboard";
+import SkillPractice from "./pages/SkillPractice";
+import TimedTest from "./pages/TimedTest";
+import Leaderboard from "./pages/Leaderboard";
+import ProblemOfTheWeek from "./pages/ProblemOfTheWeek";
+import TeacherDashboard from "./pages/TeacherDashboard";
+import Badges from "./pages/Badges";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
-      <Route path="/practice" component={Practice} />
-      <Route path="/starter" component={StarterPage} />
-      <Route path="/badges" component={BadgesPage} />
-      <Route path="/compete" component={ComingSoon} />
-      <Route path="/404" component={NotFound} />
+      <Route path="/dashboard" component={PupilDashboard} />
+      <Route path="/practice/:skillId?" component={SkillPractice} />
+      <Route path="/test" component={TimedTest} />
+      <Route path="/leaderboard" component={Leaderboard} />
+      <Route path="/potw" component={ProblemOfTheWeek} />
+      <Route path="/teacher" component={TeacherDashboard} />
+      <Route path="/badges" component={Badges} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-export default function App() {
+function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
@@ -36,3 +41,5 @@ export default function App() {
     </ErrorBoundary>
   );
 }
+
+export default App;
