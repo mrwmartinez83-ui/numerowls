@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import ProfileSetup from "./components/ProfileSetup";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import PupilDashboard from "./pages/PupilDashboard";
@@ -12,6 +13,8 @@ import Leaderboard from "./pages/Leaderboard";
 import ProblemOfTheWeek from "./pages/ProblemOfTheWeek";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import Badges from "./pages/Badges";
+import { useAuth } from "./_core/hooks/useAuth";
+import { trpc } from "./lib/trpc";
 
 function Router() {
   return (
@@ -29,13 +32,41 @@ function Router() {
   );
 }
 
+/**
+ * ProfileGate — shows the ProfileSetup modal for any authenticated user
+ * who has not yet set a display name (i.e. first login).
+ */
+function ProfileGate({ children }: { children: React.ReactNode }) {
+  const { user, isAuthenticated, loading } = useAuth();
+  const utils = trpc.useUtils();
+
+  // Don't block render while auth is loading
+  if (loading) return <>{children}</>;
+
+  // Only show for logged-in users who haven't completed their profile
+  const needsSetup = isAuthenticated && user && !user.displayName;
+
+  if (needsSetup) {
+    return (
+      <>
+        {children}
+        <ProfileSetup onComplete={() => utils.auth.me.invalidate()} />
+      </>
+    );
+  }
+
+  return <>{children}</>;
+}
+
 function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <ProfileGate>
+            <Router />
+          </ProfileGate>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
