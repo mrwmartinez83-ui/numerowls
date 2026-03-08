@@ -9,6 +9,7 @@ import { z } from "zod/v4";
 
 export const appRouter = router({
   system: systemRouter,
+
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
@@ -17,6 +18,7 @@ export const appRouter = router({
       return { success: true } as const;
     }),
   }),
+
   profile: router({
     update: protectedProcedure
       .input(z.object({
@@ -31,6 +33,7 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+
   results: router({
     save: protectedProcedure
       .input(z.object({
@@ -61,6 +64,7 @@ export const appRouter = router({
         .limit(50);
     }),
   }),
+
   skills: router({
     updateProgress: protectedProcedure
       .input(z.object({ skillId: z.string(), attempted: z.number(), correct: z.number() }))
@@ -72,7 +76,11 @@ export const appRouter = router({
           .limit(1);
         if (existing.length > 0) {
           await db.update(skillProgress)
-            .set({ attempted: sql`attempted + ${input.attempted}`, correct: sql`correct + ${input.correct}`, lastAttemptAt: new Date() })
+            .set({
+              attempted: sql`attempted + ${input.attempted}`,
+              correct: sql`correct + ${input.correct}`,
+              lastAttemptAt: new Date(),
+            })
             .where(and(eq(skillProgress.userId, ctx.user.id), eq(skillProgress.skillId, input.skillId)));
         } else {
           await db.insert(skillProgress).values({ ...input, userId: ctx.user.id });
@@ -85,6 +93,7 @@ export const appRouter = router({
       return db.select().from(skillProgress).where(eq(skillProgress.userId, ctx.user.id));
     }),
   }),
+
   badges: router({
     award: protectedProcedure
       .input(z.object({ badgeId: z.string() }))
@@ -105,6 +114,7 @@ export const appRouter = router({
       return db.select().from(userBadges).where(eq(userBadges.userId, ctx.user.id));
     }),
   }),
+
   potw: router({
     submit: protectedProcedure
       .input(z.object({ weekKey: z.string(), correct: z.boolean() }))
@@ -128,6 +138,7 @@ export const appRouter = router({
       return db.select().from(potwAnswers).where(eq(potwAnswers.userId, ctx.user.id));
     }),
   }),
+
   leaderboard: router({
     top: publicProcedure
       .input(z.object({ yearGroup: z.number().optional(), limit: z.number().default(20) }))
@@ -144,6 +155,7 @@ export const appRouter = router({
         }).from(users).orderBy(desc(users.totalPoints)).limit(input.limit);
       }),
   }),
+
   classes: router({
     create: protectedProcedure
       .input(z.object({ name: z.string(), yearGroup: z.number().optional() }))
@@ -177,6 +189,36 @@ export const appRouter = router({
           .where(eq(classMembers.classId, input.classId));
       }),
   }),
+
+  classMembers: router({
+    join: protectedProcedure
+      .input(z.object({ joinCode: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) throw new Error("DB unavailable");
+        const cls = await db.select().from(classes)
+          .where(eq(classes.joinCode, input.joinCode.toUpperCase())).limit(1);
+        if (cls.length === 0) throw new Error("Invalid join code");
+        const existing = await db.select().from(classMembers)
+          .where(and(eq(classMembers.classId, cls[0].id), eq(classMembers.userId, ctx.user.id))).limit(1);
+        if (existing.length > 0) return { success: true, className: cls[0].name };
+        await db.insert(classMembers).values({ classId: cls[0].id, userId: ctx.user.id });
+        return { success: true, className: cls[0].name };
+      }),
+    myClasses: protectedProcedure.query(async ({ ctx }) => {
+      const db = await getDb();
+      if (!db) return [];
+      return db.select({
+        classId: classMembers.classId,
+        className: classes.name,
+        yearGroup: classes.yearGroup,
+      })
+        .from(classMembers)
+        .innerJoin(classes, eq(classMembers.classId, classes.id))
+        .where(eq(classMembers.userId, ctx.user.id));
+    }),
+  }),
+
   setWork: router({
     create: protectedProcedure
       .input(z.object({
@@ -202,6 +244,30 @@ export const appRouter = router({
           .where(and(eq(setWork.classId, input.classId), eq(setWork.teacherId, ctx.user.id)))
           .orderBy(desc(setWork.createdAt));
       }),
+    forPupil: protectedProcedure.query(async ({ ctx }) => {
+      const db = await getDb();
+      if (!db) return [];
+      // Get all classes the pupil is a member of
+      const memberships = await db.select({ classId: classMembers.classId })
+        .from(classMembers).where(eq(classMembers.userId, ctx.user.id));
+      if (memberships.length === 0) return [];
+      const classIds = memberships.map(m => m.classId);
+      // Get all set work for those classes, joining teacher name
+      const work = await db.select({
+        id: setWork.id,
+        title: setWork.title,
+        description: setWork.description,
+        skillId: setWork.skillId,
+        testType: setWork.testType,
+        dueDate: setWork.dueDate,
+        createdAt: setWork.createdAt,
+        teacherName: users.displayName,
+      }).from(setWork)
+        .innerJoin(users, eq(setWork.teacherId, users.id))
+        .where(sql`${setWork.classId} IN (${sql.join(classIds.map(id => sql`${id}`), sql`, `)})`)
+        .orderBy(desc(setWork.createdAt));
+      return work;
+    }),
   }),
 });
 
