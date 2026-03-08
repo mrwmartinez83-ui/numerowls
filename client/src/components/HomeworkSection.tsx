@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { homeworkItems, HomeworkItem } from "@/lib/lessonData";
+import { Lesson, HomeworkItem } from "@/lib/lessonData";
 
 function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total: number) {
   const parts: string[] = [];
@@ -8,8 +8,8 @@ function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total:
   return (
     <div className="km-equation" style={{ marginBottom: 8 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
-        {parts.map((p, i) => (
-          <span key={i} style={{ fontSize: 32 }}>{p}</span>
+        {parts.map((p, idx) => (
+          <span key={idx} style={{ fontSize: 32 }}>{p}</span>
         ))}
       </div>
       <span style={{ fontSize: 20, fontWeight: 700, color: "#555", margin: "0 4px" }}>=</span>
@@ -25,14 +25,13 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
   const isChallenge = item.type === "challenge";
   const isPuzzle = item.type === "puzzle";
   const isMcq = item.type === "mcq";
+  const isCorrect = selected === item.correctLetter;
 
   const handleSelect = (letter: string) => {
     if (selected !== null) return;
     setSelected(letter);
     setShowAnswer(true);
   };
-
-  const isCorrect = selected === item.correctLetter;
 
   const reset = () => {
     setSelected(null);
@@ -109,12 +108,8 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
               gap: 10,
             }}
           >
-            <span style={{ fontSize: 16, fontWeight: 700 }}>
-              {item.emoji1} {item.label1} = ?
-            </span>
-            <span style={{ fontSize: 16, fontWeight: 700 }}>
-              {item.emoji2} {item.label2} = ?
-            </span>
+            <span style={{ fontSize: 16, fontWeight: 700 }}>{item.emoji1} {item.label1} = ?</span>
+            <span style={{ fontSize: 16, fontWeight: 700 }}>{item.emoji2} {item.label2} = ?</span>
           </div>
         </div>
       )}
@@ -132,7 +127,7 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
           }}
         >
           <div style={{ fontSize: 15, fontWeight: 700, color: "#555", marginBottom: 8 }}>
-            Place 1, 2, 3, 4, 5, 6 in the circles so each side sums to the same number:
+            Place numbers in the circles so each side sums to the same number:
           </div>
           <div style={{ display: "inline-block", textAlign: "center" }}>
             <div style={{ fontSize: 32, marginBottom: 4 }}>◯</div>
@@ -187,7 +182,7 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
         <div className="animate-slide-up">
           <div
             style={{
-              background: isPuzzle || (isMcq && isCorrect) || (isChallenge && isCorrect) ? "#d4edda" : !isMcq ? "#d4edda" : "#fff3cd",
+              background: !isMcq || isCorrect ? "#d4edda" : "#fff3cd",
               border: `3px solid ${isMcq && selected && !isCorrect ? "#ffc107" : "#28a745"}`,
               borderRadius: 14,
               padding: "14px 18px",
@@ -210,7 +205,7 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
                 <span>{item.emoji2} = {item.answer2}</span>
               </div>
             )}
-            {isMcq && selected && (
+            {(isMcq || isChallenge) && selected && (
               <p
                 style={{
                   fontFamily: "'Fredoka One', cursive",
@@ -222,20 +217,9 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
                 {isCorrect ? "🎉 Correct!" : `😅 Not quite — the answer is (${item.correctLetter})`}
               </p>
             )}
-            {isChallenge && (
-              <p
-                style={{
-                  fontFamily: "'Fredoka One', cursive",
-                  fontSize: 18,
-                  color: isCorrect ? "#155724" : "#856404",
-                  marginBottom: 6,
-                }}
-              >
-                {selected
-                  ? isCorrect
-                    ? "🎉 Brilliant!"
-                    : `😅 Not quite — the answer is (${item.correctLetter})`
-                  : `✅ Answer: (${item.correctLetter})`}
+            {isChallenge && !selected && (
+              <p style={{ fontFamily: "'Fredoka One', cursive", fontSize: 18, color: "#155724", marginBottom: 6 }}>
+                ✅ Answer: ({item.correctLetter})
               </p>
             )}
             <p style={{ fontSize: 15, fontWeight: 600, color: "#155724", lineHeight: 1.6 }}>
@@ -255,10 +239,10 @@ function HomeworkCard({ item, index }: { item: HomeworkItem; index: number }) {
   );
 }
 
-export default function HomeworkSection() {
-  const puzzles = homeworkItems.filter((h) => h.type === "puzzle");
-  const mcqs = homeworkItems.filter((h) => h.type === "mcq");
-  const challenge = homeworkItems.filter((h) => h.type === "challenge");
+export default function HomeworkSection({ lesson }: { lesson: Lesson }) {
+  const puzzles = lesson.homeworkItems.filter((h) => h.type === "puzzle");
+  const mcqs = lesson.homeworkItems.filter((h) => h.type === "mcq");
+  const challenge = lesson.homeworkItems.filter((h) => h.type === "challenge");
 
   return (
     <section id="homework">

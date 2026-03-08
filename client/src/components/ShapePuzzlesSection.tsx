@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { shapePuzzles, ShapePuzzle } from "@/lib/lessonData";
+import { Lesson, ShapePuzzle } from "@/lib/lessonData";
 
 function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total: number) {
   const parts: string[] = [];
@@ -16,8 +16,8 @@ function buildRow(emoji1: string, emoji2: string, e1: number, e2: number, total:
           justifyContent: "center",
         }}
       >
-        {parts.map((p, i) => (
-          <span key={i} style={{ fontSize: 36 }}>
+        {parts.map((p, idx) => (
+          <span key={idx} style={{ fontSize: 36 }}>
             {p}
           </span>
         ))}
@@ -100,20 +100,12 @@ function PuzzleCard({ puzzle }: { puzzle: ShapePuzzle }) {
               }}
             >
               <span
-                style={{
-                  fontFamily: "'Fredoka One', cursive",
-                  fontSize: 26,
-                  color: "#155724",
-                }}
+                style={{ fontFamily: "'Fredoka One', cursive", fontSize: 26, color: "#155724" }}
               >
                 {puzzle.emoji1} = {puzzle.answer1}
               </span>
               <span
-                style={{
-                  fontFamily: "'Fredoka One', cursive",
-                  fontSize: 26,
-                  color: "#155724",
-                }}
+                style={{ fontFamily: "'Fredoka One', cursive", fontSize: 26, color: "#155724" }}
               >
                 {puzzle.emoji2} = {puzzle.answer2}
               </span>
@@ -150,9 +142,9 @@ function PuzzleCard({ puzzle }: { puzzle: ShapePuzzle }) {
   );
 }
 
-export default function ShapePuzzlesSection() {
-  const setA = shapePuzzles.filter((p) => p.difficulty === "A");
-  const setB = shapePuzzles.filter((p) => p.difficulty === "B");
+export default function ShapePuzzlesSection({ lesson }: { lesson: Lesson }) {
+  const setA = lesson.shapePuzzles.filter((p) => p.difficulty === "A");
+  const setB = lesson.shapePuzzles.filter((p) => p.difficulty === "B");
 
   return (
     <section id="puzzles">
@@ -167,13 +159,7 @@ export default function ShapePuzzlesSection() {
             boxShadow: "5px 5px 0px #2D3436",
           }}
         >
-          <h2
-            style={{
-              fontFamily: "'Fredoka One', cursive",
-              fontSize: 30,
-              color: "white",
-            }}
-          >
+          <h2 style={{ fontFamily: "'Fredoka One', cursive", fontSize: 30, color: "white" }}>
             🔢 Shape Value Puzzles
           </h2>
         </div>
@@ -199,25 +185,12 @@ export default function ShapePuzzlesSection() {
           How to think about it:
         </h3>
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: 16,
-          }}
+          style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}
         >
           {[
-            {
-              icon: "🔍",
-              text: "Look at what's the same and what's different between the two rows.",
-            },
-            {
-              icon: "➖",
-              text: "If one row has one more shape, subtract the totals to find that shape's value.",
-            },
-            {
-              icon: "✅",
-              text: "Then use that value to find the other shape!",
-            },
+            { icon: "🔍", text: "Look at what's the same and what's different between the two rows." },
+            { icon: "➖", text: "If one row has one more shape, subtract the totals to find that shape's value." },
+            { icon: "✅", text: "Then use that value to find the other shape!" },
           ].map((tip, i) => (
             <div
               key={i}
@@ -238,8 +211,6 @@ export default function ShapePuzzlesSection() {
             </div>
           ))}
         </div>
-
-        {/* Worked example */}
         <div
           style={{
             marginTop: 20,
@@ -249,31 +220,15 @@ export default function ShapePuzzlesSection() {
             padding: "16px 20px",
           }}
         >
-          <p
-            style={{
-              fontFamily: "'Fredoka One', cursive",
-              fontSize: 18,
-              color: "#FF6B6B",
-              marginBottom: 8,
-            }}
-          >
+          <p style={{ fontFamily: "'Fredoka One', cursive", fontSize: 18, color: "#FF6B6B", marginBottom: 8 }}>
             📖 Worked Example:
           </p>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ fontSize: 22, fontWeight: 700 }}>
-              🌟 + 🌟 + 🔷 = 11
-              <br />
+              🌟 + 🌟 + 🔷 = 11<br />
               🌟 + 🌟 + 🌟 = 12
             </div>
-            <div
-              style={{
-                fontSize: 15,
-                fontWeight: 600,
-                color: "#2D3436",
-                lineHeight: 1.7,
-                maxWidth: 400,
-              }}
-            >
+            <div style={{ fontSize: 15, fontWeight: 600, color: "#2D3436", lineHeight: 1.7, maxWidth: 400 }}>
               Row 2 has one extra 🌟 and is 1 more than Row 1. So{" "}
               <strong style={{ color: "#FF6B6B" }}>🌟 = 1</strong>.<br />
               Then 1 + 1 + 🔷 = 11, so{" "}
@@ -299,17 +254,9 @@ export default function ShapePuzzlesSection() {
           >
             Set A
           </div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: "#555" }}>
-            — Straightforward puzzles
-          </span>
+          <span style={{ fontSize: 16, fontWeight: 700, color: "#555" }}>— Straightforward puzzles</span>
         </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 24,
-          }}
-        >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
           {setA.map((p) => (
             <PuzzleCard key={p.id} puzzle={p} />
           ))}
@@ -332,17 +279,9 @@ export default function ShapePuzzlesSection() {
           >
             Set B
           </div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: "#555" }}>
-            — Trickier puzzles! 🧠
-          </span>
+          <span style={{ fontSize: 16, fontWeight: 700, color: "#555" }}>— Trickier puzzles! 🧠</span>
         </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 24,
-          }}
-        >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
           {setB.map((p) => (
             <PuzzleCard key={p.id} puzzle={p} />
           ))}

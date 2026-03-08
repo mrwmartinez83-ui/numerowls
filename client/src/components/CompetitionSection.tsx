@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { competitionQuestions, CompetitionQuestion } from "@/lib/lessonData";
+import { Lesson, CompetitionQuestion } from "@/lib/lessonData";
 
-const POINT_COLORS: Record<number, { bg: string; border: string; shadow: string; label: string }> =
-  {
-    3: { bg: "#FF6B6B", border: "#c0392b", shadow: "#c0392b", label: "3 Points" },
-    4: { bg: "#FF8E00", border: "#d35400", shadow: "#d35400", label: "4 Points" },
-    5: { bg: "#9B59B6", border: "#7d3c98", shadow: "#7d3c98", label: "5 Points" },
-  };
+const POINT_COLORS: Record<number, { bg: string; border: string; shadow: string; label: string }> = {
+  3: { bg: "#FF6B6B", border: "#c0392b", shadow: "#c0392b", label: "3 Points" },
+  4: { bg: "#FF8E00", border: "#d35400", shadow: "#d35400", label: "4 Points" },
+  5: { bg: "#9B59B6", border: "#7d3c98", shadow: "#7d3c98", label: "5 Points" },
+};
 
 function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const colors = POINT_COLORS[q.points];
   const answered = selected !== null;
+  const isCorrect = selected === q.correctLetter;
 
   const handleSelect = (letter: string) => {
     if (answered) return;
@@ -24,8 +24,6 @@ function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
     setSelected(null);
     setShowExplanation(false);
   };
-
-  const isCorrect = selected === q.correctLetter;
 
   return (
     <div
@@ -95,29 +93,16 @@ function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
           let extraStyle: React.CSSProperties = {};
           if (answered) {
             if (opt.letter === q.correctLetter) {
-              extraStyle = {
-                background: "#d4edda",
-                borderColor: "#28a745",
-                boxShadow: "3px 3px 0px #28a745",
-              };
+              extraStyle = { background: "#d4edda", borderColor: "#28a745", boxShadow: "3px 3px 0px #28a745" };
             } else if (opt.letter === selected) {
-              extraStyle = {
-                background: "#f8d7da",
-                borderColor: "#dc3545",
-                boxShadow: "3px 3px 0px #dc3545",
-              };
+              extraStyle = { background: "#f8d7da", borderColor: "#dc3545", boxShadow: "3px 3px 0px #dc3545" };
             }
           }
-
           return (
             <button
               key={opt.letter}
               className="km-option"
-              style={{
-                ...extraStyle,
-                cursor: answered ? "default" : "pointer",
-                textAlign: "left",
-              }}
+              style={{ ...extraStyle, cursor: answered ? "default" : "pointer", textAlign: "left" }}
               onClick={() => handleSelect(opt.letter)}
             >
               <span className="km-option-letter">({opt.letter})</span>
@@ -161,13 +146,7 @@ function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
           </div>
           <button
             className="km-btn"
-            style={{
-              background: "#F0F0F0",
-              color: "#555",
-              border: "2px solid #ccc",
-              boxShadow: "none",
-              fontSize: 14,
-            }}
+            style={{ background: "#F0F0F0", color: "#555", border: "2px solid #ccc", boxShadow: "none", fontSize: 14 }}
             onClick={reset}
           >
             🔄 Try Again
@@ -178,36 +157,15 @@ function QuestionCard({ q, index }: { q: CompetitionQuestion; index: number }) {
   );
 }
 
-export default function CompetitionSection() {
-  const q3 = competitionQuestions.filter((q) => q.points === 3);
-  const q4 = competitionQuestions.filter((q) => q.points === 4);
-  const q5 = competitionQuestions.filter((q) => q.points === 5);
+export default function CompetitionSection({ lesson }: { lesson: Lesson }) {
+  const q3 = lesson.competitionQuestions.filter((q) => q.points === 3);
+  const q4 = lesson.competitionQuestions.filter((q) => q.points === 4);
+  const q5 = lesson.competitionQuestions.filter((q) => q.points === 5);
 
   const groups = [
-    {
-      label: "3-Point Questions",
-      emoji: "🟥",
-      desc: "Warm-up — take your time!",
-      color: "#FF6B6B",
-      questions: q3,
-      offset: 0,
-    },
-    {
-      label: "4-Point Questions",
-      emoji: "🟧",
-      desc: "Medium challenge",
-      color: "#FF8E00",
-      questions: q4,
-      offset: q3.length,
-    },
-    {
-      label: "5-Point Questions",
-      emoji: "🟪",
-      desc: "Super challenge!",
-      color: "#9B59B6",
-      questions: q5,
-      offset: q3.length + q4.length,
-    },
+    { label: "3-Point Questions", emoji: "🟥", desc: "Warm-up — take your time!", color: "#FF6B6B", questions: q3, offset: 0 },
+    { label: "4-Point Questions", emoji: "🟧", desc: "Medium challenge", color: "#FF8E00", questions: q4, offset: q3.length },
+    { label: "5-Point Questions", emoji: "🟪", desc: "Super challenge!", color: "#9B59B6", questions: q5, offset: q3.length + q4.length },
   ];
 
   return (
@@ -223,13 +181,7 @@ export default function CompetitionSection() {
             boxShadow: "5px 5px 0px #FF6B6B",
           }}
         >
-          <h2
-            style={{
-              fontFamily: "'Fredoka One', cursive",
-              fontSize: 30,
-              color: "white",
-            }}
-          >
+          <h2 style={{ fontFamily: "'Fredoka One', cursive", fontSize: 30, color: "white" }}>
             🦘 Competition Practice
           </h2>
         </div>
@@ -251,7 +203,6 @@ export default function CompetitionSection() {
       <div style={{ display: "flex", flexDirection: "column", gap: 48 }}>
         {groups.map((group) => (
           <div key={group.label}>
-            {/* Group header */}
             <div className="flex items-center gap-3 mb-5">
               <div
                 style={{
@@ -267,18 +218,9 @@ export default function CompetitionSection() {
               >
                 {group.label}
               </div>
-              <span style={{ fontSize: 16, fontWeight: 700, color: "#555" }}>
-                — {group.desc}
-              </span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: "#555" }}>— {group.desc}</span>
             </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                gap: 24,
-              }}
-            >
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
               {group.questions.map((q, i) => (
                 <QuestionCard key={q.id} q={q} index={group.offset + i} />
               ))}

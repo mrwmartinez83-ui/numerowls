@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { starterSteps } from "@/lib/lessonData";
+import { Lesson } from "@/lib/lessonData";
 
-export default function StarterSection() {
+export default function StarterSection({ lesson }: { lesson: Lesson }) {
+  const { starterSteps } = lesson;
   const [revealed, setRevealed] = useState<boolean[]>(starterSteps.map(() => false));
   const [allDone, setAllDone] = useState(false);
 
@@ -78,8 +79,8 @@ export default function StarterSection() {
           🔐 Crack the Code!
         </h3>
         <p style={{ fontSize: 18, fontWeight: 600, color: "#2D3436", lineHeight: 1.6 }}>
-          Each animal is hiding a secret number. Use the clues to figure out what each animal is
-          worth — then use those values to solve the final mystery!
+          Each animal or object is hiding a secret number. Use the clues to figure out what each
+          one is worth — then use those values to solve the final mystery!
         </p>
         <p style={{ fontSize: 15, color: "#666", marginTop: 8, fontWeight: 600 }}>
           Click <strong style={{ color: "#4ECDC4" }}>Reveal Answer</strong> when you're ready to
@@ -181,21 +182,14 @@ export default function StarterSection() {
                       }}
                     >
                       <span style={{ fontSize: 28 }}>✅</span>
-                      <div>
-                        <div
-                          style={{
-                            fontFamily: "'Fredoka One', cursive",
-                            fontSize: 24,
-                            color: "#155724",
-                          }}
-                        >
-                          Answer = {step.answer}
-                        </div>
-                        {isLast && (
-                          <div style={{ fontSize: 15, fontWeight: 600, color: "#155724" }}>
-                            🎉 Cat (5) + Rabbit (5) + Dog (3) = 13
-                          </div>
-                        )}
+                      <div
+                        style={{
+                          fontFamily: "'Fredoka One', cursive",
+                          fontSize: 24,
+                          color: "#155724",
+                        }}
+                      >
+                        Answer = {step.answer}
                       </div>
                     </div>
                   )}
