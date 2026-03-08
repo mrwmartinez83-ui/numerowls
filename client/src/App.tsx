@@ -13,6 +13,7 @@ import Leaderboard from "./pages/Leaderboard";
 import ProblemOfTheWeek from "./pages/ProblemOfTheWeek";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import Badges from "./pages/Badges";
+import ShapeValuePuzzles from "./pages/ShapeValuePuzzles";
 import { useAuth } from "./_core/hooks/useAuth";
 import { trpc } from "./lib/trpc";
 
@@ -27,6 +28,7 @@ function Router() {
       <Route path="/potw" component={ProblemOfTheWeek} />
       <Route path="/teacher" component={TeacherDashboard} />
       <Route path="/badges" component={Badges} />
+      <Route path="/puzzles" component={ShapeValuePuzzles} />
       <Route component={NotFound} />
     </Switch>
   );

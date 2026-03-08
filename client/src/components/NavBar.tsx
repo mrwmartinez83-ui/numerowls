@@ -12,6 +12,7 @@ export default function NavBar() {
     { href: "/", label: "Home", icon: "🏠" },
     { href: "/dashboard", label: "My Dashboard", icon: "📊" },
     { href: "/practice", label: "Practice", icon: "🧩" },
+    { href: "/puzzles", label: "Shape Puzzles", icon: "🔢" },
     { href: "/test", label: "Timed Test", icon: "⏱️" },
     { href: "/potw", label: "Problem of the Week", icon: "🦉" },
     { href: "/leaderboard", label: "Leaderboard", icon: "🏆" },
