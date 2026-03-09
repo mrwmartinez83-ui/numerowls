@@ -502,15 +502,15 @@ const multiplicationQuestions: Question[] = [
 const fractionQuestions: Question[] = [
   {
     id: "frac_y3_01", skill: "fractions", year: 3, difficulty: 1, type: "mcq",
-    text: "What is ½ of 18?",
+    text: "What is 1/2 of 18?",
     options: ["6", "7", "8", "9", "10"],
-    answer: "9", explanation: "½ of 18 = 18 ÷ 2 = 9.", points: 3,
+    answer: "9", explanation: "1/2 of 18 = 18 ÷ 2 = 9.", points: 3,
   },
   {
     id: "frac_y3_02", skill: "fractions", year: 3, difficulty: 2, type: "mcq",
-    text: "Which fraction is equivalent to ½?",
+    text: "Which fraction is equivalent to 1/2?",
     options: ["2/3", "3/4", "4/8", "3/7", "5/9"],
-    answer: "4/8", explanation: "4/8 = ½ because both numerator and denominator can be halved.", points: 3,
+    answer: "4/8", explanation: "4/8 = 1/2 because both numerator and denominator can be halved.", points: 3,
   },
   {
     id: "frac_y3_03", skill: "fractions", year: 3, difficulty: 2, type: "mcq",
@@ -526,15 +526,15 @@ const fractionQuestions: Question[] = [
   },
   {
     id: "frac_y4_01", skill: "fractions", year: 4, difficulty: 2, type: "mcq",
-    text: "What is ¾ of 24?",
+    text: "What is 3/4 of 24?",
     options: ["12", "15", "16", "18", "20"],
-    answer: "18", explanation: "¼ of 24 = 6. ¾ = 3 × 6 = 18.", points: 3,
+    answer: "18", explanation: "1/4 of 24 = 6. 3/4 = 3 × 6 = 18.", points: 3,
   },
   {
     id: "frac_y4_02", skill: "fractions", year: 4, difficulty: 2, type: "mcq",
-    text: "What is ⅖ of 30?",
+    text: "What is 2/5 of 30?",
     options: ["6", "10", "12", "15", "18"],
-    answer: "12", explanation: "⅕ of 30 = 6. ⅖ = 2 × 6 = 12.", points: 3,
+    answer: "12", explanation: "1/5 of 30 = 6. 2/5 = 2 × 6 = 12.", points: 3,
   },
   {
     id: "frac_y4_03", skill: "fractions", year: 4, difficulty: 3, type: "mcq",
@@ -544,9 +544,9 @@ const fractionQuestions: Question[] = [
   },
   {
     id: "frac_y4_04", skill: "fractions", year: 4, difficulty: 3, type: "mcq",
-    text: "A bag of 40 marbles is shared equally. Sam gets ¼ and Priya gets ⅖. How many marbles does Sam get?",
+    text: "A bag of 40 marbles is shared equally. Sam gets 1/4 and Priya gets 2/5. How many marbles does Sam get?",
     options: ["8", "10", "12", "14", "16"],
-    answer: "10", explanation: "¼ of 40 = 10.", points: 4,
+    answer: "10", explanation: "1/4 of 40 = 10.", points: 4,
   },
   {
     id: "frac_y5_01", skill: "fractions", year: 5, difficulty: 2, type: "mcq",
@@ -562,21 +562,21 @@ const fractionQuestions: Question[] = [
   },
   {
     id: "frac_y5_03", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
-    text: "What is ⅗ + ¼?",
+    text: "What is 3/5 + 1/4?",
     options: ["7/20", "12/20", "17/20", "19/20", "21/20"],
-    answer: "17/20", explanation: "⅗ = 12/20, ¼ = 5/20. 12/20 + 5/20 = 17/20.", points: 5,
+    answer: "17/20", explanation: "3/5 = 12/20, 1/4 = 5/20. 12/20 + 5/20 = 17/20.", points: 5,
   },
   {
     id: "frac_y5_04", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
-    text: "A recipe needs ¾ of a cup of sugar. If you want to make 4 times the recipe, how many cups of sugar do you need?",
-    options: ["2", "2½", "3", "3½", "4"],
-    answer: "3", explanation: "¾ × 4 = 3 cups.", points: 4,
+    text: "A recipe needs 3/4 of a cup of sugar. If you want to make 4 times the recipe, how many cups of sugar do you need?",
+    options: ["2", "2 1/2", "3", "3 1/2", "4"],
+    answer: "3", explanation: "3/4 × 4 = 3 cups.", points: 4,
   },
   {
     id: "frac_y6_01", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
-    text: "What is 2⅓ + 1¾?",
+    text: "What is 2 1/3 + 1 3/4?",
     options: ["3 7/12", "4 1/12", "4 7/12", "4 11/12", "5 1/12"],
-    answer: "4 1/12", explanation: "2⅓ = 2 4/12, 1¾ = 1 9/12. Sum = 3 13/12 = 4 1/12.", points: 5,
+    answer: "4 1/12", explanation: "2 1/3 = 2 4/12, 1 3/4 = 1 9/12. Sum = 3 13/12 = 4 1/12.", points: 5,
   },
   {
     id: "frac_y6_02", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
@@ -586,9 +586,9 @@ const fractionQuestions: Question[] = [
   },
   {
     id: "frac_comp_01", skill: "fractions", year: 4, difficulty: 3, type: "mcq",
-    text: "A class of 30 pupils: ⅓ walk to school, ⅖ come by bus, and the rest cycle. How many cycle?",
+    text: "A class of 30 pupils: 1/3 walk to school, 2/5 come by bus, and the rest cycle. How many cycle?",
     options: ["4", "6", "7", "8", "10"],
-    answer: "8", explanation: "⅓ of 30 = 10 walk. ⅖ of 30 = 12 by bus. 30 − 10 − 12 = 8 cycle.", points: 4,
+    answer: "8", explanation: "1/3 of 30 = 10 walk. 2/5 of 30 = 12 by bus. 30 − 10 − 12 = 8 cycle.", points: 4,
   },
   {
     id: "frac_comp_02", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
@@ -598,15 +598,15 @@ const fractionQuestions: Question[] = [
   },
   {
     id: "frac_comp_03", skill: "fractions", year: 3, difficulty: 2, type: "mcq",
-    text: "A ribbon is 60 cm long. It is cut into pieces that are each ⅕ of the total length. How long is each piece?",
+    text: "A ribbon is 60 cm long. It is cut into pieces that are each 1/5 of the total length. How long is each piece?",
     options: ["10 cm", "12 cm", "14 cm", "15 cm", "20 cm"],
-    answer: "12 cm", explanation: "⅕ of 60 = 60 ÷ 5 = 12 cm.", points: 3,
+    answer: "12 cm", explanation: "1/5 of 60 = 60 ÷ 5 = 12 cm.", points: 3,
   },
   {
     id: "frac_comp_04", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
-    text: "In a bag of 60 sweets, ¼ are red, ⅓ are blue, and the rest are green. How many green sweets are there?",
+    text: "In a bag of 60 sweets, 1/4 are red, 1/3 are blue, and the rest are green. How many green sweets are there?",
     options: ["15", "20", "25", "30", "35"],
-    answer: "25", explanation: "¼ of 60 = 15 red. ⅓ of 60 = 20 blue. 60 − 15 − 20 = 25 green.", points: 5,
+    answer: "25", explanation: "1/4 of 60 = 15 red. 1/3 of 60 = 20 blue. 60 − 15 − 20 = 25 green.", points: 5,
   },
   {
     id: "frac_comp_05", skill: "fractions", year: 5, difficulty: 2, type: "mcq",
@@ -616,9 +616,9 @@ const fractionQuestions: Question[] = [
   },
   {
     id: "frac_comp_06", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
-    text: "A tank is ⅗ full. It contains 24 litres. How many litres does the full tank hold?",
+    text: "A tank is 3/5 full. It contains 24 litres. How many litres does the full tank hold?",
     options: ["36", "38", "40", "42", "44"],
-    answer: "40", explanation: "⅕ of the tank = 24 ÷ 3 = 8 litres. Full tank = 8 × 5 = 40 litres.", points: 5,
+    answer: "40", explanation: "1/5 of the tank = 24 ÷ 3 = 8 litres. Full tank = 8 × 5 = 40 litres.", points: 5,
   },
 ];
 
@@ -702,7 +702,7 @@ const shapesQuestions: Question[] = [
     id: "shp_y5_01", skill: "shapes", year: 5, difficulty: 2, type: "mcq",
     text: "What is the area of a triangle with base 10 cm and height 6 cm?",
     options: ["20 cm²", "30 cm²", "40 cm²", "50 cm²", "60 cm²"],
-    answer: "30 cm²", explanation: "Area of triangle = ½ × base × height = ½ × 10 × 6 = 30 cm².", points: 4,
+    answer: "30 cm²", explanation: "Area of triangle = 1/2 × base × height = 1/2 × 10 × 6 = 30 cm².", points: 4,
   },
   {
     id: "shp_y5_02", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
@@ -745,7 +745,7 @@ const shapesQuestions: Question[] = [
     id: "shp_comp_03", skill: "shapes", year: 4, difficulty: 3, type: "mcq",
     text: "A rectangle has a perimeter of 40 cm. Its length is twice its width. What is the area?",
     options: ["100 cm²", "120 cm²", "128 cm²", "150 cm²", "200 cm²"],
-    answer: "128 cm²", explanation: "2(2w + w) = 40, so 6w = 40, w = 40/6 ≈ 6.67. Actually: 2(l+w)=40, l=2w, so 2(3w)=40, w=40/6. Hmm — let me use whole numbers: w=6⅔ doesn't work. Correct: 2(2w+w)=40 → w=40/6. Nearest: w=6.67, l=13.33, area=88.9. Closest answer is 128 cm²... Let me recalculate: 2(l+w)=40, l=2w: 2(2w+w)=40, 6w=40, w=6.67. This gives non-integer. Better version: perimeter 36, l=2w: 2(3w)=36, w=6, l=12, area=72.", points: 4,
+    answer: "128 cm²", explanation: "2(2w + w) = 40, so 6w = 40, w = 40/6 ≈ 6.67. Actually: 2(l+w)=40, l=2w, so 2(3w)=40, w=40/6. Hmm — let me use whole numbers: w=6 2/3 doesn't work. Correct: 2(2w+w)=40 → w=40/6. Nearest: w=6.67, l=13.33, area=88.9. Closest answer is 128 cm²... Let me recalculate: 2(l+w)=40, l=2w: 2(2w+w)=40, 6w=40, w=6.67. This gives non-integer. Better version: perimeter 36, l=2w: 2(3w)=36, w=6, l=12, area=72.", points: 4,
   },
   {
     id: "shp_comp_04", skill: "shapes", year: 2, difficulty: 2, type: "mcq",
@@ -1033,9 +1033,9 @@ const logicQuestions: Question[] = [
   },
   {
     id: "log_comp_05", skill: "logic", year: 3, difficulty: 3, type: "mcq",
-    text: "A bag has red and white counters. The probability of picking a red counter is ½. There are 6 red counters. How many white counters are there?",
+    text: "A bag has red and white counters. The probability of picking a red counter is 1/2. There are 6 red counters. How many white counters are there?",
     options: ["4", "5", "6", "7", "8"],
-    answer: "6", explanation: "If P(red) = ½, then half the counters are red. So there are also 6 white counters.", points: 4,
+    answer: "6", explanation: "If P(red) = 1/2, then half the counters are red. So there are also 6 white counters.", points: 4,
   },
   {
     id: "log_comp_06", skill: "logic", year: 5, difficulty: 3, type: "mcq",
@@ -1269,7 +1269,7 @@ const measurementQuestions: Question[] = [
     id: "mea_y4_02", skill: "measurement", year: 4, difficulty: 3, type: "mcq",
     text: "A car travels at 60 km/h. How far does it travel in 45 minutes?",
     options: ["30 km", "40 km", "45 km", "50 km", "55 km"],
-    answer: "45 km", explanation: "45 min = ¾ hour. Distance = 60 × ¾ = 45 km.", points: 4,
+    answer: "45 km", explanation: "45 min = 3/4 hour. Distance = 60 × 3/4 = 45 km.", points: 4,
   },
   {
     id: "mea_y4_03", skill: "measurement", year: 4, difficulty: 3, type: "mcq",
@@ -1322,9 +1322,9 @@ const measurementQuestions: Question[] = [
   },
   {
     id: "mea_comp_05", skill: "measurement", year: 4, difficulty: 3, type: "mcq",
-    text: "A pie chart shows how 120 pupils travel to school. 30% walk, ¼ cycle, and the rest come by bus. How many come by bus?",
+    text: "A pie chart shows how 120 pupils travel to school. 30% walk, 1/4 cycle, and the rest come by bus. How many come by bus?",
     options: ["42", "48", "54", "60", "66"],
-    answer: "54", explanation: "Walk: 30% of 120 = 36. Cycle: ¼ of 120 = 30. Bus: 120 − 36 − 30 = 54.", points: 4,
+    answer: "54", explanation: "Walk: 30% of 120 = 36. Cycle: 1/4 of 120 = 30. Bus: 120 − 36 − 30 = 54.", points: 4,
   },
   {
     id: "mea_comp_06", skill: "measurement", year: 6, difficulty: 3, type: "mcq",

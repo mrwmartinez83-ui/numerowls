@@ -15,6 +15,13 @@
       "when": 1772972648151,
       "tag": "0001_robust_maddog",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1773027913497,
+      "tag": "0002_wandering_speed",
+      "breakpoints": true
     }
   ]
 }

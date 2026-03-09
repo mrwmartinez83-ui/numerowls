@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { getDb } from "./db";
-import { testResults, skillProgress, userBadges, potwAnswers, classes, classMembers, setWork, users } from "../drizzle/schema";
+import { testResults, skillProgress, userBadges, potwAnswers, potwCompetitions, potwEntries, classes, classMembers, setWork, users } from "../drizzle/schema";
 import { eq, desc, and, sql, inArray } from "drizzle-orm";
 import { z } from "zod/v4";
 
@@ -122,24 +122,200 @@ export const appRouter = router({
   }),
 
   potw: router({
+    // ── Get the current active competition ─────────────────────────────────────
+    current: publicProcedure.query(async () => {
+      const db = await getDb();
+      if (!db) return null;
+      const rows = await db.select().from(potwCompetitions)
+        .where(eq(potwCompetitions.status, "active"))
+        .orderBy(desc(potwCompetitions.startedAt))
+        .limit(1);
+      return rows[0] ?? null;
+    }),
+
+    // ── Get the most recently ended competition (for results reveal) ───────────
+    lastEnded: publicProcedure.query(async () => {
+      const db = await getDb();
+      if (!db) return null;
+      const rows = await db.select().from(potwCompetitions)
+        .where(eq(potwCompetitions.status, "ended"))
+        .orderBy(desc(potwCompetitions.endedAt))
+        .limit(1);
+      return rows[0] ?? null;
+    }),
+
+    // ── Pupil: submit an answer ─────────────────────────────────────────────────
     submit: protectedProcedure
-      .input(z.object({ weekKey: z.string(), correct: z.boolean() }))
+      .input(z.object({
+        competitionId: z.number(),
+        chosenOption: z.string(),
+        correct: z.boolean(),
+      }))
       .mutation(async ({ ctx, input }) => {
         const db = await getDb();
         if (!db) return { success: false };
-        try {
-          const existing = await db.select().from(potwAnswers)
-            .where(and(eq(potwAnswers.userId, ctx.user.id), eq(potwAnswers.weekKey, input.weekKey)))
-            .limit(1);
-          if (existing.length === 0) {
-            await db.insert(potwAnswers).values({ ...input, userId: ctx.user.id });
-            if (input.correct) {
-              await db.update(users).set({ totalPoints: sql`totalPoints + 10` }).where(eq(users.id, ctx.user.id));
-            }
-          }
-          return { success: true };
-        } catch { return { success: false }; }
+        const comp = await db.select().from(potwCompetitions)
+          .where(and(eq(potwCompetitions.id, input.competitionId), eq(potwCompetitions.status, "active")))
+          .limit(1);
+        if (comp.length === 0) return { success: false, reason: "competition_ended" };
+        const existing = await db.select().from(potwEntries)
+          .where(and(eq(potwEntries.userId, ctx.user.id), eq(potwEntries.competitionId, input.competitionId)))
+          .limit(1);
+        if (existing.length > 0) return { success: false, reason: "already_entered" };
+        await db.insert(potwEntries).values({
+          competitionId: input.competitionId,
+          userId: ctx.user.id,
+          chosenOption: input.chosenOption,
+          correct: input.correct,
+        });
+        return { success: true };
       }),
+
+    // ── Pupil: check if they have entered the current competition ──────────────
+    myEntry: protectedProcedure
+      .input(z.object({ competitionId: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) return null;
+        const rows = await db.select().from(potwEntries)
+          .where(and(eq(potwEntries.userId, ctx.user.id), eq(potwEntries.competitionId, input.competitionId)))
+          .limit(1);
+        return rows[0] ?? null;
+      }),
+
+    // ── Public: winners of an ended competition (chronological order) ──────────
+    winners: publicProcedure
+      .input(z.object({ competitionId: z.number() }))
+      .query(async ({ input }) => {
+        const db = await getDb();
+        if (!db) return [];
+        const comp = await db.select().from(potwCompetitions)
+          .where(and(eq(potwCompetitions.id, input.competitionId), eq(potwCompetitions.status, "ended")))
+          .limit(1);
+        if (comp.length === 0) return [];
+        return db.select({
+          entryId: potwEntries.id,
+          userId: potwEntries.userId,
+          chosenOption: potwEntries.chosenOption,
+          correct: potwEntries.correct,
+          submittedAt: potwEntries.submittedAt,
+          displayName: users.displayName,
+          avatarEmoji: users.avatarEmoji,
+          yearGroup: users.yearGroup,
+        })
+          .from(potwEntries)
+          .innerJoin(users, eq(potwEntries.userId, users.id))
+          .where(and(eq(potwEntries.competitionId, input.competitionId), eq(potwEntries.correct, true)))
+          .orderBy(potwEntries.submittedAt);
+      }),
+
+    // ── All-time POTW leaderboard ───────────────────────────────────────────────
+    potwLeaderboard: publicProcedure
+      .input(z.object({ limit: z.number().default(20) }))
+      .query(async ({ input }) => {
+        const db = await getDb();
+        if (!db) return [];
+        return db.select({
+          userId: potwEntries.userId,
+          displayName: users.displayName,
+          avatarEmoji: users.avatarEmoji,
+          yearGroup: users.yearGroup,
+          wins: sql<number>`SUM(CASE WHEN ${potwEntries.correct} = 1 THEN 1 ELSE 0 END)`,
+          entries: sql<number>`COUNT(*)`,
+        })
+          .from(potwEntries)
+          .innerJoin(users, eq(potwEntries.userId, users.id))
+          .innerJoin(potwCompetitions, eq(potwEntries.competitionId, potwCompetitions.id))
+          .where(eq(potwCompetitions.status, "ended"))
+          .groupBy(potwEntries.userId, users.displayName, users.avatarEmoji, users.yearGroup)
+          .orderBy(desc(sql`wins`), desc(sql`entries`))
+          .limit(input.limit);
+      }),
+
+    // ── Admin/Teacher: all entries for a competition ───────────────────────────
+    allEntries: protectedProcedure
+      .input(z.object({ competitionId: z.number() }))
+      .query(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "teacher") return [];
+        const db = await getDb();
+        if (!db) return [];
+        return db.select({
+          entryId: potwEntries.id,
+          userId: potwEntries.userId,
+          chosenOption: potwEntries.chosenOption,
+          correct: potwEntries.correct,
+          submittedAt: potwEntries.submittedAt,
+          displayName: users.displayName,
+          avatarEmoji: users.avatarEmoji,
+          yearGroup: users.yearGroup,
+        })
+          .from(potwEntries)
+          .innerJoin(users, eq(potwEntries.userId, users.id))
+          .where(eq(potwEntries.competitionId, input.competitionId))
+          .orderBy(potwEntries.submittedAt);
+      }),
+
+    // ── Admin/Teacher: end competition and automatically start next ────────────
+    endAndStartNext: protectedProcedure
+      .input(z.object({
+        competitionId: z.number(),
+        nextQuestionId: z.string(),
+        nextTitle: z.string(),
+        nextYearLabel: z.string().optional(),
+        nextPoints: z.number().default(15),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "teacher") throw new Error("Not authorised");
+        const db = await getDb();
+        if (!db) return { success: false };
+        await db.update(potwCompetitions)
+          .set({ status: "ended", endedAt: new Date(), endedBy: ctx.user.id })
+          .where(eq(potwCompetitions.id, input.competitionId));
+        // Award points to correct entrants
+        const correctEntries = await db.select({ userId: potwEntries.userId })
+          .from(potwEntries)
+          .where(and(eq(potwEntries.competitionId, input.competitionId), eq(potwEntries.correct, true)));
+        for (const entry of correctEntries) {
+          await db.update(users)
+            .set({ totalPoints: sql`totalPoints + ${input.nextPoints}` })
+            .where(eq(users.id, entry.userId));
+        }
+        const [next] = await db.insert(potwCompetitions).values({
+          questionId: input.nextQuestionId,
+          title: input.nextTitle,
+          yearLabel: input.nextYearLabel,
+          points: input.nextPoints,
+          status: "active",
+        }).$returningId();
+        return { success: true, newCompetitionId: next?.id };
+      }),
+
+    // ── Admin/Teacher: create the very first competition ───────────────────────
+    createFirst: protectedProcedure
+      .input(z.object({
+        questionId: z.string(),
+        title: z.string(),
+        yearLabel: z.string().optional(),
+        points: z.number().default(15),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin" && ctx.user.role !== "teacher") throw new Error("Not authorised");
+        const db = await getDb();
+        if (!db) return { success: false };
+        const active = await db.select().from(potwCompetitions)
+          .where(eq(potwCompetitions.status, "active")).limit(1);
+        if (active.length > 0) return { success: false, reason: "already_active" };
+        const [created] = await db.insert(potwCompetitions).values({
+          questionId: input.questionId,
+          title: input.title,
+          yearLabel: input.yearLabel,
+          points: input.points,
+          status: "active",
+        }).$returningId();
+        return { success: true, competitionId: created?.id };
+      }),
+
+    // ── Legacy ─────────────────────────────────────────────────────────────────
     myAnswers: protectedProcedure.query(async ({ ctx }) => {
       const db = await getDb();
       if (!db) return [];

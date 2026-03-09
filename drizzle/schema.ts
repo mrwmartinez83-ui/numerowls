@@ -84,7 +84,7 @@ export const userBadges = mysqlTable("userBadges", {
   earnedAt: timestamp("earnedAt").defaultNow().notNull(),
 });
 
-// ── Problem of the Week ───────────────────────────────────────────────────────
+// ── Problem of the Week (legacy) ──────────────────────────────────────────────
 export const potwAnswers = mysqlTable("potwAnswers", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
@@ -92,6 +92,39 @@ export const potwAnswers = mysqlTable("potwAnswers", {
   correct: boolean("correct").notNull(),
   answeredAt: timestamp("answeredAt").defaultNow().notNull(),
 });
+
+// ── Problem of the Week Competitions ─────────────────────────────────────────
+// One row per competition. status: 'active' = open for entries, 'ended' = results revealed.
+export const potwCompetitions = mysqlTable("potwCompetitions", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Question ID from the question bank */
+  questionId: varchar("questionId", { length: 64 }).notNull(),
+  title: varchar("title", { length: 128 }).notNull(),
+  status: mysqlEnum("status", ["active", "ended"]).default("active").notNull(),
+  /** Points awarded to correct entrants */
+  points: int("points").default(15).notNull(),
+  /** Year group label shown to pupils, e.g. 'Years 4–6' */
+  yearLabel: varchar("yearLabel", { length: 32 }),
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  endedAt: timestamp("endedAt"),
+  /** ID of the teacher/admin who ended the competition */
+  endedBy: int("endedBy"),
+});
+export type PotwCompetition = typeof potwCompetitions.$inferSelect;
+export type InsertPotwCompetition = typeof potwCompetitions.$inferInsert;
+
+// ── Problem of the Week Entries ───────────────────────────────────────────────
+// One row per pupil submission. correct is stored but hidden from pupils until competition ends.
+export const potwEntries = mysqlTable("potwEntries", {
+  id: int("id").autoincrement().primaryKey(),
+  competitionId: int("competitionId").notNull(),
+  userId: int("userId").notNull(),
+  /** The option the pupil chose */
+  chosenOption: varchar("chosenOption", { length: 128 }).notNull(),
+  correct: boolean("correct").notNull(),
+  submittedAt: timestamp("submittedAt").defaultNow().notNull(),
+});
+export type PotwEntry = typeof potwEntries.$inferSelect;
 
 // ── Set Work ──────────────────────────────────────────────────────────────────
 export const setWork = mysqlTable("setWork", {
