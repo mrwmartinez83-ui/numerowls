@@ -6,6 +6,9 @@
 // NO diagrams for sequences, pure arithmetic, or self-explanatory word problems
 // ═══════════════════════════════════════════════════════════════════════════
 
+import type { DiagramSpec } from "./diagramTypes";
+export type { DiagramSpec } from "./diagramTypes";
+
 export type SkillId =
   | "addition"
   | "multiplication"
@@ -102,7 +105,7 @@ export interface Question {
   difficulty: 1 | 2 | 3;
   type: "mcq" | "puzzle";
   text: string;
-  diagram?: string;
+  diagram?: DiagramSpec;
   options: string[];
   answer: string;
   explanation: string;
@@ -1594,6 +1597,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 1: NUMBER PYRAMID ══
   {
     id: "pyr_y2_01", skill: "addition", year: 2, difficulty: 1, type: "mcq",
+    diagram: {"type": "number-pyramid", "rows": [[3, 5], [null]]},
     style: "number-pyramid", source: "jmc",
     text: "In a number pyramid, each brick equals the sum of the two bricks directly below it. The bottom row is 3, 5, 2. What is the top brick?",
     options: ["10", "12", "15", "17", "20"],
@@ -1601,6 +1605,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "pyr_y3_01", skill: "addition", year: 3, difficulty: 2, type: "mcq",
+    diagram: {"type": "number-pyramid", "rows": [[4, 3, 2], [7, 5], [null]]},
     style: "number-pyramid", source: "jmc",
     text: "In a number pyramid, the bottom row is 4, 7, 3. Each brick equals the sum of the two below it. What is the top brick?",
     options: ["18", "21", "24", "25", "28"],
@@ -1608,6 +1613,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "pyr_y3_02", skill: "addition", year: 3, difficulty: 2, type: "mcq",
+    diagram: {"type": "number-pyramid", "rows": [[5, null, 3], [null, null], [22]]},
     style: "number-pyramid", source: "jmc",
     text: "In a number pyramid, the bottom row is 5, □, 3. The top brick is 22. What is the missing number □?",
     options: ["5", "6", "7", "8", "9"],
@@ -1615,6 +1621,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "pyr_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "number-pyramid", "rows": [[2, 4, 3, 1], [6, 7, 4], [13, 11], [24]]},
     style: "number-pyramid", source: "jmc",
     text: "A number pyramid has four bricks in the bottom row: 2, 4, 3, 1. Each brick above equals the sum of the two below it. What is the top brick?",
     options: ["18", "20", "22", "24", "26"],
@@ -1622,6 +1629,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "pyr_y5_01", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "number-pyramid", "rows": [[null, 7, null], [null, null], [36]]},
     style: "number-pyramid", source: "jmc",
     text: "In a number pyramid, the bottom row is □, 7, □ where both missing numbers are equal. The top brick is 36. What is the missing number?",
     options: ["8", "9", "10", "11", "12"],
@@ -1631,6 +1639,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 2: MAGIC SQUARE ══
   {
     id: "mag_y3_01", skill: "patterns", year: 3, difficulty: 2, type: "mcq",
+    diagram: {"type": "magic-square", "cells": [[2, 7, 6], [9, 5, 1], [4, 3, 8]]},
     style: "magic-square", source: "jmc",
     text: "In a 3×3 magic square using the numbers 1 to 9 once each, every row, column, and diagonal adds up to the same total. What is that total?",
     options: ["12", "13", "14", "15", "16"],
@@ -1638,6 +1647,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "mag_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "magic-square", "cells": [[2, 16, 12], [18, 10, 2], [10, 4, 16]]},
     style: "magic-square", source: "jmc",
     text: "A 3×3 magic square uses the even numbers 2, 4, 6, 8, 10, 12, 14, 16, 18. What is the magic total for each row?",
     options: ["24", "27", "30", "33", "36"],
@@ -1645,6 +1655,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "mag_y4_02", skill: "patterns", year: 4, difficulty: 3, type: "mcq",
+    diagram: {"type": "magic-square", "cells": [[2, 7, 6], [9, null, 1], [4, 3, 8]]},
     style: "magic-square", source: "jmc",
     text: "In a 3×3 magic square using 1–9 (magic total=15), the top row is 2, 7, 6. The middle row starts with 9. What is the missing middle number: 9, □, 1?",
     options: ["3", "4", "5", "6", "7"],
@@ -1652,6 +1663,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "mag_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "magic-square", "cells": [[3, 17, 13], [19, 11, 3], [11, 5, 17]]},
     style: "magic-square", source: "jmc",
     text: "A 3×3 magic square uses the odd numbers 3, 5, 7, 9, 11, 13, 15, 17, 19. What is the magic total?",
     options: ["27", "30", "33", "36", "39"],
@@ -1659,6 +1671,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "mag_y5_02", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "magic-square", "cells": [[8, 1, 6], [3, 5, 7], [null, 9, 2]]},
     style: "magic-square", source: "jmc",
     text: "In the magic square with magic total 15, the top row is 8, 1, 6 and the left column starts 8, 3, □. What is the missing value?",
     options: ["2", "3", "4", "5", "6"],
@@ -1668,6 +1681,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 3: CROSSNUMBER ══
   {
     id: "cross_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "crossnumber", "cells": [["#", "1", ""], ["#", "", "#"], ["#", "", "#"]]},
     style: "crossnumber", source: "jmc",
     text: "A crossnumber clue says: '1 Across is a two-digit number where both digits are the same, and it is a multiple of 3.' Which of these fits?",
     options: ["11", "22", "33", "44", "55"],
@@ -1675,6 +1689,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "cross_y4_02", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "crossnumber", "cells": [["1", "#", "2"], ["", "#", ""], ["#", "3", ""]]},
     style: "crossnumber", source: "jmc",
     text: "A crossnumber clue: '1 Down is a two-digit perfect square.' How many possibilities are there?",
     options: ["3", "4", "5", "6", "7"],
@@ -1682,6 +1697,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "cross_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "crossnumber", "cells": [["1", "", "#"], ["#", "#", "#"], ["2", "", ""]]},
     style: "crossnumber", source: "jmc",
     text: "A crossnumber clue: '2 Across is a prime number between 10 and 20.' How many possibilities are there?",
     options: ["2", "3", "4", "5", "6"],
@@ -1691,6 +1707,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 4: FUNCTION MACHINE ══
   {
     id: "func_y3_01", skill: "patterns", year: 3, difficulty: 1, type: "mcq",
+    diagram: {"type": "function-machine", "steps": ["\u00d7 2", "+ 3"], "input": "5", "output": "?"},
     style: "function-machine", source: "original",
     text: "A number machine doubles a number then adds 3. If the input is 5, what is the output?",
     options: ["11", "12", "13", "14", "15"],
@@ -1698,6 +1715,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "func_y3_02", skill: "patterns", year: 3, difficulty: 2, type: "mcq",
+    diagram: {"type": "function-machine", "steps": ["+ 4", "\u00d7 3"], "input": "2", "output": "?"},
     style: "function-machine", source: "original",
     text: "A number machine multiplies by 3 then subtracts 4. The output is 11. What was the input?",
     options: ["3", "4", "5", "6", "7"],
@@ -1705,6 +1723,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "func_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "function-machine", "steps": ["\u00d7 3", "\u2212 5"], "input": "?", "output": "22"},
     style: "function-machine", source: "pmc",
     text: "Anna thinks of a number, divides it by 4, then adds 6. The result is 10. What number did she think of?",
     options: ["12", "14", "16", "18", "20"],
@@ -1712,6 +1731,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "func_y4_02", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "function-machine", "steps": ["\u00f7 2", "+ 7"], "input": "10", "output": "?"},
     style: "function-machine", source: "pmc",
     text: "A number machine adds 5 then multiplies by 2. If the output is 24, what was the input?",
     options: ["5", "6", "7", "8", "9"],
@@ -1719,6 +1739,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "func_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "function-machine", "steps": ["\u00d7 4", "\u2212 6", "\u00f7 2"], "input": "5", "output": "?"},
     style: "function-machine", source: "pmc",
     text: "Marcia thinks of a positive whole number, multiplies it by itself, then subtracts 1. The result is 24. What number did she think of?",
     options: ["3", "4", "5", "6", "7"],
@@ -1855,6 +1876,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 9: COUNTING SHAPES ══
   {
     id: "cnt_y3_01", skill: "shapes", year: 3, difficulty: 2, type: "mcq",
+    diagram: {"type": "tiling-grid", "rows": 3, "cols": 3},
     style: "counting-shapes", source: "jmc",
     text: "A 3×3 grid of squares is drawn. How many squares of any size can be seen in total? (Count 1×1, 2×2, and 3×3 squares.)",
     options: ["9", "12", "14", "16", "18"],
@@ -1862,6 +1884,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "cnt_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "counting-shapes", "viewBox": "0 0 200 180", "shapes": [{"d": "M 100,10 L 10,170 L 190,170 Z", "fill": "rgba(255,255,255,0.06)", "stroke": "rgba(255,255,255,0.3)"}, {"d": "M 100,10 L 55,90 L 145,90 Z", "fill": "rgba(93,173,226,0.1)", "stroke": "rgba(93,173,226,0.4)"}, {"d": "M 55,90 L 10,170 L 100,170 Z", "fill": "rgba(93,173,226,0.1)", "stroke": "rgba(93,173,226,0.4)"}, {"d": "M 145,90 L 100,170 L 190,170 Z", "fill": "rgba(93,173,226,0.1)", "stroke": "rgba(93,173,226,0.4)"}, {"d": "M 55,90 L 145,90 L 100,170 Z", "fill": "rgba(245,166,35,0.1)", "stroke": "rgba(245,166,35,0.4)"}], "label": "How many triangles of any size?"},
     style: "counting-shapes", source: "jmc",
     text: "How many triangles of any size can be seen in a large equilateral triangle divided into 4 equal smaller equilateral triangles?",
     options: ["4", "5", "6", "7", "8"],
@@ -1869,6 +1892,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "cnt_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "tiling-grid", "rows": 4, "cols": 4},
     style: "counting-shapes", source: "jmc",
     text: "How many squares of any size are there in a 4×4 grid?",
     options: ["16", "20", "24", "28", "30"],
@@ -1878,6 +1902,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 10: NET OF 3D SHAPE ══
   {
     id: "net_y4_01", skill: "shapes", year: 4, difficulty: 1, type: "mcq",
+    diagram: {"type": "net-shape", "netType": "cross", "label": "Net of a cube (cross shape)"},
     style: "net-3d-shape", source: "jmc",
     text: "A cube has 6 faces. A net of a cube must have exactly how many squares?",
     options: ["4", "5", "6", "7", "8"],
@@ -1885,6 +1910,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "net_y4_02", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "net-shape", "netType": "strip", "label": "Straight 1\u00d76 strip \u2014 can this fold into a cube?"},
     style: "net-3d-shape", source: "jmc",
     text: "Which of these arrangements of 6 squares CANNOT be folded into a cube? (A) A cross shape. (B) A straight 1×6 strip. (C) An L-shape of 4 with 2 extra. (D) A T-shape. (E) A 2×3 rectangle.",
     options: ["A", "B", "C", "D", "E"],
@@ -1892,6 +1918,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "net_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "counting-shapes", "viewBox": "0 0 200 200", "shapes": [{"d": "M 60,100 L 140,100 L 140,180 L 60,180 Z", "fill": "rgba(93,173,226,0.12)", "stroke": "rgba(93,173,226,0.4)"}, {"d": "M 60,100 L 140,100 L 100,30 Z", "fill": "rgba(245,166,35,0.12)", "stroke": "rgba(245,166,35,0.4)"}, {"d": "M 60,100 L 60,180 L 100,30 Z", "fill": "rgba(46,204,113,0.12)", "stroke": "rgba(46,204,113,0.4)"}, {"d": "M 140,100 L 140,180 L 100,30 Z", "fill": "rgba(46,204,113,0.12)", "stroke": "rgba(46,204,113,0.4)"}, {"d": "M 60,180 L 140,180 L 100,30 Z", "fill": "rgba(245,166,35,0.12)", "stroke": "rgba(245,166,35,0.4)"}], "label": "Square-based pyramid"},
     style: "net-3d-shape", source: "jmc",
     text: "A square-based pyramid has a square base and 4 triangular faces. How many faces, edges, and vertices does it have?",
     options: ["5 faces, 8 edges, 5 vertices", "5 faces, 8 edges, 4 vertices", "4 faces, 6 edges, 4 vertices", "5 faces, 6 edges, 5 vertices", "6 faces, 8 edges, 6 vertices"],
@@ -1901,6 +1928,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 11: VENN DIAGRAM ══
   {
     id: "venn_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "venn-diagram", "labelA": "Football", "labelB": "Tennis", "onlyA": "12", "both": "6", "onlyB": "8", "total": "30 children"},
     style: "venn-diagram", source: "jmc",
     text: "In a class of 30 children, 18 like football and 14 like tennis. 6 children like both. How many children like only football (not tennis)?",
     options: ["8", "10", "12", "14", "16"],
@@ -1908,6 +1936,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "venn_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "venn-diagram", "labelA": "Instrument", "labelB": "Sport", "onlyA": "15", "both": "10", "onlyB": "10", "outside": "5", "total": "40 pupils"},
     style: "venn-diagram", source: "imc",
     text: "In a group of 40 pupils, 25 play a musical instrument, 20 do a sport, and 10 do both. How many pupils do neither?",
     options: ["3", "5", "7", "10", "15"],
@@ -1915,6 +1944,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "venn_y5_02", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "venn-diagram", "labelA": "Mult. of 2", "labelB": "Mult. of 3", "onlyA": "7", "both": "3", "onlyB": "3", "outside": "7", "total": "1\u201320"},
     style: "venn-diagram", source: "imc",
     text: "From 1 to 20, how many numbers are multiples of 2 or multiples of 3 (or both)?",
     options: ["11", "12", "13", "14", "15"],
@@ -1922,6 +1952,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "venn_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    diagram: {"type": "venn-diagram", "labelA": "Tea", "labelB": "Coffee", "onlyA": "15", "both": "15", "onlyB": "10", "outside": "10", "total": "50 people"},
     style: "venn-diagram", source: "imc",
     text: "In a survey of 50 people, 30 drink tea, 25 drink coffee, and 10 drink neither. How many drink both tea and coffee?",
     options: ["5", "10", "15", "20", "25"],
@@ -2037,6 +2068,7 @@ const competitionStyleQuestions: Question[] = [
   // ══ STYLE 16: TILING / COVERING ══
   {
     id: "til_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "tiling-grid", "rows": 4, "cols": 4, "label": "4\u00d74 grid \u2014 how many L-trominoes fit?"},
     style: "tiling-covering", source: "jmc",
     text: "A 2×6 rectangle is to be tiled with 1×2 dominoes. How many dominoes are needed?",
     options: ["4", "5", "6", "7", "8"],
@@ -2044,6 +2076,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "til_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "tiling-grid", "rows": 4, "cols": 4, "blocked": [[0, 0], [0, 3], [3, 0], [3, 3]], "label": "4\u00d74 grid with corners removed"},
     style: "tiling-covering", source: "jmc",
     text: "What is the maximum number of non-overlapping 2×2 squares that can be placed on a 5×5 grid?",
     options: ["3", "4", "5", "6", "7"],
@@ -2051,6 +2084,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "til_y5_02", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "tiling-grid", "rows": 3, "cols": 4},
     style: "tiling-covering", source: "jmc",
     text: "A 4×6 rectangle is to be tiled with 1×3 trominoes (straight pieces covering 3 squares). How many trominoes are needed?",
     options: ["6", "7", "8", "9", "10"],
@@ -2141,6 +2175,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "fsh_y3_01", skill: "fractions", year: 3, difficulty: 1, type: "mcq",
+    diagram: {"type": "fraction-shape", "shape": "square", "parts": 4, "shaded": [1, 2, 3], "label": "3 out of 4 triangles shaded"},
     style: "fraction-of-shape", source: "pmc",
     text: "A square is divided into 4 equal triangles by drawing both diagonals. Three of the triangles are shaded. What fraction of the square is shaded?",
     options: ["1/4", "1/2", "3/4", "2/3", "3/5"],
@@ -2148,6 +2183,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "fsh_y5_01", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "tiling-grid", "rows": 6, "cols": 6, "blocked": [[2, 2], [2, 3], [3, 2], [3, 3]], "label": "6\u00d76 grid with 2\u00d72 centre removed"},
     style: "fraction-of-shape", source: "jmc",
     text: "A 6×6 square grid has a 2×2 square removed from its centre. What fraction of the original square remains?",
     options: ["7/9", "8/9", "5/6", "11/12", "35/36"],
@@ -2155,6 +2191,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "ang_y4_01", skill: "shapes", year: 4, difficulty: 1, type: "mcq",
+    diagram: {"type": "angle-shape", "shape": "triangle", "angles": [40, 75, "?"]},
     style: "angle-polygon", source: "pmc",
     text: "A triangle has angles of 40° and 75°. What is the third angle?",
     options: ["55°", "60°", "65°", "70°", "75°"],
@@ -2162,6 +2199,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "ang_y5_01", skill: "shapes", year: 5, difficulty: 2, type: "mcq",
+    diagram: {"type": "angle-shape", "shape": "polygon", "angles": [120, 120, 120, 120, 120, 120], "labels": ["Regular hexagon \u2014 each interior angle = ?"]},
     style: "angle-polygon", source: "jmc",
     text: "What is the size of each interior angle of a regular hexagon?",
     options: ["100°", "110°", "120°", "130°", "140°"],
@@ -2169,6 +2207,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "ang_y6_01", skill: "shapes", year: 6, difficulty: 3, type: "mcq",
+    diagram: {"type": "angle-shape", "shape": "triangle", "angles": [40, "?", "?"], "labels": ["Isosceles triangle"]},
     style: "angle-polygon", source: "jmc",
     text: "An isosceles triangle has one angle of 40°. Which of the following could be the other two angles?",
     options: ["40° and 100°", "70° and 70°", "40° and 40°", "50° and 90°", "Both 40°+100° and 70°+70° are possible"],
@@ -2176,6 +2215,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "sym_y3_01", skill: "shapes", year: 3, difficulty: 1, type: "mcq",
+    diagram: {"type": "symmetry-shape", "shape": "hexagon", "lines": ["v", "d1", "d2", "h", "v", "d1"]},
     style: "symmetry-reflection", source: "pmc",
     text: "How many lines of symmetry does a regular hexagon have?",
     options: ["2", "3", "4", "6", "8"],
@@ -2183,6 +2223,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "sym_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "symmetry-shape", "shape": "letter", "letter": "H", "lines": ["h", "v"]},
     style: "symmetry-reflection", source: "jmc",
     text: "Which capital letter has exactly 2 lines of symmetry?",
     options: ["A", "H", "M", "O", "T"],
@@ -2190,6 +2231,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "path_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    diagram: {"type": "pathfinding-grid", "rows": 3, "cols": 3},
     style: "pathfinding-grid", source: "jmc",
     text: "On a 3×3 grid, you start at the bottom-left corner and want to reach the top-right corner. You can only move right or up. How many different routes are there?",
     options: ["4", "5", "6", "7", "8"],
@@ -2197,6 +2239,7 @@ const competitionStyleQuestions: Question[] = [
   },
   {
     id: "path_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    diagram: {"type": "pathfinding-grid", "rows": 3, "cols": 4},
     style: "pathfinding-grid", source: "jmc",
     text: "On a grid, you travel from the top-left to the bottom-right of a 3-row, 4-column rectangle, moving only right or down. How many different routes are there?",
     options: ["10", "15", "20", "25", "30"],

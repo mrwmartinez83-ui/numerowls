@@ -6,6 +6,7 @@ import { SKILLS, getQuestionsForSkill } from "@shared/questionBank";
 import type { Question } from "@shared/questionBank";
 import { toast } from "sonner";
 import { Link } from "wouter";
+import DiagramRenderer from "@/components/DiagramRenderer";
 
 type Phase = "setup" | "running" | "finished";
 
@@ -245,8 +246,7 @@ export default function TimedTest() {
 
                 <div style={{ fontSize: "17px", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: "20px" }}>{q.text}</div>
                 {q.diagram && (
-                  <div style={{ marginBottom: "18px", padding: "14px", background: "rgba(255,255,255,0.04)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.08)" }}
-                    dangerouslySetInnerHTML={{ __html: q.diagram }} />
+                  <DiagramRenderer spec={q.diagram} />
                 )}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                   {q.options.map(opt => {

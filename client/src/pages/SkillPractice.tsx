@@ -6,6 +6,7 @@ import { SKILLS, getQuestionsForSkill } from "@shared/questionBank";
 import { useParams } from "wouter";
 import type { Question } from "@shared/questionBank";
 import { toast } from "sonner";
+import DiagramRenderer from "@/components/DiagramRenderer";
 
 type Difficulty = 0 | 1 | 2 | 3; // 0 = All
 
@@ -269,13 +270,12 @@ export default function SkillPractice() {
                     {isRevealed ? (chosen === q.answer ? "✓" : "✗") : qi + 1}
                   </div>
 
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: "16px", fontWeight: 700, color: "white", lineHeight: 1.5, marginBottom: q.diagram ? "16px" : "0" }}>
+                    <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: "16px", fontWeight: 700, color: "white", lineHeight: 1.5 }}>
                       {q.text}
                     </div>
                     {q.diagram && (
-                      <div style={{ margin: "12px 0", padding: "16px", background: "rgba(255,255,255,0.04)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.08)" }}
-                        dangerouslySetInnerHTML={{ __html: q.diagram }} />
+                      <DiagramRenderer spec={q.diagram} />
                     )}
                   </div>
 
