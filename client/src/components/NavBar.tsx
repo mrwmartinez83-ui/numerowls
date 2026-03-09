@@ -49,6 +49,12 @@ export default function NavBar() {
                 <span>Teacher</span>
               </Link>
             )}
+            {user?.role === "admin" && (
+              <Link href="/admin/questions" className={`no-nav-link ${location.startsWith("/admin") ? "active" : ""}`}>
+                <span>📚</span>
+                <span>Q Bank</span>
+              </Link>
+            )}
           </div>
 
           {/* Auth section */}

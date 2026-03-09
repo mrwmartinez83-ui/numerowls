@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, name, displayName, role, openId FROM users ORDER BY createdAt ASC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2gLcEYQzQnCZykw.56de6ef0c8b8 --database 4Z3zmWW6erbK48GtQcQS2H --execute SELECT id, name, displayName, role, openId FROM users ORDER BY createdAt ASC LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Will Martinez",
+      "displayName": "Will",
+      "role": "admin",
+      "openId": "M7NKFwC8dDc2QLSkhdkiuL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdisplayName\trole\topenId\n1\tWill Martinez\tWill\tadmin\tM7NKFwC8dDc2QLSkhdkiuL\n",
+  "stderr": "",
+  "execution_time_ms": 204
+}
