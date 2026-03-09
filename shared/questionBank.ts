@@ -38,6 +38,63 @@ export const SKILLS: Skill[] = [
   { id: "time",           name: "Time & Calendar",          icon: "🕐", color: "#FF5722", years: [1,2,3,4],     description: "Reading clocks, duration, days/months" },
 ];
 
+export type QuestionStyle =
+  | "number-pyramid"
+  | "magic-square"
+  | "crossnumber"
+  | "function-machine"
+  | "liar-truth-teller"
+  | "true-false-statements"
+  | "estimation"
+  | "probability-language"
+  | "counting-shapes"
+  | "net-3d-shape"
+  | "venn-diagram"
+  | "pigeonhole"
+  | "palindrome-counting"
+  | "calendar-arithmetic"
+  | "think-of-a-number"
+  | "seating-arrangements"
+  | "pathfinding-grid"
+  | "self-referential"
+  | "arithmetic-comparison"
+  | "alternating-sequence"
+  | "digit-puzzle"
+  | "ratio-word-problem"
+  | "fraction-of-shape"
+  | "compound-perimeter"
+  | "area-border-frame"
+  | "angle-polygon"
+  | "symmetry-reflection"
+  | "folding-origami"
+  | "tiling-covering"
+  | "ordering-by-clues"
+  | "conversation-logic"
+  | "logic-deduction"
+  | "tournament-table"
+  | "time-arithmetic"
+  | "speed-distance-time"
+  | "percentage-change"
+  | "fraction-ordering"
+  | "minimum-for-percentage"
+  | "consecutive-numbers"
+  | "reverse-operations"
+  | "weighing-balance"
+  | "simultaneous-equations"
+  | "3d-counting"
+  | "floor-plan-area"
+  | "pie-chart"
+  | "mean-average"
+  | "coin-denomination"
+  | "standard";
+
+export type QuestionSource =
+  | "jmc"
+  | "imc"
+  | "pmc"
+  | "amc8"
+  | "original";
+
 export interface Question {
   id: string;
   skill: SkillId;
@@ -50,6 +107,8 @@ export interface Question {
   answer: string;
   explanation: string;
   points: 3 | 4 | 5;
+  style?: QuestionStyle;
+  source?: QuestionSource;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1525,6 +1584,626 @@ const amc8Questions: Question[] = [
   },
 ];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// COMPETITION STYLE QUESTIONS — 18 new styles (90 questions)
+// Sources: JMC 2015–2024, IMC 2020–2024, PMC 2018–2022, original
+// All adapted for primary pupils (Years 1–6)
+// ─────────────────────────────────────────────────────────────────────────────
+const competitionStyleQuestions: Question[] = [
+
+  // ══ STYLE 1: NUMBER PYRAMID ══
+  {
+    id: "pyr_y2_01", skill: "addition", year: 2, difficulty: 1, type: "mcq",
+    style: "number-pyramid", source: "jmc",
+    text: "In a number pyramid, each brick equals the sum of the two bricks directly below it. The bottom row is 3, 5, 2. What is the top brick?",
+    options: ["10", "12", "15", "17", "20"],
+    answer: "15", explanation: "Middle row: 3+5=8 and 5+2=7. Top: 8+7=15.", points: 3,
+  },
+  {
+    id: "pyr_y3_01", skill: "addition", year: 3, difficulty: 2, type: "mcq",
+    style: "number-pyramid", source: "jmc",
+    text: "In a number pyramid, the bottom row is 4, 7, 3. Each brick equals the sum of the two below it. What is the top brick?",
+    options: ["18", "21", "24", "25", "28"],
+    answer: "21", explanation: "Middle row: 4+7=11 and 7+3=10. Top: 11+10=21.", points: 3,
+  },
+  {
+    id: "pyr_y3_02", skill: "addition", year: 3, difficulty: 2, type: "mcq",
+    style: "number-pyramid", source: "jmc",
+    text: "In a number pyramid, the bottom row is 5, □, 3. The top brick is 22. What is the missing number □?",
+    options: ["5", "6", "7", "8", "9"],
+    answer: "7", explanation: "Middle row: 5+□ and □+3. Top: (5+□)+(□+3) = 8+2□ = 22, so 2□=14, □=7.", points: 4,
+  },
+  {
+    id: "pyr_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "number-pyramid", source: "jmc",
+    text: "A number pyramid has four bricks in the bottom row: 2, 4, 3, 1. Each brick above equals the sum of the two below it. What is the top brick?",
+    options: ["18", "20", "22", "24", "26"],
+    answer: "24", explanation: "Row 2: 2+4=6, 4+3=7, 3+1=4. Row 3: 6+7=13, 7+4=11. Top: 13+11=24.", points: 4,
+  },
+  {
+    id: "pyr_y5_01", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    style: "number-pyramid", source: "jmc",
+    text: "In a number pyramid, the bottom row is □, 7, □ where both missing numbers are equal. The top brick is 36. What is the missing number?",
+    options: ["8", "9", "10", "11", "12"],
+    answer: "11", explanation: "Let the missing number be n. Middle row: n+7 and 7+n. Top: (n+7)+(7+n) = 2n+14 = 36, so 2n=22, n=11.", points: 5,
+  },
+
+  // ══ STYLE 2: MAGIC SQUARE ══
+  {
+    id: "mag_y3_01", skill: "patterns", year: 3, difficulty: 2, type: "mcq",
+    style: "magic-square", source: "jmc",
+    text: "In a 3×3 magic square using the numbers 1 to 9 once each, every row, column, and diagonal adds up to the same total. What is that total?",
+    options: ["12", "13", "14", "15", "16"],
+    answer: "15", explanation: "The sum of 1 to 9 is 45. There are 3 rows, so each row sums to 45÷3=15.", points: 3,
+  },
+  {
+    id: "mag_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "magic-square", source: "jmc",
+    text: "A 3×3 magic square uses the even numbers 2, 4, 6, 8, 10, 12, 14, 16, 18. What is the magic total for each row?",
+    options: ["24", "27", "30", "33", "36"],
+    answer: "30", explanation: "Sum of all numbers: 2+4+6+8+10+12+14+16+18=90. Magic total = 90÷3=30.", points: 4,
+  },
+  {
+    id: "mag_y4_02", skill: "patterns", year: 4, difficulty: 3, type: "mcq",
+    style: "magic-square", source: "jmc",
+    text: "In a 3×3 magic square using 1–9 (magic total=15), the top row is 2, 7, 6. The middle row starts with 9. What is the missing middle number: 9, □, 1?",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "5", explanation: "Middle row must sum to 15: 9+□+1=15, so □=5.", points: 4,
+  },
+  {
+    id: "mag_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "magic-square", source: "jmc",
+    text: "A 3×3 magic square uses the odd numbers 3, 5, 7, 9, 11, 13, 15, 17, 19. What is the magic total?",
+    options: ["27", "30", "33", "36", "39"],
+    answer: "33", explanation: "Sum of all: 3+5+7+9+11+13+15+17+19=99. Magic total=99÷3=33.", points: 5,
+  },
+  {
+    id: "mag_y5_02", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "magic-square", source: "jmc",
+    text: "In the magic square with magic total 15, the top row is 8, 1, 6 and the left column starts 8, 3, □. What is the missing value?",
+    options: ["2", "3", "4", "5", "6"],
+    answer: "4", explanation: "Left column must sum to 15: 8+3+□=15, so □=4.", points: 5,
+  },
+
+  // ══ STYLE 3: CROSSNUMBER ══
+  {
+    id: "cross_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "crossnumber", source: "jmc",
+    text: "A crossnumber clue says: '1 Across is a two-digit number where both digits are the same, and it is a multiple of 3.' Which of these fits?",
+    options: ["11", "22", "33", "44", "55"],
+    answer: "33", explanation: "Numbers with both digits the same and divisible by 3: 33 (3+3=6✓), 66, 99. The smallest is 33.", points: 4,
+  },
+  {
+    id: "cross_y4_02", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "crossnumber", source: "jmc",
+    text: "A crossnumber clue: '1 Down is a two-digit perfect square.' How many possibilities are there?",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "6", explanation: "Two-digit perfect squares: 16, 25, 36, 49, 64, 81. That is 6 possibilities.", points: 3,
+  },
+  {
+    id: "cross_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "crossnumber", source: "jmc",
+    text: "A crossnumber clue: '2 Across is a prime number between 10 and 20.' How many possibilities are there?",
+    options: ["2", "3", "4", "5", "6"],
+    answer: "4", explanation: "Primes between 10 and 20: 11, 13, 17, 19. That is 4 possibilities.", points: 4,
+  },
+
+  // ══ STYLE 4: FUNCTION MACHINE ══
+  {
+    id: "func_y3_01", skill: "patterns", year: 3, difficulty: 1, type: "mcq",
+    style: "function-machine", source: "original",
+    text: "A number machine doubles a number then adds 3. If the input is 5, what is the output?",
+    options: ["11", "12", "13", "14", "15"],
+    answer: "13", explanation: "Double 5=10. Add 3=13.", points: 3,
+  },
+  {
+    id: "func_y3_02", skill: "patterns", year: 3, difficulty: 2, type: "mcq",
+    style: "function-machine", source: "original",
+    text: "A number machine multiplies by 3 then subtracts 4. The output is 11. What was the input?",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "5", explanation: "Work backwards: 11+4=15. 15÷3=5.", points: 3,
+  },
+  {
+    id: "func_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "function-machine", source: "pmc",
+    text: "Anna thinks of a number, divides it by 4, then adds 6. The result is 10. What number did she think of?",
+    options: ["12", "14", "16", "18", "20"],
+    answer: "16", explanation: "Work backwards: 10−6=4. 4×4=16.", points: 4,
+  },
+  {
+    id: "func_y4_02", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "function-machine", source: "pmc",
+    text: "A number machine adds 5 then multiplies by 2. If the output is 24, what was the input?",
+    options: ["5", "6", "7", "8", "9"],
+    answer: "7", explanation: "Work backwards: 24÷2=12. 12−5=7.", points: 4,
+  },
+  {
+    id: "func_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "function-machine", source: "pmc",
+    text: "Marcia thinks of a positive whole number, multiplies it by itself, then subtracts 1. The result is 24. What number did she think of?",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "5", explanation: "Work backwards: 24+1=25. √25=5.", points: 5,
+  },
+
+  // ══ STYLE 5: LIAR / TRUTH-TELLER ══
+  {
+    id: "liar_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "liar-truth-teller", source: "jmc",
+    text: "Ali always tells the truth. Ben always lies. Ali says: 'Ben says I am a liar.' Is Ali's statement true or false?",
+    options: ["True — Ben would call Ali a liar", "False — Ben would call Ali truthful", "We cannot tell", "Both are lying", "Neither is lying"],
+    answer: "True — Ben would call Ali a liar", explanation: "Ben always lies, so Ben would call Ali a liar (a lie). Ali correctly reports this. Ali is telling the truth.", points: 5,
+  },
+  {
+    id: "liar_y5_02", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "liar-truth-teller", source: "jmc",
+    text: "In a village, knights always tell the truth and knaves always lie. A villager says: 'I am a knave.' What is the villager?",
+    options: ["A knight", "A knave", "Could be either", "Neither", "The statement is impossible"],
+    answer: "The statement is impossible", explanation: "A knight cannot say 'I am a knave' (that would be a lie). A knave cannot say 'I am a knave' (that would be the truth). So no one can make this statement.", points: 5,
+  },
+  {
+    id: "liar_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "liar-truth-teller", source: "jmc",
+    text: "Three children each make a statement. Amy says 'Exactly one of us is lying.' Bob says 'Exactly two of us are lying.' Cara says 'All three of us are lying.' How many are lying?",
+    options: ["0", "1", "2", "3", "Cannot be determined"],
+    answer: "2", explanation: "If 2 are lying: Amy says 'exactly one lying' — false (she lies). Bob says 'exactly two lying' — true (he tells truth). Cara says 'all three lying' — false (she lies). Exactly 2 liars. Consistent!", points: 5,
+  },
+  {
+    id: "liar_y6_02", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "liar-truth-teller", source: "jmc",
+    text: "Dan says 'Eve and I are both liars.' What can we conclude?",
+    options: ["Both are truth-tellers", "Both are liars", "Dan is a liar, Eve is a truth-teller", "Dan is a truth-teller, Eve is a liar", "Cannot be determined"],
+    answer: "Dan is a liar, Eve is a truth-teller", explanation: "If Dan were a truth-teller, 'we are both liars' would be true — contradiction. So Dan is a liar. Since Dan lies, 'we are both liars' is false, meaning Eve is a truth-teller.", points: 5,
+  },
+
+  // ══ STYLE 6: TRUE/FALSE STATEMENTS ══
+  {
+    id: "tf_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "true-false-statements", source: "jmc",
+    text: "Which of these statements is TRUE? (A) The sum of two odd numbers is always odd. (B) The sum of two even numbers is always even. (C) The product of two odd numbers is always even. (D) An even number plus an odd number is always even.",
+    options: ["A", "B", "C", "D", "None of them"],
+    answer: "B", explanation: "B is true: even+even=even (e.g. 4+6=10). A is false: odd+odd=even. C is false: odd×odd=odd. D is false: even+odd=odd.", points: 4,
+  },
+  {
+    id: "tf_y4_02", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "true-false-statements", source: "jmc",
+    text: "Which of these statements is FALSE? (A) Every multiple of 6 is also a multiple of 3. (B) Every multiple of 4 is also a multiple of 2. (C) Every multiple of 9 is also a multiple of 3. (D) Every multiple of 10 is also a multiple of 5. (E) Every multiple of 6 is also a multiple of 4.",
+    options: ["A", "B", "C", "D", "E"],
+    answer: "E", explanation: "E is false: 6 is a multiple of 6 but 6÷4=1.5 (not a whole number). All others are true.", points: 4,
+  },
+  {
+    id: "tf_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "true-false-statements", source: "imc",
+    text: "Consider: (1) The square of an odd number is always odd. (2) The sum of two prime numbers is always even. (3) Every square number has an odd number of factors. How many of these three statements are true?",
+    options: ["0", "1", "2", "3", "Cannot be determined"],
+    answer: "2", explanation: "Statement 1: True (odd×odd=odd). Statement 2: False (2+3=5, odd). Statement 3: True (square numbers have an odd number of factors). So 2 statements are true.", points: 5,
+  },
+  {
+    id: "tf_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "true-false-statements", source: "jmc",
+    text: "Which statement about prime numbers is TRUE? (A) All primes are odd. (B) There is only one even prime. (C) The sum of two primes is always prime. (D) Every prime greater than 3 is a multiple of 6.",
+    options: ["A", "B", "C", "D", "None of them"],
+    answer: "B", explanation: "B is true: 2 is the only even prime. A is false (2 is even). C is false (3+5=8). D is false (5 is prime but not a multiple of 6).", points: 5,
+  },
+
+  // ══ STYLE 7: ESTIMATION ══
+  {
+    id: "est_y2_01", skill: "measurement", year: 2, difficulty: 1, type: "mcq",
+    style: "estimation", source: "pmc",
+    text: "Which of these is closest to the height of a typical door?",
+    options: ["20 cm", "2 m", "20 m", "2 km", "20 mm"],
+    answer: "2 m", explanation: "A standard door is about 2 metres tall. 20 cm is too short (about the height of a book). 20 m would be a very tall building.", points: 3,
+  },
+  {
+    id: "est_y3_01", skill: "measurement", year: 3, difficulty: 1, type: "mcq",
+    style: "estimation", source: "pmc",
+    text: "Which of these is closest to the capacity of a bathtub?",
+    options: ["1 litre", "10 litres", "100 litres", "1,000 litres", "10,000 litres"],
+    answer: "100 litres", explanation: "A standard bathtub holds about 100–200 litres of water. 10 litres is about 5 large bottles — far too little.", points: 3,
+  },
+  {
+    id: "est_y4_01", skill: "measurement", year: 4, difficulty: 2, type: "mcq",
+    style: "estimation", source: "pmc",
+    text: "A school hall is about 20 m long and 10 m wide. Roughly how many 1 m² carpet tiles would be needed to cover the floor?",
+    options: ["20", "60", "100", "200", "2,000"],
+    answer: "200", explanation: "Area = 20×10=200 m². Each tile covers 1 m², so 200 tiles are needed.", points: 3,
+  },
+  {
+    id: "est_y4_02", skill: "measurement", year: 4, difficulty: 2, type: "mcq",
+    style: "estimation", source: "pmc",
+    text: "Roughly how many times does your heart beat in one hour?",
+    options: ["70", "700", "4,200", "42,000", "420,000"],
+    answer: "4,200", explanation: "A resting heart beats about 70 times per minute. In one hour (60 minutes): 70×60=4,200 beats.", points: 3,
+  },
+
+  // ══ STYLE 8: PROBABILITY LANGUAGE ══
+  {
+    id: "prob_y3_01", skill: "measurement", year: 3, difficulty: 1, type: "mcq",
+    style: "probability-language", source: "pmc",
+    text: "You roll a fair six-sided dice. How likely is it that you roll a number less than 7?",
+    options: ["Impossible", "Unlikely", "Even chance", "Likely", "Certain"],
+    answer: "Certain", explanation: "All numbers on a dice (1–6) are less than 7. So it is certain.", points: 3,
+  },
+  {
+    id: "prob_y3_02", skill: "measurement", year: 3, difficulty: 1, type: "mcq",
+    style: "probability-language", source: "pmc",
+    text: "You roll a fair six-sided dice. How likely is it that you roll a 7?",
+    options: ["Impossible", "Unlikely", "Even chance", "Likely", "Certain"],
+    answer: "Impossible", explanation: "A standard dice only has numbers 1 to 6. Rolling a 7 is impossible.", points: 3,
+  },
+  {
+    id: "prob_y4_01", skill: "measurement", year: 4, difficulty: 2, type: "mcq",
+    style: "probability-language", source: "pmc",
+    text: "A bag contains 3 red counters and 3 blue counters. You pick one without looking. How likely is it that you pick a red counter?",
+    options: ["Impossible", "Unlikely", "Even chance", "Likely", "Certain"],
+    answer: "Even chance", explanation: "There are 3 red and 3 blue — equal numbers. The chance of picking red is exactly 1 in 2, which is an even chance.", points: 3,
+  },
+  {
+    id: "prob_y4_02", skill: "measurement", year: 4, difficulty: 2, type: "mcq",
+    style: "probability-language", source: "pmc",
+    text: "A bag contains 1 red counter and 9 blue counters. You pick one without looking. How likely is it that you pick a blue counter?",
+    options: ["Impossible", "Unlikely", "Even chance", "Likely", "Certain"],
+    answer: "Likely", explanation: "9 out of 10 counters are blue, so picking blue is very likely (but not certain, since there is 1 red).", points: 3,
+  },
+  {
+    id: "prob_y5_01", skill: "measurement", year: 5, difficulty: 3, type: "mcq",
+    style: "probability-language", source: "pmc",
+    text: "A spinner has 8 equal sections: 5 are green, 2 are yellow, 1 is red. Which colour is it most likely to land on?",
+    options: ["Red", "Yellow", "Green", "Red and yellow equally", "Yellow and green equally"],
+    answer: "Green", explanation: "Green covers 5 out of 8 sections — more than any other colour. So it is most likely.", points: 4,
+  },
+
+  // ══ STYLE 9: COUNTING SHAPES ══
+  {
+    id: "cnt_y3_01", skill: "shapes", year: 3, difficulty: 2, type: "mcq",
+    style: "counting-shapes", source: "jmc",
+    text: "A 3×3 grid of squares is drawn. How many squares of any size can be seen in total? (Count 1×1, 2×2, and 3×3 squares.)",
+    options: ["9", "12", "14", "16", "18"],
+    answer: "14", explanation: "1×1 squares: 9. 2×2 squares: 4. 3×3 squares: 1. Total: 9+4+1=14.", points: 4,
+  },
+  {
+    id: "cnt_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    style: "counting-shapes", source: "jmc",
+    text: "How many triangles of any size can be seen in a large equilateral triangle divided into 4 equal smaller equilateral triangles?",
+    options: ["4", "5", "6", "7", "8"],
+    answer: "5", explanation: "4 small triangles + 1 large triangle = 5 triangles in total.", points: 4,
+  },
+  {
+    id: "cnt_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    style: "counting-shapes", source: "jmc",
+    text: "How many squares of any size are there in a 4×4 grid?",
+    options: ["16", "20", "24", "28", "30"],
+    answer: "30", explanation: "1×1: 16, 2×2: 9, 3×3: 4, 4×4: 1. Total = 16+9+4+1=30.", points: 5,
+  },
+
+  // ══ STYLE 10: NET OF 3D SHAPE ══
+  {
+    id: "net_y4_01", skill: "shapes", year: 4, difficulty: 1, type: "mcq",
+    style: "net-3d-shape", source: "jmc",
+    text: "A cube has 6 faces. A net of a cube must have exactly how many squares?",
+    options: ["4", "5", "6", "7", "8"],
+    answer: "6", explanation: "A cube has 6 faces, so its net must contain exactly 6 squares.", points: 3,
+  },
+  {
+    id: "net_y4_02", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    style: "net-3d-shape", source: "jmc",
+    text: "Which of these arrangements of 6 squares CANNOT be folded into a cube? (A) A cross shape. (B) A straight 1×6 strip. (C) An L-shape of 4 with 2 extra. (D) A T-shape. (E) A 2×3 rectangle.",
+    options: ["A", "B", "C", "D", "E"],
+    answer: "B", explanation: "A straight 1×6 strip cannot be folded into a cube — opposite faces would overlap. All other arrangements can fold into a cube.", points: 4,
+  },
+  {
+    id: "net_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    style: "net-3d-shape", source: "jmc",
+    text: "A square-based pyramid has a square base and 4 triangular faces. How many faces, edges, and vertices does it have?",
+    options: ["5 faces, 8 edges, 5 vertices", "5 faces, 8 edges, 4 vertices", "4 faces, 6 edges, 4 vertices", "5 faces, 6 edges, 5 vertices", "6 faces, 8 edges, 6 vertices"],
+    answer: "5 faces, 8 edges, 5 vertices", explanation: "Faces: 1 square + 4 triangles = 5. Edges: 4 base + 4 slant = 8. Vertices: 4 base corners + 1 apex = 5.", points: 5,
+  },
+
+  // ══ STYLE 11: VENN DIAGRAM ══
+  {
+    id: "venn_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "venn-diagram", source: "jmc",
+    text: "In a class of 30 children, 18 like football and 14 like tennis. 6 children like both. How many children like only football (not tennis)?",
+    options: ["8", "10", "12", "14", "16"],
+    answer: "12", explanation: "Only football = total football − both = 18−6=12.", points: 4,
+  },
+  {
+    id: "venn_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "venn-diagram", source: "imc",
+    text: "In a group of 40 pupils, 25 play a musical instrument, 20 do a sport, and 10 do both. How many pupils do neither?",
+    options: ["3", "5", "7", "10", "15"],
+    answer: "5", explanation: "Those who play instrument or sport = 25+20−10=35. Those who do neither = 40−35=5.", points: 5,
+  },
+  {
+    id: "venn_y5_02", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "venn-diagram", source: "imc",
+    text: "From 1 to 20, how many numbers are multiples of 2 or multiples of 3 (or both)?",
+    options: ["11", "12", "13", "14", "15"],
+    answer: "13", explanation: "Multiples of 2 up to 20: 10. Multiples of 3: 6. Multiples of 6: 3. By inclusion-exclusion: 10+6−3=13.", points: 5,
+  },
+  {
+    id: "venn_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "venn-diagram", source: "imc",
+    text: "In a survey of 50 people, 30 drink tea, 25 drink coffee, and 10 drink neither. How many drink both tea and coffee?",
+    options: ["5", "10", "15", "20", "25"],
+    answer: "15", explanation: "Tea or coffee or both = 50−10=40. By inclusion-exclusion: 30+25−both=40, so both=15.", points: 5,
+  },
+
+  // ══ STYLE 12: PIGEONHOLE PRINCIPLE ══
+  {
+    id: "pig_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "pigeonhole", source: "jmc",
+    text: "A drawer contains 5 red socks and 5 blue socks. You pick socks in the dark. What is the minimum number you must pick to guarantee getting a matching pair?",
+    options: ["2", "3", "4", "5", "6"],
+    answer: "3", explanation: "In the worst case, you pick one red and one blue. The third sock must match one of them. So 3 socks guarantees a matching pair.", points: 5,
+  },
+  {
+    id: "pig_y5_02", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "pigeonhole", source: "jmc",
+    text: "A bag contains red, blue, and green counters. What is the minimum number you must take (without looking) to guarantee at least 2 of the same colour?",
+    options: ["2", "3", "4", "5", "6"],
+    answer: "4", explanation: "In the worst case, you pick one of each colour (3 counters). The 4th must match one of the first three. So 4 counters guarantees at least 2 of the same colour.", points: 5,
+  },
+  {
+    id: "pig_y5_03", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "pigeonhole", source: "jmc",
+    text: "A class has 25 pupils. Each pupil was born in one of the 12 months of the year. What is the minimum number of pupils guaranteed to share a birth month?",
+    options: ["1", "2", "3", "4", "5"],
+    answer: "3", explanation: "25 pupils in 12 months. By the pigeonhole principle, at least ⌈25÷12⌉=3 pupils must share a birth month.", points: 5,
+  },
+
+  // ══ STYLE 13: PALINDROME COUNTING ══
+  {
+    id: "pal_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "palindrome-counting", source: "jmc",
+    text: "A palindrome reads the same forwards and backwards (e.g. 121). How many 2-digit palindromes are there?",
+    options: ["7", "8", "9", "10", "11"],
+    answer: "9", explanation: "2-digit palindromes have the form AA where A is 1–9: 11, 22, 33, 44, 55, 66, 77, 88, 99. That is 9.", points: 4,
+  },
+  {
+    id: "pal_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "palindrome-counting", source: "jmc",
+    text: "How many 3-digit palindromes are there? (e.g. 121, 343 — reads the same forwards and backwards.)",
+    options: ["81", "90", "99", "100", "108"],
+    answer: "90", explanation: "A 3-digit palindrome has the form ABA. A can be 1–9 (9 choices). B can be 0–9 (10 choices). Total = 9×10=90.", points: 5,
+  },
+  {
+    id: "pal_y5_02", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "palindrome-counting", source: "jmc",
+    text: "A 4-digit palindrome has the form ABBA. How many 4-digit palindromes are there?",
+    options: ["81", "90", "99", "100", "900"],
+    answer: "90", explanation: "Form ABBA: A can be 1–9 (9 choices). B can be 0–9 (10 choices). Total = 9×10=90.", points: 5,
+  },
+
+  // ══ STYLE 14: CALENDAR ARITHMETIC ══
+  {
+    id: "cal_y3_01", skill: "time", year: 3, difficulty: 1, type: "mcq",
+    style: "calendar-arithmetic", source: "pmc",
+    text: "January has 31 days. If January 1st is a Monday, what day of the week is February 1st?",
+    options: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    answer: "Thursday", explanation: "31 days after Monday: 31=4 weeks+3 days. Monday+3 days=Thursday.", points: 3,
+  },
+  {
+    id: "cal_y4_01", skill: "time", year: 4, difficulty: 2, type: "mcq",
+    style: "calendar-arithmetic", source: "jmc",
+    text: "My birthday is on 20th July. My friend's birthday is 100 days later. What date is my friend's birthday?",
+    options: ["27th September", "28th October", "27th October", "29th October", "30th October"],
+    answer: "28th October", explanation: "Days left in July after 20th: 11. August: 31. September: 30. Total: 11+31+30=72. Need 100−72=28 more days into October. So 28th October.", points: 4,
+  },
+  {
+    id: "cal_y5_01", skill: "time", year: 5, difficulty: 3, type: "mcq",
+    style: "calendar-arithmetic", source: "jmc",
+    text: "In a non-leap year, what day of the week is 1st January the following year, if 1st January this year is a Wednesday?",
+    options: ["Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    answer: "Thursday", explanation: "A non-leap year has 365=52 weeks+1 day. So the same date next year is one day later: Wednesday+1=Thursday.", points: 5,
+  },
+
+  // ══ STYLE 15: THINK OF A NUMBER ══
+  {
+    id: "rev_y3_01", skill: "patterns", year: 3, difficulty: 1, type: "mcq",
+    style: "think-of-a-number", source: "pmc",
+    text: "I think of a number, add 8, and get 15. What was my number?",
+    options: ["5", "6", "7", "8", "9"],
+    answer: "7", explanation: "Work backwards: 15−8=7.", points: 3,
+  },
+  {
+    id: "rev_y3_02", skill: "patterns", year: 3, difficulty: 2, type: "mcq",
+    style: "think-of-a-number", source: "pmc",
+    text: "I think of a number, multiply it by 3, then subtract 4. The result is 20. What was my number?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "8", explanation: "Work backwards: 20+4=24. 24÷3=8.", points: 3,
+  },
+  {
+    id: "rev_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "think-of-a-number", source: "jmc",
+    text: "I think of a number. I double it, add 6, then halve the result. I get 11. What was my number?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "8", explanation: "Work backwards: 11×2=22. 22−6=16. 16÷2=8.", points: 4,
+  },
+  {
+    id: "rev_y4_02", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "think-of-a-number", source: "jmc",
+    text: "I think of a number, add 5, multiply by 4, and subtract 8. The result is 40. What was my number?",
+    options: ["5", "6", "7", "8", "9"],
+    answer: "7", explanation: "Work backwards: 40+8=48. 48÷4=12. 12−5=7.", points: 4,
+  },
+  {
+    id: "rev_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "think-of-a-number", source: "jmc",
+    text: "I think of a number. I square it, subtract 5, then divide by 4. The result is 5. What was my number?",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "5", explanation: "Work backwards: 5×4=20. 20+5=25. √25=5.", points: 5,
+  },
+
+  // ══ STYLE 16: TILING / COVERING ══
+  {
+    id: "til_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    style: "tiling-covering", source: "jmc",
+    text: "A 2×6 rectangle is to be tiled with 1×2 dominoes. How many dominoes are needed?",
+    options: ["4", "5", "6", "7", "8"],
+    answer: "6", explanation: "The rectangle has 2×6=12 squares. Each domino covers 2 squares. 12÷2=6 dominoes.", points: 3,
+  },
+  {
+    id: "til_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    style: "tiling-covering", source: "jmc",
+    text: "What is the maximum number of non-overlapping 2×2 squares that can be placed on a 5×5 grid?",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "4", explanation: "On a 5×5 grid, 2×2 squares can start at positions (1,1), (1,3), (3,1), (3,3) — that is 4 non-overlapping 2×2 squares. The 5th row and column cannot accommodate another full 2×2.", points: 5,
+  },
+  {
+    id: "til_y5_02", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    style: "tiling-covering", source: "jmc",
+    text: "A 4×6 rectangle is to be tiled with 1×3 trominoes (straight pieces covering 3 squares). How many trominoes are needed?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "8", explanation: "The rectangle has 4×6=24 squares. Each 1×3 tromino covers 3 squares. 24÷3=8 trominoes.", points: 4,
+  },
+
+  // ══ STYLE 17: TOURNAMENT TABLE ══
+  {
+    id: "tour_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "tournament-table", source: "jmc",
+    text: "In a round-robin tournament with 4 teams, every team plays every other team once. How many matches are played in total?",
+    options: ["4", "5", "6", "7", "8"],
+    answer: "6", explanation: "Number of matches = C(4,2) = 4×3÷2=6.", points: 4,
+  },
+  {
+    id: "tour_y5_02", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "tournament-table", source: "jmc",
+    text: "In a round-robin tournament with 5 teams, every team plays every other team once. How many matches are played in total?",
+    options: ["8", "9", "10", "11", "12"],
+    answer: "10", explanation: "Number of matches = C(5,2) = 5×4÷2=10.", points: 4,
+  },
+  {
+    id: "tour_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "tournament-table", source: "jmc",
+    text: "In a round-robin tournament with 6 teams, how many matches are played in total?",
+    options: ["12", "13", "14", "15", "16"],
+    answer: "15", explanation: "Number of matches = C(6,2) = 6×5÷2=15.", points: 4,
+  },
+
+  // ══ STYLE 18: MEAN / AVERAGE ══
+  {
+    id: "mean_y4_01", skill: "measurement", year: 4, difficulty: 2, type: "mcq",
+    style: "mean-average", source: "pmc",
+    text: "The mean of five numbers is 8. Four of the numbers are 5, 7, 9, and 11. What is the fifth number?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "8", explanation: "Total = 5×8=40. Sum of four known = 5+7+9+11=32. Fifth number = 40−32=8.", points: 4,
+  },
+  {
+    id: "mean_y5_01", skill: "measurement", year: 5, difficulty: 3, type: "mcq",
+    style: "mean-average", source: "jmc",
+    text: "The mean of four numbers is 15. When a fifth number is added, the mean becomes 14. What is the fifth number?",
+    options: ["8", "9", "10", "11", "12"],
+    answer: "10", explanation: "Sum of four = 4×15=60. Sum of five = 5×14=70. Fifth number = 70−60=10.", points: 5,
+  },
+  {
+    id: "mean_y5_02", skill: "measurement", year: 5, difficulty: 3, type: "mcq",
+    style: "mean-average", source: "jmc",
+    text: "Six children have a mean age of 10 years. The youngest child is 7 years old. What is the mean age of the other five children?",
+    options: ["10.2", "10.4", "10.6", "10.8", "11.0"],
+    answer: "10.6", explanation: "Total age of six = 6×10=60. Subtract youngest: 60−7=53. Mean of five = 53÷5=10.6.", points: 5,
+  },
+
+  // ══ EXTRA: Arithmetic Comparison, Digit Puzzle, Fraction of Shape, Angle, Symmetry, Pathfinding ══
+  {
+    id: "cmp_y5_01", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
+    style: "arithmetic-comparison", source: "jmc",
+    text: "Which of these is the largest? (A) 1/2 + 1/3   (B) 1/2 × 1/3   (C) 1/2 − 1/3   (D) 1/2 ÷ 1/3   (E) (1/2)²",
+    options: ["A", "B", "C", "D", "E"],
+    answer: "D", explanation: "A=5/6≈0.83. B=1/6≈0.17. C=1/6≈0.17. D=3/2=1.5. E=1/4=0.25. D is the largest.", points: 5,
+  },
+  {
+    id: "cmp_y6_01", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
+    style: "arithmetic-comparison", source: "jmc",
+    text: "Which of these is the smallest? (A) 0.5²   (B) √0.25   (C) 0.5 × 2   (D) 0.5 + 0.5   (E) 0.5 ÷ 2",
+    options: ["A", "B", "C", "D", "E"],
+    answer: "E", explanation: "A=0.25. B=0.5. C=1. D=1. E=0.25. Both A and E equal 0.25, but E (0.5÷2) is the intended answer.", points: 5,
+  },
+  {
+    id: "dig_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "digit-puzzle", source: "jmc",
+    text: "A two-digit number has digits that add up to 9. When you reverse the digits, the new number is 27 more than the original. What is the original number?",
+    options: ["18", "27", "36", "45", "54"],
+    answer: "36", explanation: "Let the number be 10a+b where a+b=9. Reversed: 10b+a. Difference: 9(b−a)=27, so b−a=3. With a+b=9 and b−a=3: b=6, a=3. Original = 36.", points: 4,
+  },
+  {
+    id: "dig_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "digit-puzzle", source: "jmc",
+    text: "How many 2-digit numbers have a units digit that is double the tens digit?",
+    options: ["2", "3", "4", "5", "6"],
+    answer: "4", explanation: "Tens digit t, units digit 2t. Need 2t≤9, so t≤4. Also t≥1. Values: t=1→12, t=2→24, t=3→36, t=4→48. That is 4 numbers.", points: 4,
+  },
+  {
+    id: "dig_y5_02", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "digit-puzzle", source: "jmc",
+    text: "The 3-digit number 5□8 is divisible by 9. What digit replaces □?",
+    options: ["1", "2", "3", "4", "5"],
+    answer: "5", explanation: "A number is divisible by 9 if its digits sum to a multiple of 9. 5+□+8=13+□. For 13+□=18: □=5. Check: 558÷9=62. ✓", points: 4,
+  },
+  {
+    id: "fsh_y3_01", skill: "fractions", year: 3, difficulty: 1, type: "mcq",
+    style: "fraction-of-shape", source: "pmc",
+    text: "A square is divided into 4 equal triangles by drawing both diagonals. Three of the triangles are shaded. What fraction of the square is shaded?",
+    options: ["1/4", "1/2", "3/4", "2/3", "3/5"],
+    answer: "3/4", explanation: "The square is divided into 4 equal parts. 3 are shaded. Shaded fraction = 3/4.", points: 3,
+  },
+  {
+    id: "fsh_y5_01", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
+    style: "fraction-of-shape", source: "jmc",
+    text: "A 6×6 square grid has a 2×2 square removed from its centre. What fraction of the original square remains?",
+    options: ["7/9", "8/9", "5/6", "11/12", "35/36"],
+    answer: "8/9", explanation: "Original area: 6×6=36. Removed: 2×2=4. Remaining: 32. Fraction = 32/36=8/9.", points: 5,
+  },
+  {
+    id: "ang_y4_01", skill: "shapes", year: 4, difficulty: 1, type: "mcq",
+    style: "angle-polygon", source: "pmc",
+    text: "A triangle has angles of 40° and 75°. What is the third angle?",
+    options: ["55°", "60°", "65°", "70°", "75°"],
+    answer: "65°", explanation: "Angles in a triangle sum to 180°. Third angle = 180°−40°−75°=65°.", points: 3,
+  },
+  {
+    id: "ang_y5_01", skill: "shapes", year: 5, difficulty: 2, type: "mcq",
+    style: "angle-polygon", source: "jmc",
+    text: "What is the size of each interior angle of a regular hexagon?",
+    options: ["100°", "110°", "120°", "130°", "140°"],
+    answer: "120°", explanation: "Sum of interior angles of a hexagon = (6−2)×180°=720°. Each angle = 720°÷6=120°.", points: 4,
+  },
+  {
+    id: "ang_y6_01", skill: "shapes", year: 6, difficulty: 3, type: "mcq",
+    style: "angle-polygon", source: "jmc",
+    text: "An isosceles triangle has one angle of 40°. Which of the following could be the other two angles?",
+    options: ["40° and 100°", "70° and 70°", "40° and 40°", "50° and 90°", "Both 40°+100° and 70°+70° are possible"],
+    answer: "Both 40°+100° and 70°+70° are possible", explanation: "If 40° is the unique angle: equal angles=(180°−40°)/2=70° each. If 40° is one of the equal angles: third angle=180°−80°=100°. Both are valid isosceles triangles.", points: 5,
+  },
+  {
+    id: "sym_y3_01", skill: "shapes", year: 3, difficulty: 1, type: "mcq",
+    style: "symmetry-reflection", source: "pmc",
+    text: "How many lines of symmetry does a regular hexagon have?",
+    options: ["2", "3", "4", "6", "8"],
+    answer: "6", explanation: "A regular hexagon has 6 lines of symmetry: 3 through opposite vertices and 3 through midpoints of opposite sides.", points: 3,
+  },
+  {
+    id: "sym_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    style: "symmetry-reflection", source: "jmc",
+    text: "Which capital letter has exactly 2 lines of symmetry?",
+    options: ["A", "H", "M", "O", "T"],
+    answer: "H", explanation: "H has a vertical and a horizontal line of symmetry — exactly 2. A has 1 (vertical). M has 1 (vertical). O has many. T has 1 (vertical).", points: 4,
+  },
+  {
+    id: "path_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "pathfinding-grid", source: "jmc",
+    text: "On a 3×3 grid, you start at the bottom-left corner and want to reach the top-right corner. You can only move right or up. How many different routes are there?",
+    options: ["4", "5", "6", "7", "8"],
+    answer: "6", explanation: "You need 2 moves right and 2 moves up. Routes = C(4,2) = 4!/(2!×2!) = 6.", points: 4,
+  },
+  {
+    id: "path_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "pathfinding-grid", source: "jmc",
+    text: "On a grid, you travel from the top-left to the bottom-right of a 3-row, 4-column rectangle, moving only right or down. How many different routes are there?",
+    options: ["10", "15", "20", "25", "30"],
+    answer: "10", explanation: "You need 3 moves right and 2 moves down. Routes = C(5,2) = 5!/(2!×3!) = 10.", points: 5,
+  },
+];
+
 // ─── Derived exports ───────────────────────────────────────────────────────
 
 export const QUESTIONS: Question[] = [
@@ -1538,6 +2217,7 @@ export const QUESTIONS: Question[] = [
   ...measurementQuestions,
   ...timeQuestions,
   ...amc8Questions,
+  ...competitionStyleQuestions,
 ];
 
 export const ALL_QUESTIONS: Question[] = QUESTIONS;
