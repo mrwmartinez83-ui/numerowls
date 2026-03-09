@@ -89,6 +89,23 @@ export type QuestionStyle =
   | "pie-chart"
   | "mean-average"
   | "coin-denomination"
+  | "direction-rotation"
+  | "meeting-point"
+  | "best-value"
+  | "simultaneous-constraints"
+  | "age-problems"
+  | "coin-combinations"
+  | "balance-scales"
+  | "fraction-remaining"
+  | "picture-graph"
+  | "multi-step-cutting"
+  | "ordering-quantities"
+  | "triangular-numbers"
+  | "median-real-data"
+  | "arithmetic-sequence"
+  | "value-for-money"
+  | "rate-proportion"
+  | "consecutive-integers"
   | "standard";
 
 export type QuestionSource =
@@ -96,6 +113,9 @@ export type QuestionSource =
   | "imc"
   | "pmc"
   | "amc8"
+  | "nns"
+  | "singapore"
+  | "tmc"
   | "original";
 
 export interface Question {
@@ -2247,8 +2267,731 @@ const competitionStyleQuestions: Question[] = [
   },
 ];
 
-// ─── Derived exports ───────────────────────────────────────────────────────
+// ─── New Competition-Inspired Questions (PMC, Singapore, NNS, TMC) ──────────
+const newCompetitionQuestions: Question[] = [
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: direction-rotation
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "dir_y3_01", skill: "shapes", year: 3, difficulty: 1, type: "mcq",
+    style: "direction-rotation", source: "pmc",
+    text: "Bella is facing North. She turns 90° clockwise. Which direction is she now facing?",
+    options: ["North", "South", "East", "West", "North-East"],
+    answer: "East",
+    explanation: "A 90° clockwise turn from North goes to East. Clockwise order: N → E → S → W.",
+    points: 3,
+  },
+  {
+    id: "dir_y3_02", skill: "shapes", year: 3, difficulty: 1, type: "mcq",
+    style: "direction-rotation", source: "pmc",
+    text: "A toy car is facing West. It turns 180°. Which direction is it now facing?",
+    options: ["North", "South", "East", "West", "South-West"],
+    answer: "East",
+    explanation: "A 180° turn reverses direction completely. The opposite of West is East.",
+    points: 3,
+  },
+  {
+    id: "dir_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    style: "direction-rotation", source: "pmc",
+    text: "A seagull is flying East. It spins 180° clockwise. What direction is it now flying?",
+    options: ["East", "North", "North-East", "South", "West"],
+    answer: "West",
+    explanation: "A 180° spin reverses direction. The opposite of East is West.",
+    points: 3,
+  },
+  {
+    id: "dir_y4_02", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    style: "direction-rotation", source: "pmc",
+    text: "A robot faces South. It makes two 90° anticlockwise turns. Which direction does it face now?",
+    options: ["North", "South", "East", "West", "South-East"],
+    answer: "North",
+    explanation: "From South: 1st 90° anticlockwise → East. 2nd 90° anticlockwise → North.",
+    points: 3,
+  },
+  {
+    id: "dir_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    style: "direction-rotation", source: "pmc",
+    text: "A dancer faces South-West. She turns 270° clockwise. Which direction does she now face?",
+    options: ["North-East", "North-West", "South-East", "South-West", "East"],
+    answer: "South-East",
+    explanation: "Using 45° steps clockwise from SW: SW→W(45°)→NW(90°)→N(135°)→NE(180°)→E(225°)→SE(270°). So 270° clockwise from SW = SE.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: meeting-point
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "meet_y5_01", skill: "measurement", year: 5, difficulty: 2, type: "mcq",
+    style: "meeting-point", source: "pmc",
+    text: "A spider and a fly are 33 cm apart. The spider moves towards the fly at 7 cm per second and the fly moves towards the spider at 4 cm per second. How many seconds before they meet?",
+    options: ["2 sec", "3 sec", "4 sec", "5 sec", "6 sec"],
+    answer: "3 sec",
+    explanation: "Together they close the gap at 7 + 4 = 11 cm/s. Time = 33 ÷ 11 = 3 seconds.",
+    points: 4,
+  },
+  {
+    id: "meet_y5_02", skill: "measurement", year: 5, difficulty: 2, type: "mcq",
+    style: "meeting-point", source: "pmc",
+    text: "Two trains are 120 km apart on the same track, heading towards each other. Train A travels at 40 km/h and Train B at 20 km/h. How long before they meet?",
+    options: ["1 hour", "2 hours", "3 hours", "4 hours", "5 hours"],
+    answer: "2 hours",
+    explanation: "Combined closing speed = 40 + 20 = 60 km/h. Time = 120 ÷ 60 = 2 hours.",
+    points: 4,
+  },
+  {
+    id: "meet_y6_01", skill: "measurement", year: 6, difficulty: 3, type: "mcq",
+    style: "meeting-point", source: "pmc",
+    text: "Anya walks from Town A to Town B at 4 km/h. Ben cycles from Town B to Town A at 12 km/h. The towns are 20 km apart. They set off at the same time. How far from Town A do they meet?",
+    options: ["4 km", "5 km", "6 km", "8 km", "10 km"],
+    answer: "5 km",
+    explanation: "Combined speed = 4 + 12 = 16 km/h. Time to meet = 20 ÷ 16 = 1.25 hours. Anya travels 4 × 1.25 = 5 km from Town A.",
+    points: 5,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: best-value
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "bval_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "best-value", source: "pmc",
+    text: "A shop sells biscuits: 1 for 30p, 3 for 80p, or 5 for £1.20. Which deal gives the cheapest price per biscuit?",
+    options: ["1 for 30p", "3 for 80p", "5 for £1.20", "They are all the same", "Cannot tell"],
+    answer: "5 for £1.20",
+    explanation: "Per biscuit: 1 for 30p = 30p. 3 for 80p ≈ 26.7p. 5 for 120p = 24p. The 5-pack is cheapest.",
+    points: 3,
+  },
+  {
+    id: "bval_y4_02", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "best-value", source: "pmc",
+    text: "Nibbletts come in three offers: 2 for the price of 1, 3 for the price of 2, or 5 for the price of 3. Which offer gives you the most Nibbletts for your money?",
+    options: ["2 for price of 1", "3 for price of 2", "5 for price of 3", "They are all the same", "Cannot tell"],
+    answer: "2 for price of 1",
+    explanation: "Work out what fraction you pay: '2 for 1' = pay for 1 out of 2 = 50%. '3 for 2' = pay for 2 out of 3 ≈ 67%. '5 for 3' = pay for 3 out of 5 = 60%. The lowest fraction paid is the best deal: '2 for price of 1'.",
+    points: 3,
+  },
+  {
+    id: "bval_y5_01", skill: "addition", year: 5, difficulty: 2, type: "mcq",
+    style: "best-value", source: "pmc",
+    text: "Orange juice: 250 ml for 60p, 500 ml for £1.10, or 1 litre for £2.00. Which is the best value?",
+    options: ["250 ml for 60p", "500 ml for £1.10", "1 litre for £2.00", "250 ml and 500 ml are equal", "All the same"],
+    answer: "1 litre for £2.00",
+    explanation: "Price per 100 ml: 250 ml = 60÷2.5 = 24p. 500 ml = 110÷5 = 22p. 1 litre = 200÷10 = 20p. The 1-litre bottle is cheapest per ml.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: simultaneous-constraints
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "sim_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "simultaneous-constraints", source: "nns",
+    text: "Zids have 4 spots. Zods have 9 spots. Altogether some Zids and Zods have 48 spots. How many Zids are there?",
+    options: ["0", "3", "6", "9", "12"],
+    answer: "3",
+    explanation: "Try: 3 Zids = 12 spots, leaving 48 − 12 = 36 spots for Zods. 36 ÷ 9 = 4 Zods. Check: 3×4 + 4×9 = 12 + 36 = 48. ✓",
+    points: 5,
+  },
+  {
+    id: "sim_y5_02", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "simultaneous-constraints", source: "nns",
+    text: "Cats have 4 legs. Birds have 2 legs. A pet shop has some cats and birds. There are 7 animals and 22 legs altogether. How many cats are there?",
+    options: ["2", "3", "4", "5", "6"],
+    answer: "4",
+    explanation: "Let c = cats. Birds = 7 − c. Legs: 4c + 2(7−c) = 22 → 4c + 14 − 2c = 22 → 2c = 8 → c = 4. Check: 4 cats (16 legs) + 3 birds (6 legs) = 22 legs. ✓",
+    points: 5,
+  },
+  {
+    id: "sim_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "simultaneous-constraints", source: "nns",
+    text: "At Franco's café: 1 curry and 1 tea cost £4.50. 2 curries and 1 tea cost £7.50. How much does 1 curry cost?",
+    options: ["£2.00", "£2.50", "£3.00", "£3.50", "£4.00"],
+    answer: "£3.00",
+    explanation: "The difference between the two orders is 1 extra curry costing £7.50 − £4.50 = £3.00.",
+    points: 5,
+  },
+  {
+    id: "sim_y6_02", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "simultaneous-constraints", source: "nns",
+    text: "A pet rescue has equal numbers of parrots, cats and dogs. Parrots have 2 legs, cats and dogs have 4 legs each. There are 30 legs altogether. How many cats are there?",
+    options: ["2", "3", "4", "5", "6"],
+    answer: "3",
+    explanation: "Let n = number of each animal. Legs = 2n + 4n + 4n = 10n = 30. So n = 3. There are 3 cats.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: age-problems
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "age_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "age-problems", source: "singapore",
+    text: "Five years ago, Sam was 8 years old. His mum is 26 years older than him. How old will Sam's mum be in 3 years' time?",
+    options: ["39", "40", "41", "42", "43"],
+    answer: "42",
+    explanation: "Sam now = 8 + 5 = 13. Mum now = 13 + 26 = 39. In 3 years: 39 + 3 = 42.",
+    points: 3,
+  },
+  {
+    id: "age_y4_02", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "age-problems", source: "singapore",
+    text: "Lily is 9 years old. Her dad is 4 times her age. How old will her dad be when Lily is 15?",
+    options: ["36", "38", "40", "42", "44"],
+    answer: "42",
+    explanation: "Dad now = 4 × 9 = 36. Age gap = 36 − 9 = 27 years (constant). When Lily is 15: dad = 15 + 27 = 42.",
+    points: 3,
+  },
+  {
+    id: "age_y5_01", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    style: "age-problems", source: "nns",
+    text: "My age this year is a multiple of 8. Next year it will be a multiple of 7. How old am I?",
+    options: ["8", "24", "32", "40", "48"],
+    answer: "48",
+    explanation: "Check multiples of 8: 8→9 (not ×7), 16→17 (no), 24→25 (no), 32→33 (no), 40→41 (no), 48→49=7×7 ✓. I am 48.",
+    points: 4,
+  },
+  {
+    id: "age_y5_02", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    style: "age-problems", source: "nns",
+    text: "Last year my age was a square number. Next year it will be a cube number. How old am I now?",
+    options: ["7", "8", "9", "25", "26"],
+    answer: "26",
+    explanation: "I need: last year = square, next year = cube. So square + 2 = cube. 25 + 2 = 27 ✓ (25 = 5², 27 = 3³). Last year I was 25, next year 27, so I'm 26 now.",
+    points: 5,
+  },
+  {
+    id: "age_y5_03", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    style: "age-problems", source: "singapore",
+    text: "Daniel is 5 years older than his sister. In 4 years, the sum of their ages will be 27. How old is Daniel now?",
+    options: ["7", "9", "11", "12", "14"],
+    answer: "12",
+    explanation: "Let sister = s, Daniel = s+5. In 4 years: (s+4)+(s+5+4)=27 → 2s+13=27 → 2s=14 → s=7. Daniel = 7+5 = 12.",
+    points: 4,
+  },
+  {
+    id: "age_y6_01", skill: "addition", year: 6, difficulty: 3, type: "mcq",
+    style: "age-problems", source: "nns",
+    text: "Mum was 27 when I was born. Eight years ago, she was twice as old as I will be in 5 years' time. How old am I now?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "9",
+    explanation: "Let my age now = a. Eight years ago, mum's age = (27+a)−8 = a+19. In 5 years, my age = a+5. Equation: a+19 = 2(a+5) → a+19 = 2a+10 → 9 = a.",
+    points: 5,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: coin-combinations
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "coin_y3_01", skill: "addition", year: 3, difficulty: 1, type: "mcq",
+    style: "coin-combinations", source: "nns",
+    text: "Lucy wants to pay exactly 15p using exactly 3 coins. Which combination works? (Coins: 1p, 2p, 5p, 10p, 20p)",
+    options: ["5p + 5p + 5p", "10p + 2p + 2p", "5p + 5p + 2p", "10p + 5p + 1p", "10p + 3p + 2p"],
+    answer: "5p + 5p + 5p",
+    explanation: "5+5+5=15p ✓ using exactly 3 coins. Check others: 10+2+2=14p ✗. 5+5+2=12p ✗. 10+5+1=16p ✗. 3p coin doesn't exist.",
+    points: 3,
+  },
+  {
+    id: "coin_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "coin-combinations", source: "nns",
+    text: "What is the smallest number of coins needed to pay exactly 76p? (Coins: 1p, 2p, 5p, 10p, 20p, 50p)",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "4",
+    explanation: "76p = 50p + 20p + 5p + 1p = 4 coins. ✓",
+    points: 3,
+  },
+  {
+    id: "coin_y5_01", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    style: "coin-combinations", source: "nns",
+    text: "Anna put some 10p coins on a table. Half of them were tails up. She turned over 2 coins (both tails to heads), and then one third of them were tails up. How many coins did Anna put on the table?",
+    options: ["6", "8", "10", "12", "18"],
+    answer: "12",
+    explanation: "Let total = n. Initially n/2 tails up. After turning 2 tails to heads: tails = n/2 − 2 = n/3. So 3(n/2−2) = n → 3n/2 − 6 = n → n/2 = 6 → n = 12. Check: 12 coins, 6 tails. Turn 2 tails to heads: 4 tails = 12/3 = 4 ✓.",
+    points: 5,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: balance-scales
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "bal_y3_01", skill: "logic", year: 3, difficulty: 1, type: "mcq",
+    style: "balance-scales", source: "singapore",
+    text: "A balance shows: 1 apple = 3 oranges. 1 orange = 2 grapes. How many grapes balance 1 apple?",
+    options: ["3", "4", "5", "6", "7"],
+    answer: "6",
+    explanation: "1 apple = 3 oranges. Each orange = 2 grapes. So 1 apple = 3 × 2 = 6 grapes.",
+    points: 3,
+  },
+  {
+    id: "bal_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "balance-scales", source: "singapore",
+    text: "3 identical boxes of type A balance with 1 box of type B and a 5 kg weight. Box B weighs 7 kg. What is the mass of one box A?",
+    options: ["2 kg", "3 kg", "4 kg", "5 kg", "6 kg"],
+    answer: "4 kg",
+    explanation: "3A = B + 5 = 7 + 5 = 12 kg. So A = 12 ÷ 3 = 4 kg.",
+    points: 3,
+  },
+  {
+    id: "bal_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "balance-scales", source: "singapore",
+    text: "On a balance: A + 4 kg = B. Also, 3A = B + 2 kg. What is the mass of box B?",
+    options: ["4 kg", "5 kg", "6 kg", "7 kg", "8 kg"],
+    answer: "7 kg",
+    explanation: "From A + 4 = B: B = A + 4. Substitute into 3A = B + 2: 3A = (A+4)+2 = A+6 → 2A = 6 → A = 3 kg. B = 3 + 4 = 7 kg.",
+    points: 5,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: logic-deduction
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "ded_y3_01", skill: "logic", year: 3, difficulty: 1, type: "mcq",
+    style: "logic-deduction", source: "singapore",
+    text: "Four friends each have a different pet: cat, dog, fish and rabbit. Aisha has a fish. Ben does not have a dog. Chloe has a cat. What pet does Dan have?",
+    options: ["Cat", "Dog", "Fish", "Rabbit", "Bird"],
+    answer: "Dog",
+    explanation: "Aisha = fish, Chloe = cat. Remaining: dog and rabbit for Ben and Dan. Ben doesn't have a dog, so Ben = rabbit and Dan = dog.",
+    points: 3,
+  },
+  {
+    id: "ded_y3_02", skill: "logic", year: 3, difficulty: 2, type: "mcq",
+    style: "logic-deduction", source: "singapore",
+    text: "Andy, Ben, Lucas and Siti had lunch. They ordered: chicken rice, noodles, fish & chips and pasta. Siti loves fish. Andy prefers rice. Lucas did not order noodles. What did Ben order?",
+    options: ["Chicken rice", "Noodles", "Fish & chips", "Pasta", "Cannot tell"],
+    answer: "Noodles",
+    explanation: "Siti = fish & chips. Andy = chicken rice. Lucas ≠ noodles, so Lucas = pasta. Ben = noodles.",
+    points: 3,
+  },
+  {
+    id: "ded_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "logic-deduction", source: "singapore",
+    text: "Five pupils finished a race in different positions. Ella finished before Dan. Dan finished before Finn. Finn finished before Bea. Bea finished before Cal. Who finished 3rd?",
+    options: ["Ella", "Dan", "Finn", "Bea", "Cal"],
+    answer: "Finn",
+    explanation: "Order: Ella (1st) → Dan (2nd) → Finn (3rd) → Bea (4th) → Cal (5th). Finn finished 3rd.",
+    points: 3,
+  },
+  {
+    id: "ded_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "logic-deduction", source: "singapore",
+    text: "In a class, every pupil plays at least one sport. 18 play football, 14 play tennis, and 8 play both. How many pupils are in the class?",
+    options: ["18", "20", "24", "26", "32"],
+    answer: "24",
+    explanation: "Total = football + tennis − both = 18 + 14 − 8 = 24.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: fraction-remaining
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "frac_rem_y4_01", skill: "fractions", year: 4, difficulty: 2, type: "mcq",
+    style: "fraction-remaining", source: "singapore",
+    text: "Tom had a pizza. He gave 1/4 to his sister and 2/4 to his friend. What fraction of the pizza did Tom have left?",
+    options: ["1/8", "1/4", "1/3", "1/2", "3/4"],
+    answer: "1/4",
+    explanation: "Tom gave away 1/4 + 2/4 = 3/4. He kept 1 − 3/4 = 1/4.",
+    points: 3,
+  },
+  {
+    id: "frac_rem_y4_02", skill: "fractions", year: 4, difficulty: 2, type: "mcq",
+    style: "fraction-remaining", source: "singapore",
+    text: "Steve had a pizza. He gave 3/10 to his sister and twice as many pieces to his father. What fraction did Steve have left?",
+    options: ["1/10", "2/10", "3/10", "4/10", "5/10"],
+    answer: "1/10",
+    explanation: "Steve gave 3/10 to sister and 2 × 3/10 = 6/10 to father. Total given = 3/10 + 6/10 = 9/10. Left = 1 − 9/10 = 1/10.",
+    points: 3,
+  },
+  {
+    id: "frac_rem_y5_01", skill: "fractions", year: 5, difficulty: 2, type: "mcq",
+    style: "fraction-remaining", source: "singapore",
+    text: "A bag had 60 sweets. Maya ate 1/3 of them. Her brother ate 2/5 of the remainder. How many sweets were left?",
+    options: ["12", "16", "20", "24", "28"],
+    answer: "24",
+    explanation: "Maya ate 1/3 × 60 = 20. Remainder = 40. Brother ate 2/5 × 40 = 16. Left = 40 − 16 = 24.",
+    points: 4,
+  },
+  {
+    id: "frac_rem_y5_02", skill: "fractions", year: 5, difficulty: 2, type: "mcq",
+    style: "fraction-remaining", source: "singapore",
+    text: "A rope is 1 metre long. Joe cuts off 64 cm. He then cuts the remaining piece into 4 equal parts. How long is each part?",
+    options: ["6 cm", "7 cm", "8 cm", "9 cm", "10 cm"],
+    answer: "9 cm",
+    explanation: "Remaining = 100 − 64 = 36 cm. Each part = 36 ÷ 4 = 9 cm.",
+    points: 3,
+  },
+  {
+    id: "frac_rem_y6_01", skill: "fractions", year: 6, difficulty: 3, type: "mcq",
+    style: "fraction-remaining", source: "singapore",
+    text: "Agnes bought 50 red and yellow beads. For every 4 red beads, there was 1 yellow bead. How many red beads did Agnes buy?",
+    options: ["30", "35", "40", "45", "48"],
+    answer: "40",
+    explanation: "In every group of 5 beads, 4 are red. Number of groups = 50 ÷ 5 = 10. Red beads = 10 × 4 = 40.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: picture-graph
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "pgraph_y3_01", skill: "logic", year: 3, difficulty: 1, type: "mcq",
+    style: "picture-graph", source: "singapore",
+    text: "A picture graph shows favourite fruits. Each ★ symbol = 2 pupils. Apples: ★★★ (3 symbols), Bananas: ★★ (2 symbols), Oranges: ★★★★ (4 symbols). How many pupils chose apples or oranges?",
+    options: ["6", "8", "10", "12", "14"],
+    answer: "14",
+    explanation: "Apples: 3 × 2 = 6 pupils. Oranges: 4 × 2 = 8 pupils. Total = 6 + 8 = 14 pupils.",
+    points: 3,
+  },
+  {
+    id: "pgraph_y3_02", skill: "logic", year: 3, difficulty: 2, type: "mcq",
+    style: "picture-graph", source: "singapore",
+    text: "A pictogram shows books read. Each ★ = 3 books. Ali: ★★★★ (4 stars), Beth: ★★ (2 stars), Cara: ★★★★★ (5 stars). How many more books did Cara read than Beth?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "9",
+    explanation: "Cara: 5 × 3 = 15 books. Beth: 2 × 3 = 6 books. Difference = 15 − 6 = 9 books.",
+    points: 3,
+  },
+  {
+    id: "pgraph_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "picture-graph", source: "singapore",
+    text: "A picture graph shows sandwiches sold. Each symbol = 10 sandwiches. Tuna: 4 symbols, Egg: 3 symbols. Chicken sandwiches = half the total of tuna and egg. How many chicken sandwiches were sold?",
+    options: ["25", "30", "35", "40", "45"],
+    answer: "35",
+    explanation: "Tuna = 4 × 10 = 40. Egg = 3 × 10 = 30. Tuna + Egg = 70. Chicken = 70 ÷ 2 = 35.",
+    points: 3,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: multi-step word problems
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "ms_y4_01", skill: "measurement", year: 4, difficulty: 2, type: "mcq",
+    style: "multi-step-cutting", source: "singapore",
+    text: "A pancake seller had 9 bottles of honey, each with 10 litres. He used 36 litres on Saturday and 23 litres on Sunday. How many litres of honey did he have left?",
+    options: ["27", "31", "41", "51", "63"],
+    answer: "31",
+    explanation: "Total = 9 × 10 = 90 litres. Used = 36 + 23 = 59 litres. Left = 90 − 59 = 31 litres.",
+    points: 3,
+  },
+  {
+    id: "ms_y4_02", skill: "measurement", year: 4, difficulty: 2, type: "mcq",
+    style: "multi-step-cutting", source: "singapore",
+    text: "A ribbon is 2 metres long. Priya cuts off 35 cm for a bow and 45 cm for a headband. She cuts the remaining ribbon into 4 equal pieces. How long is each piece?",
+    options: ["25 cm", "28 cm", "30 cm", "32 cm", "35 cm"],
+    answer: "30 cm",
+    explanation: "Total = 200 cm. Used = 35 + 45 = 80 cm. Remaining = 120 cm. Each piece = 120 ÷ 4 = 30 cm.",
+    points: 3,
+  },
+  {
+    id: "ms_y5_01", skill: "measurement", year: 5, difficulty: 2, type: "mcq",
+    style: "multi-step-cutting", source: "singapore",
+    text: "Oranges are sold in bags of 4 for £3 per bag. Mrs Lee bought 32 oranges and Mdm Rose bought 6 bags. How much did they spend altogether?",
+    options: ["£36", "£40", "£42", "£44", "£48"],
+    answer: "£42",
+    explanation: "Mrs Lee: 32 ÷ 4 = 8 bags × £3 = £24. Mdm Rose: 6 × £3 = £18. Total = £24 + £18 = £42.",
+    points: 4,
+  },
+  {
+    id: "ms_y5_02", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    style: "multi-step-cutting", source: "nns",
+    text: "Mr Tan has some money. If he buys a toaster for £49, he will have £26 left. If he buys an iron instead, he will be £17 short. How much does the iron cost?",
+    options: ["£75", "£82", "£88", "£92", "£96"],
+    answer: "£92",
+    explanation: "Mr Tan has £49 + £26 = £75. The iron costs £75 + £17 = £92.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: digit-puzzle / place-value
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "plv_y3_01", skill: "addition", year: 3, difficulty: 1, type: "mcq",
+    style: "digit-puzzle", source: "singapore",
+    text: "Which of these correctly describes the number 513?",
+    options: ["5 hundreds and 31 ones", "5 hundreds, 1 ten and 3 ones", "530 ones", "51 tens and 3 ones", "5 tens and 13 ones"],
+    answer: "5 hundreds, 1 ten and 3 ones",
+    explanation: "513 = 5 hundreds + 1 ten + 3 ones. Standard place value breakdown.",
+    points: 3,
+  },
+  {
+    id: "yr_y5_01", skill: "logic", year: 5, difficulty: 2, type: "mcq",
+    style: "digit-puzzle", source: "pmc",
+    text: "The digits of the year 2022 add up to 6. How many years after 2022 is the next year whose digits also add up to 6?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "9",
+    explanation: "Check years: 2023→7, 2024→8, 2025→9, 2026→10, 2027→11, 2028→12, 2029→13, 2030→5, 2031→6 ✓. That's 2031 − 2022 = 9 years.",
+    points: 4,
+  },
+  {
+    id: "book_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "digit-puzzle", source: "nns",
+    text: "How many times does the digit 3 appear in the page numbers from 1 to 33?",
+    options: ["4", "5", "6", "7", "8"],
+    answer: "8",
+    explanation: "Pages with a 3: 3(×1), 13(×1), 23(×1), 30(×1), 31(×1), 32(×1), 33(×2). Total = 1+1+1+1+1+1+2 = 8.",
+    points: 5,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: rate-proportion / speed
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "spd_y5_01", skill: "measurement", year: 5, difficulty: 2, type: "mcq",
+    style: "rate-proportion", source: "pmc",
+    text: "Ringa Bell takes 20 minutes to cycle to school, which is 1 mile away. What is her average cycling speed in miles per hour?",
+    options: ["2 mph", "3 mph", "4 mph", "5 mph", "6 mph"],
+    answer: "3 mph",
+    explanation: "20 minutes = 1/3 of an hour. Speed = 1 mile ÷ (1/3 hour) = 3 mph.",
+    points: 3,
+  },
+  {
+    id: "spd_y5_02", skill: "measurement", year: 5, difficulty: 2, type: "mcq",
+    style: "rate-proportion", source: "pmc",
+    text: "An electric scooter uses 20p of electricity to travel 25 miles. How much would it cost to travel 100 miles?",
+    options: ["40p", "60p", "80p", "£1.00", "£1.20"],
+    answer: "80p",
+    explanation: "100 miles = 4 × 25 miles. Cost = 4 × 20p = 80p.",
+    points: 3,
+  },
+  {
+    id: "spd_y6_01", skill: "measurement", year: 6, difficulty: 3, type: "mcq",
+    style: "rate-proportion", source: "pmc",
+    text: "My teacher has 18 socks (9 pairs). He puts on a clean pair every 3 days. How many days can he wear socks before he has to wash them all?",
+    options: ["12", "18", "21", "27", "36"],
+    answer: "27",
+    explanation: "9 pairs × 3 days per pair = 27 days.",
+    points: 3,
+  },
+  {
+    id: "rate2_y5_01", skill: "measurement", year: 5, difficulty: 2, type: "mcq",
+    style: "rate-proportion", source: "tmc",
+    text: "A wheel makes 360 revolutions per hour. How many seconds does it take to complete 1 revolution?",
+    options: ["5 seconds", "8 seconds", "10 seconds", "12 seconds", "15 seconds"],
+    answer: "10 seconds",
+    explanation: "360 revolutions per hour = 360 per 3600 seconds = 1 revolution per 10 seconds.",
+    points: 4,
+  },
+  {
+    id: "rate2_y6_01", skill: "measurement", year: 6, difficulty: 3, type: "mcq",
+    style: "rate-proportion", source: "tmc",
+    text: "A car travels at 60 mph and a lorry at 45 mph. They set off from the same place at the same time in the same direction. After 2 hours, how far apart are they?",
+    options: ["15 miles", "20 miles", "25 miles", "30 miles", "35 miles"],
+    answer: "30 miles",
+    explanation: "Car: 2 × 60 = 120 miles. Lorry: 2 × 45 = 90 miles. Distance apart = 120 − 90 = 30 miles.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: consecutive-integers
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "con_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "consecutive-integers", source: "tmc",
+    text: "Three consecutive numbers add up to 48. What is the largest of the three?",
+    options: ["14", "15", "16", "17", "18"],
+    answer: "17",
+    explanation: "Middle number = 48 ÷ 3 = 16. Largest = 16 + 1 = 17.",
+    points: 3,
+  },
+  {
+    id: "con_y5_01", skill: "addition", year: 5, difficulty: 2, type: "mcq",
+    style: "consecutive-integers", source: "tmc",
+    text: "Five consecutive integers add up to 85. What is the smallest of the five?",
+    options: ["13", "14", "15", "16", "17"],
+    answer: "15",
+    explanation: "Middle number = 85 ÷ 5 = 17. Smallest = 17 − 2 = 15.",
+    points: 3,
+  },
+  {
+    id: "con_y5_02", skill: "addition", year: 5, difficulty: 3, type: "mcq",
+    style: "consecutive-integers", source: "tmc",
+    text: "The sum of four consecutive even numbers is 92. What is the largest of the four?",
+    options: ["20", "22", "24", "26", "28"],
+    answer: "26",
+    explanation: "Let the numbers be n, n+2, n+4, n+6. Sum = 4n+12 = 92 → 4n = 80 → n = 20. Largest = 20+6 = 26.",
+    points: 4,
+  },
+  {
+    id: "con_y6_01", skill: "addition", year: 6, difficulty: 3, type: "mcq",
+    style: "consecutive-integers", source: "tmc",
+    text: "The sum of three consecutive integers is 54. What is the product of the smallest and largest?",
+    options: ["287", "306", "323", "342", "361"],
+    answer: "323",
+    explanation: "Middle = 54 ÷ 3 = 18. Numbers are 17, 18, 19. Product = 17 × 19 = 323.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: ordering-quantities
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "ord2_y5_01", skill: "fractions", year: 5, difficulty: 2, type: "mcq",
+    style: "ordering-quantities", source: "tmc",
+    text: "Three runners completed different fractions of a race: Amir ran 3/5, Bea ran 0.58, Cal ran 61%. Who ran the furthest?",
+    options: ["Amir", "Bea", "Cal", "They all ran the same", "Cannot tell"],
+    answer: "Cal",
+    explanation: "Convert: Amir = 0.60, Bea = 0.58, Cal = 0.61. Cal ran furthest.",
+    points: 3,
+  },
+  {
+    id: "ord2_y5_02", skill: "fractions", year: 5, difficulty: 3, type: "mcq",
+    style: "ordering-quantities", source: "tmc",
+    text: "Which is the correct order from smallest to largest: 3/8, 0.4, 35%?",
+    options: ["3/8, 35%, 0.4", "35%, 3/8, 0.4", "3/8, 0.4, 35%", "35%, 0.4, 3/8", "0.4, 3/8, 35%"],
+    answer: "35%, 3/8, 0.4",
+    explanation: "Convert: 3/8 = 0.375, 0.4 = 0.400, 35% = 0.350. Order: 0.350 < 0.375 < 0.400 → 35%, 3/8, 0.4.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: triangular-numbers
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "tri2_y4_01", skill: "patterns", year: 4, difficulty: 2, type: "mcq",
+    style: "triangular-numbers", source: "tmc",
+    text: "A jar has 56 sweets. The first child takes 1, the second takes 2, the third takes 3, and so on. How many sweets are left when the next child cannot take their full share?",
+    options: ["0", "1", "2", "3", "4"],
+    answer: "1",
+    explanation: "1+2+...+10 = 55 sweets taken. 56 − 55 = 1 sweet left. The 11th child needs 11 but only 1 remains.",
+    points: 4,
+  },
+  {
+    id: "tri2_y5_01", skill: "patterns", year: 5, difficulty: 3, type: "mcq",
+    style: "triangular-numbers", source: "tmc",
+    text: "Which of these numbers is a triangular number?",
+    options: ["20", "25", "28", "32", "35"],
+    answer: "28",
+    explanation: "Triangular numbers: 1, 3, 6, 10, 15, 21, 28, 36... 28 = 1+2+3+4+5+6+7 ✓.",
+    points: 4,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: median-real-data
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "med2_y5_01", skill: "logic", year: 5, difficulty: 2, type: "mcq",
+    style: "median-real-data", source: "tmc",
+    text: "Six pupils scored these marks: 14, 7, 19, 11, 14, 8. What is the median score?",
+    options: ["11", "12", "12.5", "13", "14"],
+    answer: "12.5",
+    explanation: "Sorted: 7, 8, 11, 14, 14, 19. Median = mean of 3rd and 4th = (11+14)÷2 = 12.5.",
+    points: 4,
+  },
+  {
+    id: "med2_y6_01", skill: "logic", year: 6, difficulty: 3, type: "mcq",
+    style: "median-real-data", source: "tmc",
+    text: "A train stops at five stations. The number of letters in each name: Elm (3), Riverside (9), Oak Park (8), Central (7), Bridge (6). What is the median number of letters?",
+    options: ["6", "6.5", "7", "7.5", "8"],
+    answer: "7",
+    explanation: "Sorted: 3, 6, 7, 8, 9. With 5 values, median = 3rd value = 7.",
+    points: 3,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: arithmetic-sequence
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "arith2_y4_01", skill: "patterns", year: 4, difficulty: 1, type: "mcq",
+    style: "arithmetic-sequence", source: "tmc",
+    text: "A sequence starts: 4, 7, 10, 13, ... What is the 10th term?",
+    options: ["28", "29", "30", "31", "32"],
+    answer: "31",
+    explanation: "Increases by 3 each time. nth term = 3n+1. For n=10: 3×10+1 = 31.",
+    points: 3,
+  },
+  {
+    id: "arith2_y5_01", skill: "patterns", year: 5, difficulty: 2, type: "mcq",
+    style: "arithmetic-sequence", source: "tmc",
+    text: "An arithmetic sequence starts 2, 6, 10, 14, ... What is the 15th term?",
+    options: ["54", "56", "58", "60", "62"],
+    answer: "58",
+    explanation: "Common difference = 4. nth term = 4n−2. For n=15: 4×15−2 = 58.",
+    points: 3,
+  },
+  {
+    id: "arith2_y6_01", skill: "patterns", year: 6, difficulty: 3, type: "mcq",
+    style: "arithmetic-sequence", source: "tmc",
+    text: "The 4th term of an arithmetic sequence is 19 and the 7th term is 31. What is the 1st term?",
+    options: ["5", "6", "7", "8", "9"],
+    answer: "7",
+    explanation: "From term 4 to term 7 is 3 steps: 31−19=12, so common difference = 4. Term 1 = 19 − 3×4 = 7.",
+    points: 5,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: counting-shapes (additional)
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "ctri_y4_01", skill: "shapes", year: 4, difficulty: 2, type: "mcq",
+    style: "counting-shapes", source: "nns",
+    text: "A large triangle is divided into 4 smaller equal triangles by connecting the midpoints of its sides. How many triangles are there in total (including the large one)?",
+    options: ["4", "5", "6", "7", "8"],
+    answer: "5",
+    explanation: "4 small triangles + 1 large triangle = 5 triangles in total.",
+    points: 3,
+  },
+  {
+    id: "ctri_y5_01", skill: "shapes", year: 5, difficulty: 3, type: "mcq",
+    style: "counting-shapes", source: "nns",
+    text: "How many squares of ALL sizes are there in a 3×3 grid of squares?",
+    options: ["9", "12", "14", "16", "18"],
+    answer: "14",
+    explanation: "1×1 squares: 9. 2×2 squares: 4. 3×3 squares: 1. Total = 9+4+1 = 14.",
+    points: 4,
+  },
+  {
+    id: "per_y2_01", skill: "shapes", year: 2, difficulty: 1, type: "mcq",
+    style: "counting-shapes", source: "singapore",
+    text: "Andy places 2 bottles on each side of a square (not at corners). How many bottles does he need to go all the way around 1 square?",
+    options: ["6", "7", "8", "9", "10"],
+    answer: "8",
+    explanation: "A square has 4 sides. 2 bottles × 4 sides = 8 bottles.",
+    points: 3,
+  },
+  {
+    id: "per_y3_01", skill: "shapes", year: 3, difficulty: 2, type: "mcq",
+    style: "counting-shapes", source: "singapore",
+    text: "Andy places 2 bottles on each side of a square (not at corners). How many bottles does he need to go all the way around 3 separate squares?",
+    options: ["20", "22", "24", "26", "28"],
+    answer: "24",
+    explanation: "Each square needs 4 × 2 = 8 bottles. For 3 squares: 3 × 8 = 24 bottles.",
+    points: 3,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: value-for-money / profit-loss
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "val2_y4_01", skill: "addition", year: 4, difficulty: 2, type: "mcq",
+    style: "value-for-money", source: "tmc",
+    text: "A swimming pool charges £3 per visit OR £20 for a monthly pass. Mia swims 8 times in a month. How much does she save with the monthly pass?",
+    options: ["£2", "£3", "£4", "£5", "£6"],
+    answer: "£4",
+    explanation: "Pay per visit: 8 × £3 = £24. Monthly pass: £20. Saving = £24 − £20 = £4.",
+    points: 3,
+  },
+  {
+    id: "val2_y6_01", skill: "addition", year: 6, difficulty: 3, type: "mcq",
+    style: "value-for-money", source: "tmc",
+    text: "A fair charges £12 for an evening pass OR £1.50 per ride. Three friends buy evening passes. They go on 6, 9 and 14 rides respectively. How much do they save altogether?",
+    options: ["£4.50", "£7.50", "£10.50", "£13.50", "£16.50"],
+    answer: "£7.50",
+    explanation: "Pay per ride: (6+9+14) × £1.50 = 29 × £1.50 = £43.50. Evening passes: 3 × £12 = £36. Saving = £43.50 − £36 = £7.50.",
+    points: 5,
+  },
+  {
+    id: "profit_y6_01", skill: "addition", year: 6, difficulty: 3, type: "mcq",
+    style: "value-for-money", source: "nns",
+    text: "Flash Harry bought a saddle for £100, sold it for £200, bought it back for £300, then sold it for £400. Overall, did he make or lose money, and how much?",
+    options: ["Made £100", "Made £200", "Made £300", "Lost £100", "Lost £200"],
+    answer: "Made £200",
+    explanation: "Transaction 1: bought £100, sold £200 → profit £100. Transaction 2: bought £300, sold £400 → profit £100. Total profit = £200.",
+    points: 5,
+  },
+  // ══════════════════════════════════════════════════════════════════════════
+  // STYLE: venn-diagram (additional)
+  // ══════════════════════════════════════════════════════════════════════════
+  {
+    id: "venn3_y4_01", skill: "logic", year: 4, difficulty: 2, type: "mcq",
+    style: "venn-diagram", source: "tmc",
+    text: "In a class of 30 pupils, 18 have a cat, 14 have a dog, and 5 have both. How many pupils have neither a cat nor a dog?",
+    options: ["1", "2", "3", "4", "5"],
+    answer: "3",
+    explanation: "At least one pet = 18 + 14 − 5 = 27. Neither = 30 − 27 = 3.",
+    points: 3,
+  },
+  {
+    id: "venn3_y5_01", skill: "logic", year: 5, difficulty: 3, type: "mcq",
+    style: "venn-diagram", source: "tmc",
+    text: "50 people were asked about TV and radio. 41 watched TV, 15 listened to radio, 6 did both. How many did neither?",
+    options: ["0", "1", "2", "3", "4"],
+    answer: "0",
+    explanation: "At least one = 41 + 15 − 6 = 50. Neither = 50 − 50 = 0.",
+    points: 4,
+  },
+];
 
+// ─── Derived exports ───────────────────────────────────────────────────────
 export const QUESTIONS: Question[] = [
   ...additionQuestions,
   ...multiplicationQuestions,
@@ -2261,7 +3004,8 @@ export const QUESTIONS: Question[] = [
   ...timeQuestions,
   ...amc8Questions,
   ...competitionStyleQuestions,
-];
+  ...newCompetitionQuestions,
+];;
 
 export const ALL_QUESTIONS: Question[] = QUESTIONS;
 
