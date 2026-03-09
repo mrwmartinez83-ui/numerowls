@@ -7,6 +7,7 @@ import { useParams } from "wouter";
 import type { Question } from "@shared/questionBank";
 import { toast } from "sonner";
 import DiagramRenderer from "@/components/DiagramRenderer";
+import { renderMath } from "@/lib/renderMath";
 
 type Difficulty = 0 | 1 | 2 | 3; // 0 = All
 
@@ -271,9 +272,9 @@ export default function SkillPractice() {
                   </div>
 
                     <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: "16px", fontWeight: 700, color: "white", lineHeight: 1.5 }}>
-                      {q.text}
-                    </div>
+                    <div style={{ fontSize: "16px", fontWeight: 700, color: "white", lineHeight: 1.5 }}
+                      dangerouslySetInnerHTML={{ __html: renderMath(q.text) }}
+                    />
                     {q.diagram && (
                       <DiagramRenderer spec={q.diagram} />
                     )}
@@ -302,7 +303,7 @@ export default function SkillPractice() {
                     return (
                       <button key={opt} onClick={() => handleAnswer(q, opt)}
                         style={{ padding: "10px 14px", borderRadius: "10px", background: bg, border, color, fontSize: "14px", fontWeight: 600, cursor: isRevealed ? "default" : "pointer", textAlign: "left", transition: "all 0.15s" }}>
-                        {opt}
+                        <span dangerouslySetInnerHTML={{ __html: renderMath(opt) }} />
                       </button>
                     );
                   })}
@@ -311,7 +312,7 @@ export default function SkillPractice() {
                 {/* Explanation */}
                 {isRevealed && (
                   <div style={{ marginTop: "12px", padding: "10px 14px", borderRadius: "10px", background: chosen === q.answer ? "rgba(46,204,113,0.08)" : "rgba(231,76,60,0.08)", fontSize: "13px", color: "#B0C4DE", lineHeight: 1.5 }}>
-                    {chosen === q.answer ? "✅ " : "❌ "}{q.explanation}
+                    {chosen === q.answer ? "✅ " : "❌ "}<span dangerouslySetInnerHTML={{ __html: renderMath(q.explanation) }} />
                   </div>
                 )}
               </div>

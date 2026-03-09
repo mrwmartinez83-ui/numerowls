@@ -11,6 +11,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { QUESTIONS, SKILLS } from "@shared/questionBank";
 import type { Question, SkillId, QuestionStyle, QuestionSource } from "@shared/questionBank";
 import DiagramRenderer from "@/components/DiagramRenderer";
+import { renderMath } from "@/lib/renderMath";
 import { Link } from "wouter";
 
 const STYLE_LABELS: Record<string, string> = {
@@ -261,9 +262,9 @@ export default function QuestionBrowser() {
                   </code>
 
                   {/* Question text preview */}
-                  <div style={{ flex: 1, fontSize: "14px", color: "white", fontWeight: 600, lineHeight: 1.4 }}>
-                    {q.text.length > 120 ? q.text.slice(0, 120) + "…" : q.text}
-                  </div>
+                  <div style={{ flex: 1, fontSize: "14px", color: "white", fontWeight: 600, lineHeight: 1.4 }}
+                    dangerouslySetInnerHTML={{ __html: renderMath(q.text.length > 120 ? q.text.slice(0, 120) + "…" : q.text) }}
+                  />
 
                   {/* Metadata badges */}
                   <div style={{ display: "flex", gap: "6px", flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end", alignItems: "center" }}>
@@ -314,9 +315,9 @@ export default function QuestionBrowser() {
                 {isExpanded && (
                   <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "16px" }}>
                     {/* Full question text */}
-                    <div style={{ fontSize: "15px", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: "12px" }}>
-                      {q.text}
-                    </div>
+                    <div style={{ fontSize: "15px", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: "12px" }}
+                      dangerouslySetInnerHTML={{ __html: renderMath(q.text) }}
+                    />
 
                     {/* Diagram */}
                     {q.diagram && (
@@ -334,14 +335,14 @@ export default function QuestionBrowser() {
                           border: `1.5px solid ${opt === q.answer ? "#2ECC71" : "rgba(255,255,255,0.1)"}`,
                           color: opt === q.answer ? "#2ECC71" : "white",
                         }}>
-                          {opt === q.answer ? "✓ " : ""}{opt}
+                          <span dangerouslySetInnerHTML={{ __html: (opt === q.answer ? "✓ " : "") + renderMath(opt) }} />
                         </div>
                       ))}
                     </div>
 
                     {/* Explanation */}
                     <div style={{ padding: "12px 14px", borderRadius: "10px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontSize: "13px", color: "#B0C4DE", lineHeight: 1.6 }}>
-                      💡 <strong style={{ color: "white" }}>Explanation:</strong> {q.explanation}
+                      💡 <strong style={{ color: "white" }}>Explanation:</strong> <span dangerouslySetInnerHTML={{ __html: renderMath(q.explanation) }} />
                     </div>
 
                     {/* Metadata row */}

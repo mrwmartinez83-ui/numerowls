@@ -7,6 +7,7 @@ import type { Question } from "@shared/questionBank";
 import { toast } from "sonner";
 import { Link } from "wouter";
 import DiagramRenderer from "@/components/DiagramRenderer";
+import { renderMath } from "@/lib/renderMath";
 
 type Phase = "setup" | "running" | "finished";
 
@@ -244,7 +245,9 @@ export default function TimedTest() {
                   ) : null;
                 })()}
 
-                <div style={{ fontSize: "17px", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: "20px" }}>{q.text}</div>
+                <div style={{ fontSize: "17px", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: "20px" }}
+                  dangerouslySetInnerHTML={{ __html: renderMath(q.text) }}
+                />
                 {q.diagram && (
                   <DiagramRenderer spec={q.diagram} />
                 )}
@@ -260,7 +263,7 @@ export default function TimedTest() {
                     return (
                       <button key={opt} onClick={() => handleAnswer(opt)}
                         style={{ padding: "13px 16px", borderRadius: "12px", background: bg, border, color, fontSize: "15px", fontWeight: 600, cursor: chosen ? "default" : "pointer", textAlign: "left", transition: "all 0.15s" }}>
-                        {opt}
+                        <span dangerouslySetInnerHTML={{ __html: renderMath(opt) }} />
                       </button>
                     );
                   })}
@@ -303,9 +306,11 @@ export default function TimedTest() {
                     }}>
                       <span style={{ fontSize: "14px", minWidth: "20px", fontWeight: 700, color: "#8899AA" }}>{i + 1}.</span>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: "13px", color: "white", lineHeight: 1.4, marginBottom: "3px" }}>{q.text}</div>
+                        <div style={{ fontSize: "13px", color: "white", lineHeight: 1.4, marginBottom: "3px" }}
+                          dangerouslySetInnerHTML={{ __html: renderMath(q.text) }}
+                        />
                         <div style={{ fontSize: "12px", color: isCorrect ? "#2ECC71" : "#E74C3C" }}>
-                          {isCorrect ? "✅ Correct" : `❌ Your answer: ${answers[q.id] ?? "—"} · Correct: ${q.answer}`}
+                          {isCorrect ? "✅ Correct" : <><span dangerouslySetInnerHTML={{ __html: `❌ Your answer: ${renderMath(answers[q.id] ?? "—")} · Correct: ${renderMath(q.answer)}` }} /></>}
                         </div>
                       </div>
                     </div>

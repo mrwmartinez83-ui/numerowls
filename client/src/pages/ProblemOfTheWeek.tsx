@@ -3,6 +3,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
 import { getLoginUrl } from "@/const";
+import { renderMath } from "@/lib/renderMath";
 
 const POTW_QUESTIONS = [
   {
@@ -41,7 +42,9 @@ export default function ProblemOfTheWeek() {
         <h1 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "28px", color: "white", marginBottom: "4px" }}>{potw.title}</h1>
         <p style={{ color: "#B0C4DE", fontSize: "14px", marginBottom: "32px" }}>{potw.yearGroup} · {potw.points} bonus points · Week of 10 March 2026</p>
         <div className="no-card" style={{ marginBottom: "20px" }}>
-          <div style={{ fontSize: "17px", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: "24px" }}>{potw.question}</div>
+          <div style={{ fontSize: "17px", fontWeight: 700, color: "white", lineHeight: 1.6, marginBottom: "24px" }}
+            dangerouslySetInnerHTML={{ __html: renderMath(potw.question) }}
+          />
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {potw.options.map(opt => {
               const isRevealed = !!chosen || !!alreadyAnswered;
@@ -55,14 +58,14 @@ export default function ProblemOfTheWeek() {
               return (
                 <button key={opt} onClick={() => handleAnswer(opt)}
                   style={{ padding: "12px 18px", borderRadius: "12px", background: bg, border, color, fontSize: "15px", fontWeight: 600, cursor: isRevealed ? "default" : "pointer", textAlign: "left" }}>
-                  {opt}
+                  <span dangerouslySetInnerHTML={{ __html: renderMath(opt) }} />
                 </button>
               );
             })}
           </div>
           {(chosen || alreadyAnswered) && (
             <div style={{ marginTop: "16px", padding: "14px", borderRadius: "12px", background: "rgba(255,255,255,0.04)", fontSize: "14px", color: "#B0C4DE", lineHeight: 1.6 }}>
-              💡 {potw.explanation}
+              💡 <span dangerouslySetInnerHTML={{ __html: renderMath(potw.explanation) }} />
             </div>
           )}
         </div>
