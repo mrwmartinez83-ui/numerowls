@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import { getLevel, getXpIntoLevel, XP_PER_LEVEL } from "@/lib/xpUtils";
+import POTWResultBanner from "@/components/POTWResultBanner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
@@ -154,6 +155,9 @@ export default function PupilDashboard() {
     <div style={{ minHeight: "100vh", background: "#0F1B2D" }}>
       <NavBar />
       <div className="container" style={{ paddingTop: "32px", paddingBottom: "80px", maxWidth: "1100px" }}>
+
+        {/* ── POTW result notifications ── */}
+        <POTWResultBanner />
 
         {/* ── Hero greeting ── */}
         <div style={{

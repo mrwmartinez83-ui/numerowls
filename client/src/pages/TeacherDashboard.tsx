@@ -625,7 +625,7 @@ export default function TeacherDashboard() {
                             </div>
                           </div>
                           <button
-                            onClick={() => { const nextTitle = potwTitle || (POTW_QUESTIONS.find(q => q.id === potwQuestionId)?.title ?? "Weekly Challenge"); endAndStartNext.mutate({ competitionId: currentComp.id, nextQuestionId: potwQuestionId, nextTitle, nextYearLabel: potwYearLabel, nextPoints: potwPoints }); }}
+                            onClick={() => { const nextTitle = potwTitle || (POTW_QUESTIONS.find(q => q.id === potwQuestionId)?.title || "Weekly Challenge"); endAndStartNext.mutate({ competitionId: currentComp.id, nextQuestionId: potwQuestionId, nextTitle, nextYearLabel: potwYearLabel, nextPoints: potwPoints }); }}
                             disabled={endAndStartNext.isPending}
                             style={{ background: "linear-gradient(135deg,#E74C3C,#C0392B)", color: "white", fontWeight: 800, fontSize: "14px", padding: "10px 20px", borderRadius: "10px", border: "none", cursor: "pointer", width: "100%" }}
                           >

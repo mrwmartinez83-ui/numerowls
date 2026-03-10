@@ -54,3 +54,9 @@
 - [x] Hamburger menu groups pages by category (Learn, Play, Compete, More)
 - [x] PupilDashboard: big visual activity hub with large emoji cards for each activity
 - [x] Ensure all pages reachable from the dashboard hub cards
+
+## POTW Improvements (Round 2)
+- [ ] Add 20+ new POTW questions with SVG diagrams (Years 1-6)
+- [ ] Build POTW archive page /potw/archive
+- [ ] Add in-app result notification (DB flag + alert banner on pupil dashboard/POTW page)
+- [ ] Wire archive link into NavBar hamburger menu and POTW page

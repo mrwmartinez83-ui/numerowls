@@ -127,6 +127,8 @@ export const potwEntries = mysqlTable("potwEntries", {
   chosenOption: varchar("chosenOption", { length: 128 }).notNull(),
   correct: boolean("correct").notNull(),
   submittedAt: timestamp("submittedAt").defaultNow().notNull(),
+  /** Whether the pupil has seen their result notification */
+  seenResult: boolean("seenResult").default(false).notNull(),
 });
 export type PotwEntry = typeof potwEntries.$inferSelect;
 

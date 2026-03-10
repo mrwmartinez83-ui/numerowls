@@ -376,6 +376,78 @@ export const appRouter = router({
         return rows[0] ?? { total: 0, correct: 0 };
       }),
 
+    // ── Pupil: get unseen results (competitions ended but not yet seen) ──────────
+    unseenResults: protectedProcedure.query(async ({ ctx }) => {
+      const db = await getDb();
+      if (!db) return [];
+      // Find entries where the competition has ended but seenResult is false
+      return db.select({
+        entryId: potwEntries.id,
+        competitionId: potwEntries.competitionId,
+        correct: potwEntries.correct,
+        chosenOption: potwEntries.chosenOption,
+        title: potwCompetitions.title,
+        questionId: potwCompetitions.questionId,
+        points: potwCompetitions.points,
+      })
+        .from(potwEntries)
+        .innerJoin(potwCompetitions, eq(potwEntries.competitionId, potwCompetitions.id))
+        .where(and(
+          eq(potwEntries.userId, ctx.user.id),
+          eq(potwEntries.seenResult, false),
+          eq(potwCompetitions.status, "ended"),
+        ))
+        .limit(5);
+    }),
+
+    // ── Pupil: mark result notification as seen ───────────────────────────
+    markResultSeen: protectedProcedure
+      .input(z.object({ entryId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) return { success: false };
+        await db.update(potwEntries)
+          .set({ seenResult: true })
+          .where(and(eq(potwEntries.id, input.entryId), eq(potwEntries.userId, ctx.user.id)));
+        return { success: true };
+      }),
+
+    // ── Public: archive of all ended competitions with stats ─────────────────
+    archive: publicProcedure.query(async () => {
+      const db = await getDb();
+      if (!db) return [];
+      const comps = await db.select({
+        id: potwCompetitions.id,
+        questionId: potwCompetitions.questionId,
+        title: potwCompetitions.title,
+        yearLabel: potwCompetitions.yearLabel,
+        points: potwCompetitions.points,
+        startedAt: potwCompetitions.startedAt,
+        endedAt: potwCompetitions.endedAt,
+      })
+        .from(potwCompetitions)
+        .where(eq(potwCompetitions.status, "ended"))
+        .orderBy(desc(potwCompetitions.endedAt));
+      const results = await Promise.all(comps.map(async (comp) => {
+        const stats = await db.select({
+          total: sql<number>`COUNT(*)`,
+          correct: sql<number>`SUM(CASE WHEN ${potwEntries.correct} = 1 THEN 1 ELSE 0 END)`,
+        }).from(potwEntries).where(eq(potwEntries.competitionId, comp.id));
+        const winners = await db.select({
+          displayName: users.displayName,
+          avatarEmoji: users.avatarEmoji,
+          submittedAt: potwEntries.submittedAt,
+        })
+          .from(potwEntries)
+          .innerJoin(users, eq(potwEntries.userId, users.id))
+          .where(and(eq(potwEntries.competitionId, comp.id), eq(potwEntries.correct, true)))
+          .orderBy(potwEntries.submittedAt)
+          .limit(3);
+        return { ...comp, total: stats[0]?.total ?? 0, correct: stats[0]?.correct ?? 0, winners };
+      }));
+      return results;
+    }),
+
     // ── Legacy ─────────────────────────────────────────────────────────────────
     myAnswers: protectedProcedure.query(async ({ ctx }) => {
       const db = await getDb();

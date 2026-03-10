@@ -10,7 +10,8 @@ import PupilDashboard from "./pages/PupilDashboard";
 import SkillPractice from "./pages/SkillPractice";
 import TimedTest from "./pages/TimedTest";
 import Leaderboard from "./pages/Leaderboard";
-import ProblemOfTheWeek from "./pages/ProblemOfTheWeek";
+import ProblemOfTheWeek from "@/pages/ProblemOfTheWeek";
+import ProblemOfTheWeekArchive from "@/pages/ProblemOfTheWeekArchive";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import Badges from "./pages/Badges";
 import ShapeValuePuzzles from "./pages/ShapeValuePuzzles";
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/test" component={TimedTest} />
       <Route path="/leaderboard" component={Leaderboard} />
       <Route path="/potw" component={ProblemOfTheWeek} />
+      <Route path="/potw/archive" component={ProblemOfTheWeekArchive} />
       <Route path="/teacher" component={TeacherDashboard} />
       <Route path="/badges" component={Badges} />
       <Route path="/puzzles" component={ShapeValuePuzzles} />

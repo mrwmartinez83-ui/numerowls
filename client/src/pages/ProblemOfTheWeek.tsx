@@ -1,4 +1,5 @@
 import NavBar from "@/components/NavBar";
+import POTWResultBanner from "@/components/POTWResultBanner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { useState, useEffect, useRef } from "react";
@@ -114,7 +115,10 @@ export default function ProblemOfTheWeek() {
       <NavBar />
       <div className="container" style={{ paddingTop: "40px", paddingBottom: "80px", maxWidth: "740px" }}>
 
-        {/* ── Page header ─────────────────────────────────────────────────────── */}
+        {/* ── POTW result notifications ── */}
+        <POTWResultBanner />
+
+        {/* ── Page header ─────────────────────────────────────────────────────────────────────────────────── */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
           <span style={{ fontSize: "36px" }}>🏆</span>
           <div>
@@ -124,6 +128,9 @@ export default function ProblemOfTheWeek() {
             <p style={{ color: "#B0C4DE", fontSize: "14px", margin: 0 }}>
               One tough problem per week. Think carefully — you only get one attempt!
             </p>
+            <Link href="/potw/archive" style={{ fontSize: "12px", color: "#4ECDC4", textDecoration: "none", fontWeight: 700, display: "inline-block", marginTop: "4px" }}>
+              📜 View Past Problems &amp; Solutions →
+            </Link>
           </div>
         </div>
 

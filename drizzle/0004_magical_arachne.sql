@@ -1,0 +1,1 @@
+ALTER TABLE `potwEntries` ADD `seenResult` boolean DEFAULT false NOT NULL;
