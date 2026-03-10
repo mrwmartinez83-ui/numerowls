@@ -48,3 +48,9 @@
 - [ ] Build Gold room: The Space Station Crisis (Y5-6, 5 stages)
 - [ ] Build Escape Rooms Hub page
 - [ ] Wire Escape Rooms into NavBar, Games Hub, Dashboard
+
+## Navigation Redesign
+- [x] Slim NavBar: logo + 4 primary links + hamburger slide-out for all pages
+- [x] Hamburger menu groups pages by category (Learn, Play, Compete, More)
+- [x] PupilDashboard: big visual activity hub with large emoji cards for each activity
+- [x] Ensure all pages reachable from the dashboard hub cards
