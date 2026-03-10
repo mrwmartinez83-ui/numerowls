@@ -60,3 +60,16 @@
 - [ ] Build POTW archive page /potw/archive
 - [ ] Add in-app result notification (DB flag + alert banner on pupil dashboard/POTW page)
 - [ ] Wire archive link into NavBar hamburger menu and POTW page
+
+## Games NavBar Fix & Visual Polish
+- [ ] Fix GamesHub: replace custom mini-header with real NavBar
+- [ ] Polish GamesHub: big colourful grid cards with hover animations
+- [ ] Polish GameNumberNinja: animated answer flash, streak fire effect, bigger buttons
+- [ ] Polish GameTimesTableBlitz: animated score pop, streak counter, colour feedback
+- [ ] Polish GameNumberBondMemory: card flip animation, match celebration
+- [ ] Polish GameFractionSnap: animated fraction cards, timer pulse
+- [ ] Polish GameCountdown: dramatic target reveal, solution check animation
+- [ ] Polish GameMagicSquare: cell highlight on correct row/col/diag
+- [ ] Polish GameNumberPyramid: animated block fill, celebration on solve
+- [ ] Polish GameOrderingChallenge: smooth drag animation, confetti on correct order
+- [ ] Polish GameFunctionMachine: animated cog/gear, dramatic reveal

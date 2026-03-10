@@ -1,4 +1,4 @@
-import { useState } from "react";
+import NavBar from "@/components/NavBar";
 import GameCountdown from "@/games/GameCountdown";
 import GameNumberBondMemory from "@/games/GameNumberBondMemory";
 import GameMagicSquare from "@/games/GameMagicSquare";
@@ -8,37 +8,69 @@ import GameNumberPyramid from "@/games/GameNumberPyramid";
 import GameOrderingChallenge from "@/games/GameOrderingChallenge";
 import GameFractionSnap from "@/games/GameFractionSnap";
 import GameNumberNinja from "@/games/GameNumberNinja";
+import { useState } from "react";
 
-const T = {
-  bg: "#0F1B2D", s1: "#1A2E4A", s2: "#243B55",
-  border: "rgba(255,255,255,0.09)", gold: "#F5A623", teal: "#4ECDC4",
-  purple: "#9B59B6", green: "#2ECC71", red: "#E74C3C",
-  pink: "#E91E8C", orange: "#E67E22", muted: "#B0C4DE", white: "#FFFFFF",
-};
+type GameId = "ninja" | "blitz" | "pyramid" | "countdown" | "bonds" | "magic" | "ordering" | "fraction" | "function";
 
-interface GameDef {
-  id: string;
-  icon: string;
-  label: string;
-  color: string;
-  desc: string;
-  badge?: string;
-  years?: string;
-}
-
-const GAMES: GameDef[] = [
-  { id: "ninja",    icon: "🥷",  label: "Number Ninja",         color: T.purple, desc: "Pick the right answer before the timer runs out! Speed increases every 5 rounds.", badge: "NEW", years: "Y1–Y6" },
-  { id: "blitz",    icon: "✖️",  label: "Times Table Blitz",    color: T.gold,   desc: "60 seconds. Answer as many times tables as you can. Build streaks for bonus points!", years: "Y2–Y6" },
-  { id: "pyramid",  icon: "🔺",  label: "Number Pyramids",      color: T.teal,   desc: "Each block equals the sum of the two below. Fill in the missing numbers!", years: "Y1–Y6" },
-  { id: "countdown",icon: "🔢",  label: "Countdown",            color: "#3498DB",desc: "Use 6 numbers with +−×÷ to hit a 3-digit target. 30 seconds on the clock!", years: "Y4–Y6" },
-  { id: "bonds",    icon: "🃏",  label: "Number Bond Memory",   color: T.teal,   desc: "Flip cards to find pairs that add up to the bond target. How fast can you match them all?", years: "Y1–Y4" },
-  { id: "magic",    icon: "✨",  label: "Magic Square",         color: T.pink,   desc: "Fill the grid so every row, column and diagonal adds to the magic number!", years: "Y3–Y6" },
-  { id: "ordering", icon: "🔀",  label: "Ordering Challenge",   color: T.teal,   desc: "Drag tiles into the right order — whole numbers, decimals, fractions or measurements.", years: "Y1–Y6" },
-  { id: "fraction", icon: "🍕",  label: "Fraction Snap",        color: T.orange, desc: "Tap all the fractions equivalent to the target before time runs out!", badge: "NEW", years: "Y3–Y6" },
-  { id: "function", icon: "⚙️",  label: "Function Machine",     color: T.purple, desc: "Find the output, input, or crack the rule of the mystery number machine!", years: "Y2–Y6" },
+const GAMES: {
+  id: GameId; icon: string; label: string; desc: string;
+  color: string; bg: string; badge?: string; years?: string;
+}[] = [
+  {
+    id: "ninja", icon: "🥷", label: "Number Ninja",
+    desc: "Pick the right answer before the timer runs out! Speed increases every 5 rounds.",
+    color: "#9B59B6", bg: "linear-gradient(135deg,#2d1b4e 0%,#1a0d2e 100%)",
+    badge: "⚡ Fast", years: "Y1–6",
+  },
+  {
+    id: "blitz", icon: "⚡", label: "Times Table Blitz",
+    desc: "60 seconds. Answer as many times tables as you can. Build streaks for bonus points!",
+    color: "#F5A623", bg: "linear-gradient(135deg,#3d2800 0%,#1a1200 100%)",
+    badge: "🔥 Hot", years: "Y2–6",
+  },
+  {
+    id: "bonds", icon: "🃏", label: "Number Bond Memory",
+    desc: "Flip cards to find pairs that add up to the target. How fast can you match them all?",
+    color: "#4ECDC4", bg: "linear-gradient(135deg,#0d3535 0%,#061a1a 100%)",
+    badge: "🧠 Memory", years: "Y1–4",
+  },
+  {
+    id: "countdown", icon: "🔢", label: "Countdown",
+    desc: "Use 6 numbers with +−×÷ to hit a 3-digit target — just like on TV!",
+    color: "#3498DB", bg: "linear-gradient(135deg,#0d2035 0%,#06101a 100%)",
+    badge: "📺 Classic", years: "Y4–6",
+  },
+  {
+    id: "fraction", icon: "🍕", label: "Fraction Snap",
+    desc: "Tap all the fractions equivalent to the target before time runs out!",
+    color: "#E67E22", bg: "linear-gradient(135deg,#3d1a00 0%,#1a0d00 100%)",
+    badge: "🍕 Yummy", years: "Y3–6",
+  },
+  {
+    id: "magic", icon: "✨", label: "Magic Square",
+    desc: "Fill the grid so every row, column and diagonal adds to the magic number!",
+    color: "#E91E8C", bg: "linear-gradient(135deg,#3d0020 0%,#1a0010 100%)",
+    badge: "🔮 Tricky", years: "Y3–6",
+  },
+  {
+    id: "pyramid", icon: "🔺", label: "Number Pyramids",
+    desc: "Each block equals the sum of the two below. Fill in the missing numbers!",
+    color: "#2ECC71", bg: "linear-gradient(135deg,#0d3520 0%,#06180e 100%)",
+    badge: "🏗 Build", years: "Y2–5",
+  },
+  {
+    id: "ordering", icon: "📊", label: "Ordering Challenge",
+    desc: "Drag tiles into the right order — whole numbers, decimals, fractions or measurements.",
+    color: "#1ABC9C", bg: "linear-gradient(135deg,#0d2d28 0%,#061510 100%)",
+    badge: "🔀 Sort", years: "Y1–6",
+  },
+  {
+    id: "function", icon: "⚙️", label: "Function Machine",
+    desc: "Find the output, input, or crack the mystery rule of the number machine!",
+    color: "#E74C3C", bg: "linear-gradient(135deg,#3d0d0d 0%,#1a0606 100%)",
+    badge: "🤔 Logic", years: "Y3–6",
+  },
 ];
-
-type GameId = typeof GAMES[number]["id"];
 
 export default function GamesHub() {
   const [active, setActive] = useState<GameId | null>(null);
@@ -61,53 +93,171 @@ export default function GamesHub() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, color: T.white, fontFamily: "'Space Grotesk', sans-serif" }}>
-      {/* Header */}
-      <div style={{ background: "rgba(15,27,45,0.95)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.border}`, padding: "0 24px", display: "flex", alignItems: "center", height: 56, gap: 12, position: "sticky", top: 0, zIndex: 100 }}>
-        <span style={{ fontSize: 22 }}>🦉</span>
-        <span style={{ fontFamily: "'Nunito',sans-serif", fontWeight: 900, color: T.gold, fontSize: 16 }}>NumerOwls</span>
-        <span style={{ color: T.border, fontSize: 20 }}>|</span>
-        <span style={{ fontFamily: "'Nunito',sans-serif", fontWeight: 900, fontSize: 14, color: T.muted }}>🎮 Games Hub</span>
-        {active && game && (
-          <>
-            <span style={{ color: T.border, fontSize: 20 }}>|</span>
-            <span style={{ fontSize: 17 }}>{game.icon}</span>
-            <span style={{ fontFamily: "'Nunito',sans-serif", fontWeight: 900, fontSize: 14, color: T.muted }}>{game.label}</span>
-            <button onClick={() => setActive(null)} style={{ marginLeft: "auto", background: "transparent", border: `1px solid ${T.border}`, color: T.muted, borderRadius: 8, padding: "5px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Nunito',sans-serif" }}>← All Games</button>
-          </>
-        )}
-      </div>
+    <div style={{ minHeight: "100vh", background: "#0F1B2D", color: "#fff", fontFamily: "'Space Grotesk', sans-serif" }}>
+      {/* Real NavBar — always visible */}
+      <NavBar />
 
       {!active ? (
-        <div style={{ maxWidth: 600, margin: "0 auto", padding: "40px 16px" }}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ fontSize: 56, marginBottom: 12 }}>🎮</div>
-            <h1 style={{ fontFamily: "'Nunito',sans-serif", fontWeight: 900, fontSize: 32, color: T.white, marginBottom: 8 }}>Games Hub</h1>
-            <p style={{ color: T.muted, fontSize: 14 }}>9 maths games — pick one to play</p>
+        /* ─── Games Hub Landing ─── */
+        <div style={{ maxWidth: 800, margin: "0 auto", padding: "44px 20px 80px" }}>
+          {/* Page header */}
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ fontSize: 68, marginBottom: 14, lineHeight: 1, filter: "drop-shadow(0 0 24px rgba(245,166,35,0.5))" }}>🎮</div>
+            <h1 style={{
+              fontFamily: "'Nunito', sans-serif", fontWeight: 900,
+              fontSize: 40, color: "#fff", margin: "0 0 10px",
+              textShadow: "0 2px 20px rgba(255,255,255,0.1)",
+            }}>
+              Games Hub
+            </h1>
+            <p style={{ color: "#B0C4DE", fontSize: 16, margin: 0 }}>
+              9 maths games — pick one and play!
+            </p>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {GAMES.map((g, i) => (
-              <button key={g.id} onClick={() => setActive(g.id)} style={{ background: T.s1, border: `2px solid ${T.border}`, borderRadius: 18, padding: "18px 22px", display: "flex", alignItems: "center", gap: 18, cursor: "pointer", textAlign: "left", width: "100%", transition: "all 0.2s", animationDelay: `${i * 0.05}s` }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = g.color; (e.currentTarget as HTMLButtonElement).style.background = T.s2; (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = T.border; (e.currentTarget as HTMLButtonElement).style.background = T.s1; (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)"; }}>
-                <div style={{ width: 56, height: 56, borderRadius: 14, background: `${g.color}22`, border: `2px solid ${g.color}55`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 }}>{g.icon}</div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontFamily: "'Nunito',sans-serif", fontWeight: 900, fontSize: 16, color: T.white }}>{g.label}</span>
-                    {g.badge && <span style={{ padding: "2px 8px", borderRadius: 99, background: `${g.color}33`, border: `1px solid ${g.color}66`, color: g.color, fontSize: 10, fontWeight: 800 }}>{g.badge}</span>}
-                    {g.years && <span style={{ padding: "2px 8px", borderRadius: 99, background: "rgba(255,255,255,0.06)", color: T.muted, fontSize: 10, fontWeight: 700 }}>{g.years}</span>}
-                  </div>
-                  <div style={{ fontSize: 13, color: T.muted, lineHeight: 1.4 }}>{g.desc}</div>
+          {/* Game cards grid */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))",
+            gap: 20,
+          }}>
+            {GAMES.map((g) => (
+              <button
+                key={g.id}
+                onClick={() => setActive(g.id)}
+                style={{
+                  background: g.bg,
+                  border: `2px solid ${g.color}44`,
+                  borderRadius: 22,
+                  padding: "24px 20px 20px",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                  transition: "transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLButtonElement;
+                  el.style.transform = "translateY(-5px) scale(1.02)";
+                  el.style.borderColor = g.color;
+                  el.style.boxShadow = `0 16px 40px ${g.color}44`;
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLButtonElement;
+                  el.style.transform = "translateY(0) scale(1)";
+                  el.style.borderColor = `${g.color}44`;
+                  el.style.boxShadow = "none";
+                }}
+              >
+                {/* Glow blob */}
+                <div style={{
+                  position: "absolute", top: -40, right: -40,
+                  width: 120, height: 120, borderRadius: "50%",
+                  background: `${g.color}1a`, filter: "blur(28px)", pointerEvents: "none",
+                }} />
+
+                {/* Icon circle */}
+                <div style={{
+                  width: 60, height: 60, borderRadius: 18,
+                  background: `${g.color}22`, border: `2px solid ${g.color}66`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 30, flexShrink: 0,
+                  boxShadow: `0 4px 16px ${g.color}33`,
+                }}>
+                  {g.icon}
                 </div>
-                <div style={{ color: g.color, fontSize: 22, fontWeight: 900, fontFamily: "'Nunito',sans-serif", flexShrink: 0 }}>→</div>
+
+                {/* Badges */}
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {g.badge && (
+                    <span style={{
+                      padding: "3px 10px", borderRadius: 99,
+                      background: `${g.color}33`, border: `1px solid ${g.color}77`,
+                      color: g.color, fontSize: 11, fontWeight: 800,
+                    }}>{g.badge}</span>
+                  )}
+                  {g.years && (
+                    <span style={{
+                      padding: "3px 10px", borderRadius: 99,
+                      background: "rgba(255,255,255,0.08)", color: "#B0C4DE",
+                      fontSize: 11, fontWeight: 700,
+                    }}>{g.years}</span>
+                  )}
+                </div>
+
+                {/* Title */}
+                <div style={{
+                  fontFamily: "'Nunito', sans-serif", fontWeight: 900,
+                  fontSize: 18, color: "#fff", lineHeight: 1.2,
+                }}>
+                  {g.label}
+                </div>
+
+                {/* Description */}
+                <div style={{ fontSize: 13, color: "#B0C4DE", lineHeight: 1.55, flexGrow: 1 }}>
+                  {g.desc}
+                </div>
+
+                {/* Play button */}
+                <div style={{
+                  alignSelf: "flex-end",
+                  width: 38, height: 38, borderRadius: "50%",
+                  background: `${g.color}22`, border: `2px solid ${g.color}66`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: g.color, fontSize: 15, fontWeight: 900,
+                  boxShadow: `0 2px 10px ${g.color}33`,
+                }}>
+                  ▶
+                </div>
               </button>
             ))}
           </div>
         </div>
       ) : (
-        <div style={{ paddingTop: 8 }}>
-          {renderGame()}
+        /* ─── Active Game ─── */
+        <div style={{ minHeight: "calc(100vh - 60px)" }}>
+          {/* Game sub-bar */}
+          <div style={{
+            background: "rgba(15,27,45,0.97)", backdropFilter: "blur(12px)",
+            borderBottom: "1px solid rgba(255,255,255,0.09)",
+            padding: "0 20px", height: 46,
+            display: "flex", alignItems: "center", gap: 12,
+            position: "sticky", top: 60, zIndex: 90,
+          }}>
+            <button
+              onClick={() => setActive(null)}
+              style={{
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#B0C4DE", borderRadius: 8, padding: "5px 14px",
+                cursor: "pointer", fontSize: 13, fontWeight: 700,
+                fontFamily: "'Nunito', sans-serif",
+                display: "flex", alignItems: "center", gap: 6,
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.12)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.07)"; }}
+            >
+              ← All Games
+            </button>
+            {game && (
+              <>
+                <span style={{ color: "rgba(255,255,255,0.18)", fontSize: 18 }}>|</span>
+                <span style={{ fontSize: 18 }}>{game.icon}</span>
+                <span style={{
+                  fontFamily: "'Nunito', sans-serif", fontWeight: 900,
+                  fontSize: 15, color: "#fff",
+                }}>{game.label}</span>
+              </>
+            )}
+          </div>
+
+          <div style={{ paddingTop: 8 }}>
+            {renderGame()}
+          </div>
         </div>
       )}
     </div>
