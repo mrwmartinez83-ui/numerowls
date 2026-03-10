@@ -1,5 +1,5 @@
 import NavBar from "@/components/NavBar";
-import { getLevel, getXpIntoLevel, XP_PER_LEVEL } from "@/components/NavBar";
+import { getLevel, getXpIntoLevel, XP_PER_LEVEL } from "@/lib/xpUtils";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
@@ -457,6 +457,14 @@ export default function PupilDashboard() {
                     border: "1.5px solid rgba(155,89,182,0.5)",
                     color: "#9B59B6", fontWeight: 800, fontSize: "14px", cursor: "pointer",
                   }}>🎮 Games Hub</button>
+                </Link>
+                <Link href="/escape-rooms">
+                  <button style={{
+                    width: "100%", padding: "12px 16px", borderRadius: "10px",
+                    background: "linear-gradient(135deg, rgba(78,205,196,0.2), rgba(52,152,219,0.15))",
+                    border: "1.5px solid rgba(78,205,196,0.5)",
+                    color: "#4ECDC4", fontWeight: 800, fontSize: "14px", cursor: "pointer",
+                  }}>🔐 Escape Rooms</button>
                 </Link>
                 <Link href="/test"><button className="no-btn-gold" style={{ width: "100%" }}>⏱️ Take a Timed Test</button></Link>
                 <Link href="/potw"><button className="no-btn-teal" style={{ width: "100%" }}>🦉 Problem of the Week</button></Link>

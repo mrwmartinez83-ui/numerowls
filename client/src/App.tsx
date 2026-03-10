@@ -17,6 +17,8 @@ import ShapeValuePuzzles from "./pages/ShapeValuePuzzles";
 import QuestionBrowser from "./pages/QuestionBrowser";
 import CompetitionMode from "./pages/CompetitionMode";
 import GamesHub from "./pages/GamesHub";
+import EscapeRooms from "./pages/EscapeRooms";
+import EscapeRoomPlayer from "./pages/EscapeRoomPlayer";
 import { useAuth } from "./_core/hooks/useAuth";
 import { trpc } from "./lib/trpc";
 
@@ -34,6 +36,8 @@ function Router() {
       <Route path="/puzzles" component={ShapeValuePuzzles} />
       <Route path="/competition" component={CompetitionMode} />
       <Route path="/games" component={GamesHub} />
+      <Route path="/escape-rooms" component={EscapeRooms} />
+      <Route path="/escape-rooms/:tier" component={EscapeRoomPlayer} />
       <Route path="/admin/questions" component={QuestionBrowser} />
       <Route component={NotFound} />
     </Switch>

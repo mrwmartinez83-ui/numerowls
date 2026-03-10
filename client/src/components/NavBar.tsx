@@ -4,9 +4,7 @@ import { Link, useLocation } from "wouter";
 
 const YEAR_EMOJI: Record<number, string> = { 1: "🌱", 2: "🌿", 3: "🌳", 4: "⭐", 5: "🚀", 6: "🏆" };
 
-export const XP_PER_LEVEL = 100;
-export function getLevel(xp: number) { return Math.floor((xp ?? 0) / XP_PER_LEVEL) + 1; }
-export function getXpIntoLevel(xp: number) { return (xp ?? 0) % XP_PER_LEVEL; }
+import { XP_PER_LEVEL, getLevel, getXpIntoLevel } from "@/lib/xpUtils";
 
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -18,6 +16,7 @@ export default function NavBar() {
     { href: "/practice", label: "Practice", icon: "🧩" },
     { href: "/competition", label: "Competition", icon: "🏆" },
     { href: "/games", label: "Games Hub", icon: "🎮" },
+    { href: "/escape-rooms", label: "Escape Rooms", icon: "🔐" },
     { href: "/puzzles", label: "Shape Puzzles", icon: "🔢" },
     { href: "/test", label: "Timed Test", icon: "⏱️" },
     { href: "/potw", label: "Problem of the Week", icon: "🦉" },

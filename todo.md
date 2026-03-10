@@ -40,3 +40,11 @@
 - [ ] Build Games Hub page with all 7 games
 - [ ] Add Games Hub to NavBar and App routes
 - [ ] Add Games Hub to Dashboard Quick Actions
+
+## Escape Rooms
+- [ ] Build shared EscapeRoom engine (stage renderer, hint system, lock animations, story panels)
+- [ ] Build Bronze room: The Enchanted Forest (Y1-3, 5 stages)
+- [ ] Build Silver room: The Pirate's Vault (Y3-5, 5 stages)
+- [ ] Build Gold room: The Space Station Crisis (Y5-6, 5 stages)
+- [ ] Build Escape Rooms Hub page
+- [ ] Wire Escape Rooms into NavBar, Games Hub, Dashboard
