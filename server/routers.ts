@@ -51,10 +51,56 @@ export const appRouter = router({
         if (!db) return { success: false };
         try {
           await db.insert(testResults).values({ ...input, userId: ctx.user.id });
+
+          // XP earned = same as points (score * 3 for practice, score * 5 for timed)
+          const xpEarned = input.pointsEarned;
+
+          // Streak logic: check if today is a new practice day
+          const todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+          const [currentUser] = await db.select({
+            currentStreak: users.currentStreak,
+            longestStreak: users.longestStreak,
+            lastPracticeDate: users.lastPracticeDate,
+          }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+
+          let newStreak = currentUser?.currentStreak ?? 0;
+          let newLongest = currentUser?.longestStreak ?? 0;
+          const lastDate = currentUser?.lastPracticeDate;
+
+          if (lastDate !== todayStr) {
+            // Check if yesterday was the last practice day (streak continues)
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().slice(0, 10);
+            if (lastDate === yesterdayStr) {
+              newStreak += 1;
+            } else {
+              newStreak = 1; // streak broken, restart
+            }
+            if (newStreak > newLongest) newLongest = newStreak;
+          }
+
           await db.update(users)
-            .set({ totalPoints: sql`totalPoints + ${input.pointsEarned}` })
+            .set({
+              totalPoints: sql`totalPoints + ${input.pointsEarned}`,
+              xp: sql`xp + ${xpEarned}`,
+              currentStreak: newStreak,
+              longestStreak: newLongest,
+              lastPracticeDate: todayStr,
+            })
             .where(eq(users.id, ctx.user.id));
-          return { success: true };
+
+          // Award streak badge at 5 days
+          if (newStreak >= 5) {
+            const existing = await db.select().from(userBadges)
+              .where(and(eq(userBadges.userId, ctx.user.id), eq(userBadges.badgeId, "streak_5")))
+              .limit(1);
+            if (existing.length === 0) {
+              await db.insert(userBadges).values({ userId: ctx.user.id, badgeId: "streak_5" });
+            }
+          }
+
+          return { success: true, xpEarned, newStreak };
         } catch { return { success: false }; }
       }),
     myHistory: protectedProcedure.query(async ({ ctx }) => {

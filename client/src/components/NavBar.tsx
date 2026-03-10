@@ -4,6 +4,10 @@ import { Link, useLocation } from "wouter";
 
 const YEAR_EMOJI: Record<number, string> = { 1: "🌱", 2: "🌿", 3: "🌳", 4: "⭐", 5: "🚀", 6: "🏆" };
 
+export const XP_PER_LEVEL = 100;
+export function getLevel(xp: number) { return Math.floor((xp ?? 0) / XP_PER_LEVEL) + 1; }
+export function getXpIntoLevel(xp: number) { return (xp ?? 0) % XP_PER_LEVEL; }
+
 export default function NavBar() {
   const { user, isAuthenticated, logout } = useAuth();
   const [location] = useLocation();
@@ -17,6 +21,10 @@ export default function NavBar() {
     { href: "/potw", label: "Problem of the Week", icon: "🦉" },
     { href: "/leaderboard", label: "Leaderboard", icon: "🏆" },
   ];
+
+  const level = getLevel(user?.xp ?? 0);
+  const xpIntoLevel = getXpIntoLevel(user?.xp ?? 0);
+  const xpPct = Math.round((xpIntoLevel / XP_PER_LEVEL) * 100);
 
   return (
     <nav className="no-nav">
@@ -58,9 +66,54 @@ export default function NavBar() {
           </div>
 
           {/* Auth section */}
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
             {isAuthenticated ? (
               <>
+                {/* 🔥 Streak badge */}
+                {(user?.currentStreak ?? 0) > 0 && (
+                  <Link href="/dashboard" style={{ textDecoration: "none" }}>
+                    <div
+                      title={`${user?.currentStreak}-day streak! Keep it up!`}
+                      style={{
+                        display: "flex", alignItems: "center", gap: "4px",
+                        padding: "4px 10px", borderRadius: "20px",
+                        background: "rgba(255,100,30,0.14)",
+                        border: "1px solid rgba(255,100,30,0.4)",
+                        fontSize: "12px", fontWeight: 800, color: "#FF6820",
+                        cursor: "pointer",
+                      }}
+                    >
+                      🔥 {user?.currentStreak}
+                    </div>
+                  </Link>
+                )}
+
+                {/* ⚡ XP level badge with mini bar */}
+                <Link href="/dashboard" style={{ textDecoration: "none" }}>
+                  <div
+                    title={`Level ${level} · ${xpIntoLevel}/${XP_PER_LEVEL} XP`}
+                    style={{
+                      display: "flex", flexDirection: "column", alignItems: "center",
+                      padding: "3px 10px", borderRadius: "12px",
+                      background: "rgba(245,166,35,0.10)",
+                      border: "1px solid rgba(245,166,35,0.3)",
+                      cursor: "pointer", minWidth: "52px",
+                    }}
+                  >
+                    <span style={{ fontSize: "11px", fontWeight: 800, color: "#F5A623", lineHeight: 1.2 }}>
+                      ⚡ Lv {level}
+                    </span>
+                    <div style={{ width: "40px", height: "4px", borderRadius: "99px", background: "rgba(255,255,255,0.1)", marginTop: "2px" }}>
+                      <div style={{
+                        height: "100%", borderRadius: "99px",
+                        background: "linear-gradient(90deg, #F5A623, #FFD700)",
+                        width: `${xpPct}%`,
+                        transition: "width 0.6s ease",
+                      }} />
+                    </div>
+                  </div>
+                </Link>
+
                 {/* Year group badge */}
                 {user?.yearGroup && (
                   <Link href="/dashboard" style={{ textDecoration: "none" }}>

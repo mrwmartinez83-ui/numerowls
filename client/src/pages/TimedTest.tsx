@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { fireCorrectConfetti, fireBigCelebration, firePerfectScore } from "@/hooks/useConfetti";
+import OwlMascot from "@/components/OwlMascot";
 import NavBar from "@/components/NavBar";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
@@ -8,6 +10,16 @@ import { toast } from "sonner";
 import { Link } from "wouter";
 import DiagramRenderer from "@/components/DiagramRenderer";
 import { renderMath } from "@/lib/renderMath";
+
+const CORRECT_PHRASES = [
+  "⭐ Brilliant!", "🎉 Amazing!", "✨ Superstar!", "🔥 On fire!",
+  "🌟 Fantastic!", "💫 Wow!", "🎊 Excellent!", "👏 Great job!",
+];
+const WRONG_PHRASES = [
+  "💪 Keep going!", "🧠 Nearly!", "💡 Next one!",
+  "🌱 Try again!", "📚 Check it!",
+];
+function pickRandom<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
 
 type Phase = "setup" | "running" | "finished";
 
@@ -25,6 +37,7 @@ export default function TimedTest() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [startTime, setStartTime] = useState<number>(0);
   const [saved, setSaved] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; correct: boolean } | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Keep yearGroup in sync if the user profile loads after mount
@@ -75,11 +88,19 @@ export default function TimedTest() {
   const handleAnswer = (choice: string) => {
     const q = questions[current];
     if (answers[q.id]) return;
+    const isCorrect = choice === q.answer;
     setAnswers(prev => ({ ...prev, [q.id]: choice }));
+
+    // Feedback message
+    const msg = isCorrect ? pickRandom(CORRECT_PHRASES) : pickRandom(WRONG_PHRASES);
+    setFeedbackMsg({ text: msg, correct: isCorrect });
+    if (isCorrect) fireCorrectConfetti();
+
     setTimeout(() => {
+      setFeedbackMsg(null);
       if (current < questions.length - 1) setCurrent(c => c + 1);
       else finishTest();
-    }, 600);
+    }, 700);
   };
 
   // ── Save results when finished ─────────────────────────────────────────────
@@ -149,6 +170,10 @@ export default function TimedTest() {
     // Show toast for certificate
     if (certEarned) {
       toast.success(`🎉 Certificate earned! You scored ${Math.round(ratio * 100)}%`);
+      if (ratio === 1) firePerfectScore();
+      else fireBigCelebration();
+    } else if (ratio >= 0.5) {
+      fireBigCelebration();
     }
 
     // Invalidate badges list
@@ -256,18 +281,36 @@ export default function TimedTest() {
                     let bg     = "rgba(255,255,255,0.05)";
                     let border = "1.5px solid rgba(255,255,255,0.1)";
                     let color  = "white";
+                    let transform = "scale(1)";
                     if (chosen) {
-                      if (opt === q.answer)  { bg = "rgba(46,204,113,0.15)";  border = "1.5px solid #2ECC71"; color = "#2ECC71"; }
+                      if (opt === q.answer)  { bg = "rgba(46,204,113,0.15)";  border = "1.5px solid #2ECC71"; color = "#2ECC71"; transform = "scale(1.03)"; }
                       else if (opt === chosen){ bg = "rgba(231,76,60,0.15)";  border = "1.5px solid #E74C3C"; color = "#E74C3C"; }
                     }
                     return (
                       <button key={opt} onClick={() => handleAnswer(opt)}
-                        style={{ padding: "13px 16px", borderRadius: "12px", background: bg, border, color, fontSize: "15px", fontWeight: 600, cursor: chosen ? "default" : "pointer", textAlign: "left", transition: "all 0.15s" }}>
+                        style={{ padding: "13px 16px", borderRadius: "12px", background: bg, border, color, fontSize: "15px", fontWeight: 600, cursor: chosen ? "default" : "pointer", textAlign: "left", transition: "all 0.2s", transform }}>
                         <span dangerouslySetInnerHTML={{ __html: renderMath(opt) }} />
                       </button>
                     );
                   })}
                 </div>
+
+                {/* Instant feedback overlay */}
+                {feedbackMsg && (
+                  <div style={{
+                    marginTop: "14px",
+                    padding: "10px 16px",
+                    borderRadius: "12px",
+                    background: feedbackMsg.correct ? "rgba(46,204,113,0.15)" : "rgba(231,76,60,0.12)",
+                    border: `1.5px solid ${feedbackMsg.correct ? "rgba(46,204,113,0.5)" : "rgba(231,76,60,0.4)"}`,
+                    fontSize: "18px", fontWeight: 800,
+                    color: feedbackMsg.correct ? "#2ECC71" : "#E74C3C",
+                    textAlign: "center",
+                    animation: "owlMsgFadeIn 0.2s ease",
+                  }}>
+                    {feedbackMsg.text}
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -276,7 +319,12 @@ export default function TimedTest() {
         {/* ── Finished ── */}
         {phase === "finished" && (
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "72px", marginBottom: "16px" }}>{pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "💪"}</div>
+            <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}>
+              <OwlMascot
+                mood={pct >= 80 ? "celebrating" : pct >= 50 ? "happy" : "sad"}
+                size={72}
+              />
+            </div>
             <h1 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "32px", color: "white", marginBottom: "8px" }}>Test Complete!</h1>
             <div style={{ fontSize: "64px", fontWeight: 900, color: pct >= 80 ? "#2ECC71" : pct >= 50 ? "#F5A623" : "#E74C3C", marginBottom: "8px", lineHeight: 1 }}>{pct}%</div>
             <div style={{ color: "#B0C4DE", fontSize: "16px", marginBottom: "8px" }}>{score} out of {questions.length} correct</div>

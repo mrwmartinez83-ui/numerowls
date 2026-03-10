@@ -1,4 +1,5 @@
 import NavBar from "@/components/NavBar";
+import { getLevel, getXpIntoLevel, XP_PER_LEVEL } from "@/components/NavBar";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
@@ -173,9 +174,44 @@ export default function PupilDashboard() {
               </div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            <Link href="/practice"><button className="no-btn-teal">🧩 Practice</button></Link>
-            <Link href="/test"><button className="no-btn-gold">⏱️ Take a Test</button></Link>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-end" }}>
+            {/* XP bar */}
+            <div style={{ minWidth: "200px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
+                <span style={{ fontSize: "12px", fontWeight: 800, color: "#F5A623" }}>
+                  ⚡ Level {getLevel(user?.xp ?? 0)}
+                </span>
+                <span style={{ fontSize: "11px", color: "#8899AA" }}>
+                  {getXpIntoLevel(user?.xp ?? 0)}/{XP_PER_LEVEL} XP
+                </span>
+              </div>
+              <div style={{ height: "10px", borderRadius: "99px", background: "rgba(255,255,255,0.08)", overflow: "hidden" }}>
+                <div style={{
+                  height: "100%", borderRadius: "99px",
+                  background: "linear-gradient(90deg, #F5A623, #FFD700)",
+                  width: `${Math.round((getXpIntoLevel(user?.xp ?? 0) / XP_PER_LEVEL) * 100)}%`,
+                  transition: "width 0.8s ease",
+                  boxShadow: "0 0 8px rgba(245,166,35,0.5)",
+                }} />
+              </div>
+            </div>
+            {/* Streak */}
+            {(user?.currentStreak ?? 0) > 0 && (
+              <div style={{
+                display: "flex", alignItems: "center", gap: "6px",
+                padding: "6px 14px", borderRadius: "20px",
+                background: "rgba(255,100,30,0.12)",
+                border: "1.5px solid rgba(255,100,30,0.4)",
+                fontSize: "14px", fontWeight: 800, color: "#FF6820",
+              }}>
+                🔥 {user?.currentStreak}-day streak!
+                {(user?.currentStreak ?? 0) >= 3 && " Keep it up!"}
+              </div>
+            )}
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <Link href="/practice"><button className="no-btn-teal">🧩 Practice</button></Link>
+              <Link href="/test"><button className="no-btn-gold">⏱️ Take a Test</button></Link>
+            </div>
           </div>
         </div>
 
