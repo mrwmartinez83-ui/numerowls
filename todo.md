@@ -28,3 +28,15 @@
 - [x] Timed Test with results
 - [x] Skill Practice
 - [x] Leaderboard
+
+## Games Hub
+- [ ] Create Countdown game component
+- [ ] Create Number Bond Memory game component
+- [ ] Create Magic Square game component
+- [ ] Create Function Machine game component
+- [ ] Create Times Table Blitz game (new)
+- [ ] Create Fraction Snap game (new)
+- [ ] Create Number Ninja game (new)
+- [ ] Build Games Hub page with all 7 games
+- [ ] Add Games Hub to NavBar and App routes
+- [ ] Add Games Hub to Dashboard Quick Actions

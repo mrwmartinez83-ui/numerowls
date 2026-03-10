@@ -16,6 +16,7 @@ import Badges from "./pages/Badges";
 import ShapeValuePuzzles from "./pages/ShapeValuePuzzles";
 import QuestionBrowser from "./pages/QuestionBrowser";
 import CompetitionMode from "./pages/CompetitionMode";
+import GamesHub from "./pages/GamesHub";
 import { useAuth } from "./_core/hooks/useAuth";
 import { trpc } from "./lib/trpc";
 
@@ -32,6 +33,7 @@ function Router() {
       <Route path="/badges" component={Badges} />
       <Route path="/puzzles" component={ShapeValuePuzzles} />
       <Route path="/competition" component={CompetitionMode} />
+      <Route path="/games" component={GamesHub} />
       <Route path="/admin/questions" component={QuestionBrowser} />
       <Route component={NotFound} />
     </Switch>

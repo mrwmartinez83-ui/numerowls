@@ -199,6 +199,15 @@ export default function Landing() {
                   fontFamily: "'Nunito', sans-serif",
                 }}>🏆 Competition Mode</button>
               </Link>
+              <Link href="/games">
+                <button style={{
+                  fontSize: "16px", padding: "16px 28px", borderRadius: "12px",
+                  background: "linear-gradient(135deg, rgba(155,89,182,0.25), rgba(142,68,173,0.2))",
+                  border: "2px solid rgba(155,89,182,0.6)",
+                  color: "#9B59B6", fontWeight: 900, cursor: "pointer",
+                  fontFamily: "'Nunito', sans-serif",
+                }}>🎮 Games Hub</button>
+              </Link>
               <Link href="/test">
                 <button className="no-btn-teal" style={{ fontSize: "16px", padding: "16px 28px" }}>⏱️ Timed Test</button>
               </Link>
