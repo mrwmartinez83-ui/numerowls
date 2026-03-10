@@ -4,10 +4,11 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { getLoginUrl } from "@/const";
 import { SKILLS } from "@shared/questionBank";
+import { POTW_QUESTIONS } from "@shared/potwQuestionBank";
 import { toast } from "sonner";
 import type { SkillId } from "@shared/questionBank";
 
-type Tab = "overview" | "pupils" | "setwork" | "results";
+type Tab = "overview" | "pupils" | "setwork" | "results" | "potw";
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 function pct(correct: number, attempted: number) {
@@ -33,6 +34,12 @@ export default function TeacherDashboard() {
 
   const [activeClass, setActiveClass] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("overview");
+
+  // POTW form state
+  const [potwQuestionId, setPotwQuestionId] = useState(POTW_QUESTIONS[0].id);
+  const [potwTitle, setPotwTitle] = useState("");
+  const [potwYearLabel, setPotwYearLabel] = useState("Years 4–6");
+  const [potwPoints, setPotwPoints] = useState(20);
   const [newClassName, setNewClassName] = useState("");
   const [newClassYear, setNewClassYear] = useState(2);
   const [showCreateClass, setShowCreateClass] = useState(false);
@@ -62,6 +69,18 @@ export default function TeacherDashboard() {
     { classId: activeClass!, limit: 50 }, { enabled: !!activeClass && activeTab === "results" }
   );
 
+  // POTW queries
+  const { data: currentComp, refetch: refetchComp } = trpc.potw.current.useQuery();
+  const { data: lastEnded } = trpc.potw.lastEnded.useQuery();
+  const { data: currentEntryCount } = trpc.potw.entryCount.useQuery(
+    { competitionId: currentComp?.id ?? 0 },
+    { enabled: !!currentComp, refetchInterval: 15_000 }
+  );
+  const { data: allEntries } = trpc.potw.allEntries.useQuery(
+    { competitionId: currentComp?.id ?? 0 },
+    { enabled: !!currentComp && activeTab === "potw" }
+  );
+
   // ── Mutations ──────────────────────────────────────────────────────────────
   const createClass = trpc.classes.create.useMutation({
     onSuccess: (data) => {
@@ -88,6 +107,16 @@ export default function TeacherDashboard() {
   });
   const deleteWork = trpc.setWork.delete.useMutation({
     onSuccess: () => { refetchWork(); toast.success("Work removed."); },
+  });
+
+  // POTW mutations
+  const createFirstComp = trpc.potw.createFirst.useMutation({
+    onSuccess: () => { refetchComp(); toast.success("Competition created! Pupils can now enter."); },
+    onError: (e) => toast.error(e.message),
+  });
+  const endAndStartNext = trpc.potw.endAndStartNext.useMutation({
+    onSuccess: () => { refetchComp(); toast.success("Competition ended and results revealed! New competition started."); },
+    onError: (e) => toast.error(e.message),
   });
 
   function resetWorkForm() {
@@ -281,7 +310,8 @@ export default function TeacherDashboard() {
                     { id: "overview", label: "📊 Overview" },
                     { id: "pupils",   label: "👥 Pupils & Progress" },
                     { id: "setwork",  label: "📋 Set Work" },
-                    { id: "results",  label: "🏆 Recent Results" },
+                    { id: "results",  label: "🏆 Results" },
+                    { id: "potw",     label: "🏅 POTW" },
                   ] as { id: Tab; label: string }[]).map(t => (
                     <button key={t.id} onClick={() => setActiveTab(t.id)}
                       style={{
@@ -521,6 +551,132 @@ export default function TeacherDashboard() {
                         </div>
                       )}
                     </div>
+                  </div>
+                )}
+
+                {/* ── POTW MANAGEMENT TAB ──────────────────────────────── */}
+                {activeTab === "potw" && (
+                  <div className="no-card">
+                    <h3 style={{ fontWeight: 800, fontSize: "15px", color: "white", marginBottom: "4px" }}>🏅 Problem of the Week</h3>
+                    <p style={{ color: "#B0C4DE", fontSize: "13px", marginBottom: "20px" }}>Create and manage the weekly challenge. Pupils submit one answer — results are hidden until you reveal them.</p>
+
+                    {/* Current competition status */}
+                    {currentComp ? (
+                      <div style={{ background: "rgba(46,204,113,0.06)", border: "1px solid rgba(46,204,113,0.2)", borderRadius: "12px", padding: "16px 20px", marginBottom: "20px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "10px" }}>
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                              <span style={{ background: "rgba(46,204,113,0.15)", color: "#2ECC71", border: "1px solid #2ECC71", borderRadius: "20px", padding: "2px 10px", fontSize: "11px", fontWeight: 700 }}>🟢 ACTIVE</span>
+                            </div>
+                            <p style={{ color: "white", fontWeight: 800, fontSize: "16px", margin: "0 0 4px" }}>{currentComp.title}</p>
+                            <p style={{ color: "#B0C4DE", fontSize: "13px", margin: 0 }}>{currentComp.yearLabel} · {currentComp.points} points</p>
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <div style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "32px", color: "white", lineHeight: 1 }}>{currentEntryCount?.total ?? 0}</div>
+                            <div style={{ color: "#B0C4DE", fontSize: "12px" }}>entries</div>
+                            {currentEntryCount && Number(currentEntryCount.total) > 0 && (
+                              <div style={{ color: "#F5A623", fontSize: "12px", fontWeight: 700 }}>
+                                {Math.round((Number(currentEntryCount.correct) / Number(currentEntryCount.total)) * 100)}% correct
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Entry breakdown */}
+                        {allEntries && allEntries.length > 0 && (
+                          <div style={{ marginTop: "14px", maxHeight: "200px", overflowY: "auto" }}>
+                            <p style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>Entries so far (answers hidden)</p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                              {allEntries.map((e) => (
+                                <div key={e.entryId} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "6px 10px", borderRadius: "8px", background: "rgba(255,255,255,0.03)" }}>
+                                  <span style={{ fontSize: "16px" }}>{e.avatarEmoji ?? "🦉"}</span>
+                                  <span style={{ color: "white", fontSize: "13px", flex: 1 }}>{e.displayName ?? "Anonymous"}</span>
+                                  {e.yearGroup && <span style={{ color: "#B0C4DE", fontSize: "11px" }}>Y{e.yearGroup}</span>}
+                                  <span style={{ color: "#8899AA", fontSize: "11px" }}>{new Date(e.submittedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* End competition and start next */}
+                        <div style={{ marginTop: "16px", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "16px" }}>
+                          <p style={{ color: "#B0C4DE", fontSize: "13px", marginBottom: "12px" }}>End this competition and immediately start the next one:</p>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "10px" }}>
+                            <div>
+                              <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Next Question</label>
+                              <select value={potwQuestionId} onChange={e => { setPotwQuestionId(e.target.value); setPotwTitle(POTW_QUESTIONS.find(q => q.id === e.target.value)?.title ?? ""); }} className="no-select" style={{ width: "100%", fontSize: "12px" }}>
+                                {POTW_QUESTIONS.map(q => (
+                                  <option key={q.id} value={q.id}>{q.title} (Y{q.yearRange}, {q.points}pts)</option>
+                                ))}
+                              </select>
+                            </div>
+                            <div>
+                              <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Title</label>
+                              <input value={potwTitle} onChange={e => setPotwTitle(e.target.value)} placeholder="e.g. Week 3 Challenge" className="no-input" style={{ width: "100%", fontSize: "12px" }} />
+                            </div>
+                            <div>
+                              <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Year Label</label>
+                              <input value={potwYearLabel} onChange={e => setPotwYearLabel(e.target.value)} placeholder="e.g. Years 4–6" className="no-input" style={{ width: "100%", fontSize: "12px" }} />
+                            </div>
+                            <div>
+                              <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Points</label>
+                              <input type="number" value={potwPoints} onChange={e => setPotwPoints(Number(e.target.value))} min={5} max={50} className="no-input" style={{ width: "100%", fontSize: "12px" }} />
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => { const nextTitle = potwTitle || (POTW_QUESTIONS.find(q => q.id === potwQuestionId)?.title ?? "Weekly Challenge"); endAndStartNext.mutate({ competitionId: currentComp.id, nextQuestionId: potwQuestionId, nextTitle, nextYearLabel: potwYearLabel, nextPoints: potwPoints }); }}
+                            disabled={endAndStartNext.isPending}
+                            style={{ background: "linear-gradient(135deg,#E74C3C,#C0392B)", color: "white", fontWeight: 800, fontSize: "14px", padding: "10px 20px", borderRadius: "10px", border: "none", cursor: "pointer", width: "100%" }}
+                          >
+                            {endAndStartNext.isPending ? "Revealing…" : "🔓 Reveal Results & Start Next Competition"}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* No active competition — create first */
+                      <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", padding: "20px", marginBottom: "20px" }}>
+                        <p style={{ color: "#B0C4DE", fontSize: "14px", marginBottom: "14px" }}>No active competition. Create one to get started:</p>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
+                          <div>
+                            <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Question</label>
+                            <select value={potwQuestionId} onChange={e => { setPotwQuestionId(e.target.value); setPotwTitle(POTW_QUESTIONS.find(q => q.id === e.target.value)?.title ?? ""); }} className="no-select" style={{ width: "100%", fontSize: "12px" }}>
+                              {POTW_QUESTIONS.map(q => (
+                                <option key={q.id} value={q.id}>{q.title} (Y{q.yearRange}, {q.points}pts)</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Title</label>
+                            <input value={potwTitle} onChange={e => setPotwTitle(e.target.value)} placeholder="e.g. Week 1 Challenge" className="no-input" style={{ width: "100%", fontSize: "12px" }} />
+                          </div>
+                          <div>
+                            <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Year Label</label>
+                            <input value={potwYearLabel} onChange={e => setPotwYearLabel(e.target.value)} placeholder="e.g. Years 4–6" className="no-input" style={{ width: "100%", fontSize: "12px" }} />
+                          </div>
+                          <div>
+                            <label style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, display: "block", marginBottom: "4px" }}>Points</label>
+                            <input type="number" value={potwPoints} onChange={e => setPotwPoints(Number(e.target.value))} min={5} max={50} className="no-input" style={{ width: "100%", fontSize: "12px" }} />
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => { const title = potwTitle || (POTW_QUESTIONS.find(q => q.id === potwQuestionId)?.title ?? "Weekly Challenge"); createFirstComp.mutate({ questionId: potwQuestionId, title, yearLabel: potwYearLabel, points: potwPoints }); }}
+                          disabled={createFirstComp.isPending}
+                          style={{ background: "linear-gradient(135deg,#FFC800,#FF8C00)", color: "#0F1B2D", fontWeight: 800, fontSize: "14px", padding: "10px 20px", borderRadius: "10px", border: "none", cursor: "pointer", width: "100%" }}
+                        >
+                          {createFirstComp.isPending ? "Creating…" : "🚀 Launch Competition"}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Last ended competition summary */}
+                    {lastEnded && (
+                      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "14px 18px" }}>
+                        <p style={{ color: "#B0C4DE", fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "6px" }}>Previous Competition</p>
+                        <p style={{ color: "white", fontWeight: 700, fontSize: "14px", margin: "0 0 4px" }}>{lastEnded.title}</p>
+                        <p style={{ color: "#8899AA", fontSize: "12px", margin: 0 }}>Ended {new Date(lastEnded.endedAt!).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</p>
+                      </div>
+                    )}
                   </div>
                 )}
 

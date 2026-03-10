@@ -361,6 +361,21 @@ export const appRouter = router({
         return { success: true, competitionId: created?.id };
       }),
 
+    // ── Public: entry count for a competition ─────────────────────────────────
+    entryCount: publicProcedure
+      .input(z.object({ competitionId: z.number() }))
+      .query(async ({ input }) => {
+        const db = await getDb();
+        if (!db) return { total: 0, correct: 0 };
+        const rows = await db.select({
+          total: sql<number>`COUNT(*)`,
+          correct: sql<number>`SUM(CASE WHEN ${potwEntries.correct} = 1 THEN 1 ELSE 0 END)`,
+        })
+          .from(potwEntries)
+          .where(eq(potwEntries.competitionId, input.competitionId));
+        return rows[0] ?? { total: 0, correct: 0 };
+      }),
+
     // ── Legacy ─────────────────────────────────────────────────────────────────
     myAnswers: protectedProcedure.query(async ({ ctx }) => {
       const db = await getDb();
