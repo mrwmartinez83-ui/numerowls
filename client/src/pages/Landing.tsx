@@ -190,8 +190,17 @@ export default function Landing() {
               <Link href="/practice">
                 <button className="no-btn-gold" style={{ fontSize: "18px", padding: "16px 36px" }}>🧩 Start Practising →</button>
               </Link>
+              <Link href="/competition">
+                <button style={{
+                  fontSize: "16px", padding: "16px 28px", borderRadius: "12px",
+                  background: "linear-gradient(135deg, rgba(245,166,35,0.25), rgba(255,215,0,0.2))",
+                  border: "2px solid rgba(245,166,35,0.6)",
+                  color: "#F5A623", fontWeight: 900, cursor: "pointer",
+                  fontFamily: "'Nunito', sans-serif",
+                }}>🏆 Competition Mode</button>
+              </Link>
               <Link href="/test">
-                <button className="no-btn-teal" style={{ fontSize: "16px", padding: "16px 28px" }}>⏱️ Take a Timed Test</button>
+                <button className="no-btn-teal" style={{ fontSize: "16px", padding: "16px 28px" }}>⏱️ Timed Test</button>
               </Link>
             </div>
           ) : (

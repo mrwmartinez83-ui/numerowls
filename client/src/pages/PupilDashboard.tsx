@@ -442,9 +442,17 @@ export default function PupilDashboard() {
             <Card>
               <SectionHeading>⚡ Quick Actions</SectionHeading>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <Link href="/competition">
+                  <button style={{
+                    width: "100%", padding: "12px 16px", borderRadius: "10px",
+                    background: "linear-gradient(135deg, rgba(245,166,35,0.2), rgba(255,215,0,0.15))",
+                    border: "1.5px solid rgba(245,166,35,0.5)",
+                    color: "#F5A623", fontWeight: 800, fontSize: "14px", cursor: "pointer",
+                  }}>🏆 Competition Mode</button>
+                </Link>
                 <Link href="/test"><button className="no-btn-gold" style={{ width: "100%" }}>⏱️ Take a Timed Test</button></Link>
                 <Link href="/potw"><button className="no-btn-teal" style={{ width: "100%" }}>🦉 Problem of the Week</button></Link>
-                <Link href="/leaderboard"><button className="no-btn-ghost" style={{ width: "100%" }}>🏆 View Leaderboard</button></Link>
+                <Link href="/leaderboard"><button className="no-btn-ghost" style={{ width: "100%" }}>🏅 View Leaderboard</button></Link>
               </div>
             </Card>
           </div>

@@ -8,6 +8,8 @@
 
 import type { DiagramSpec } from "./diagramTypes";
 export type { DiagramSpec } from "./diagramTypes";
+import { COMPETITION_QUESTIONS } from "./competitionQuestionBank";
+export { COMPETITION_QUESTIONS } from "./competitionQuestionBank";
 
 export type SkillId =
   | "addition"
@@ -116,6 +118,8 @@ export type QuestionSource =
   | "nns"
   | "singapore"
   | "tmc"
+  | "kangaroo"
+  | "ukmt"
   | "original";
 
 export interface Question {
@@ -3548,7 +3552,8 @@ export const QUESTIONS: Question[] = [
   ...competitionStyleQuestions,
   ...newCompetitionQuestions,
   ...dmpQuestions,
-];;
+  ...COMPETITION_QUESTIONS,
+];
 
 export const ALL_QUESTIONS: Question[] = QUESTIONS;
 
