@@ -312,7 +312,7 @@ function QuestionCard({
         </p>
 
         {/* Diagram */}
-        {q.svgDiagram && (
+        {(q.svgDiagram || q.diagram) && (
           <div style={{
             background: "rgba(255,255,255,0.03)",
             borderRadius: 16,
@@ -322,7 +322,7 @@ function QuestionCard({
             justifyContent: "center",
           }}>
             <div
-              dangerouslySetInnerHTML={{ __html: q.svgDiagram }}
+              dangerouslySetInnerHTML={{ __html: q.svgDiagram || q.diagram || '' }}
               style={{ width: "100%", maxWidth: 380 }}
             />
           </div>

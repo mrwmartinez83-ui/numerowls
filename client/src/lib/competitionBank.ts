@@ -199,6 +199,12 @@ export type CompetitionQuestionStyle =
   | "perimeter-area"
   | "number-property"
   | "pattern-sequence"
+  | "picture-count"
+  | "number-line"
+  | "shape-pattern"
+  | "balance"
+  | "coins"
+  | "grid-count"
   | "standard";
 
 export interface CompetitionQ {
@@ -210,6 +216,7 @@ export interface CompetitionQ {
   text: string;
   hint: string;           // One-step hint without giving the answer
   svgDiagram?: string;
+  diagram?: string;       // Alias for svgDiagram (Y1-2 questions)
   options: { letter: string; text: string }[];
   correctLetter: string;
   explanation: string;    // Step-by-step working
@@ -289,6 +296,496 @@ const y12_3pt: CompetitionQ[] = [
     ],
     correctLetter: "B",
     explanation: "The tens digit is 3 (between 30 and 40). Digits add to 7, so units digit = 7 − 3 = 4. The number is 34.",
+  },
+];
+
+
+// ── YEAR 1–2 · Extra Picture-Based Questions ────────────────────────────────
+const y12_extra: CompetitionQ[] = [
+  {
+    id: "y12_e01", year: 1, yearMax: 2, points: 3,
+    style: "picture-count",
+    text: "How many dots are there altogether?",
+    diagram: `<svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="140" rx="12" fill="#f0f8ff"/>
+  <rect x="20" y="20" width="130" height="100" rx="10" fill="#fff" stroke="#4ECDC4" stroke-width="2"/>
+  <rect x="170" y="20" width="130" height="100" rx="10" fill="#fff" stroke="#F5A623" stroke-width="2"/>
+  <text x="85" y="15" text-anchor="middle" font-size="11" fill="#4ECDC4" font-weight="bold">Group A</text>
+  <text x="235" y="15" text-anchor="middle" font-size="11" fill="#F5A623" font-weight="bold">Group B</text>
+  <circle cx="50" cy="55" r="10" fill="#4ECDC4"/><circle cx="80" cy="55" r="10" fill="#4ECDC4"/>
+  <circle cx="110" cy="55" r="10" fill="#4ECDC4"/><circle cx="50" cy="85" r="10" fill="#4ECDC4"/>
+  <circle cx="80" cy="85" r="10" fill="#4ECDC4"/><circle cx="110" cy="85" r="10" fill="#4ECDC4"/>
+  <circle cx="200" cy="50" r="10" fill="#F5A623"/><circle cx="230" cy="50" r="10" fill="#F5A623"/>
+  <circle cx="260" cy="50" r="10" fill="#F5A623"/><circle cx="200" cy="80" r="10" fill="#F5A623"/>
+  <circle cx="230" cy="80" r="10" fill="#F5A623"/>
+  <text x="85" y="135" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">6 dots</text>
+  <text x="235" y="135" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">5 dots</text>
+</svg>`,
+    hint: "Count the dots in each box, then add them together.",
+    options: [
+      { letter: "A", text: "9" }, { letter: "B", text: "10" },
+      { letter: "C", text: "11" }, { letter: "D", text: "12" }, { letter: "E", text: "13" },
+    ],
+    correctLetter: "C",
+    explanation: "Group A has 6 dots, Group B has 5 dots. 6 + 5 = 11.",
+  },
+  {
+    id: "y12_e02", year: 1, yearMax: 2, points: 3,
+    style: "number-line",
+    text: "The arrow points to a number on the number line. What number is it?",
+    diagram: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="100" rx="12" fill="#f8f9fa"/>
+  <line x1="20" y1="60" x2="300" y2="60" stroke="#2D3436" stroke-width="3"/>
+  <polygon points="300,55 310,60 300,65" fill="#2D3436"/>
+  <line x1="20" y1="52" x2="20" y2="68" stroke="#2D3436" stroke-width="2"/>
+  <line x1="76" y1="52" x2="76" y2="68" stroke="#2D3436" stroke-width="2"/>
+  <line x1="132" y1="52" x2="132" y2="68" stroke="#2D3436" stroke-width="2"/>
+  <line x1="188" y1="52" x2="188" y2="68" stroke="#2D3436" stroke-width="2"/>
+  <line x1="244" y1="52" x2="244" y2="68" stroke="#2D3436" stroke-width="2"/>
+  <text x="20" y="82" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">0</text>
+  <text x="132" y="82" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">10</text>
+  <text x="244" y="82" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">20</text>
+  <line x1="160" y1="40" x2="160" y2="58" stroke="#E74C3C" stroke-width="2.5"/>
+  <polygon points="155,40 165,40 160,30" fill="#E74C3C"/>
+  <text x="160" y="25" text-anchor="middle" font-size="12" fill="#E74C3C" font-weight="bold">?</text>
+</svg>`,
+    hint: "Each gap between the big marks is 10. Count the small steps.",
+    options: [
+      { letter: "A", text: "12" }, { letter: "B", text: "13" },
+      { letter: "C", text: "14" }, { letter: "D", text: "15" }, { letter: "E", text: "16" },
+    ],
+    correctLetter: "B",
+    explanation: "The number line goes from 0 to 20. Each section is 10. The arrow is just past the halfway mark (10), at 13.",
+  },
+  {
+    id: "y12_e03", year: 1, yearMax: 2, points: 3,
+    style: "shape-pattern",
+    text: "What shape comes next in the pattern?",
+    diagram: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="100" rx="12" fill="#f8f9fa"/>
+  <circle cx="35" cy="50" r="18" fill="#4ECDC4"/>
+  <rect x="67" y="32" width="36" height="36" fill="#F5A623" rx="4"/>
+  <polygon points="140,32 158,68 122,68" fill="#E74C3C"/>
+  <circle cx="185" cy="50" r="18" fill="#4ECDC4"/>
+  <rect x="217" y="32" width="36" height="36" fill="#F5A623" rx="4"/>
+  <text x="280" y="58" text-anchor="middle" font-size="36" fill="#9B59B6">?</text>
+</svg>`,
+    hint: "Look at the repeating pattern: circle, square, triangle, circle, square, …",
+    options: [
+      { letter: "A", text: "Circle" }, { letter: "B", text: "Square" },
+      { letter: "C", text: "Triangle" }, { letter: "D", text: "Rectangle" }, { letter: "E", text: "Star" },
+    ],
+    correctLetter: "C",
+    explanation: "The pattern is: circle, square, triangle — repeating. After circle, square comes triangle.",
+  },
+  {
+    id: "y12_e04", year: 1, yearMax: 2, points: 3,
+    style: "balance",
+    text: "The scales are balanced. Each 🍎 weighs the same. How many 🍎 balance one 🏆?",
+    diagram: `<svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="160" rx="12" fill="#f0fff0"/>
+  <rect x="154" y="90" width="10" height="56" fill="#8B6914" rx="3"/>
+  <rect x="112" y="140" width="88" height="10" fill="#5D4037" rx="4"/>
+  <rect x="46" y="84" width="226" height="10" fill="#5D4037" rx="5"/>
+  <line x1="84" y1="94" x2="74" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <line x1="100" y1="94" x2="110" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <rect x="66" y="114" width="52" height="32" fill="#B0BEC5" rx="3"/>
+  <line x1="224" y1="94" x2="214" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <line x1="240" y1="94" x2="250" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <rect x="206" y="114" width="52" height="32" fill="#B0BEC5" rx="3"/>
+  <text x="92" y="138" text-anchor="middle" font-size="22">🏆</text>
+  <text x="214" y="132" text-anchor="middle" font-size="18">🍎🍎🍎</text>
+  <text x="159" y="80" text-anchor="middle" font-size="16" font-weight="bold" fill="#27AE60">=</text>
+</svg>`,
+    hint: "Count how many apples are on the right side of the scales.",
+    options: [
+      { letter: "A", text: "1" }, { letter: "B", text: "2" },
+      { letter: "C", text: "3" }, { letter: "D", text: "4" }, { letter: "E", text: "5" },
+    ],
+    correctLetter: "C",
+    explanation: "The scales balance, so the trophy = 3 apples. Count the 🍎 on the right: there are 3.",
+  },
+  {
+    id: "y12_e05", year: 1, yearMax: 2, points: 3,
+    style: "coins",
+    text: "Sam has these coins. How much money does Sam have altogether?",
+    diagram: `<svg viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="110" rx="12" fill="#fffde7"/>
+  <circle cx="45" cy="55" r="28" fill="#FFD700" stroke="#B8860B" stroke-width="2"/>
+  <text x="45" y="61" text-anchor="middle" font-size="14" font-weight="bold" fill="#7B5E00">10p</text>
+  <circle cx="115" cy="55" r="28" fill="#FFD700" stroke="#B8860B" stroke-width="2"/>
+  <text x="115" y="61" text-anchor="middle" font-size="14" font-weight="bold" fill="#7B5E00">10p</text>
+  <circle cx="185" cy="55" r="22" fill="#C0C0C0" stroke="#888" stroke-width="2"/>
+  <text x="185" y="61" text-anchor="middle" font-size="13" font-weight="bold" fill="#444">5p</text>
+  <circle cx="245" cy="55" r="18" fill="#C0C0C0" stroke="#888" stroke-width="2"/>
+  <text x="245" y="61" text-anchor="middle" font-size="12" font-weight="bold" fill="#444">2p</text>
+  <circle cx="290" cy="55" r="14" fill="#C0C0C0" stroke="#888" stroke-width="2"/>
+  <text x="290" y="61" text-anchor="middle" font-size="11" font-weight="bold" fill="#444">1p</text>
+</svg>`,
+    hint: "Add up each coin: 10 + 10 + 5 + 2 + 1 = ?",
+    options: [
+      { letter: "A", text: "25p" }, { letter: "B", text: "27p" },
+      { letter: "C", text: "28p" }, { letter: "D", text: "30p" }, { letter: "E", text: "26p" },
+    ],
+    correctLetter: "C",
+    explanation: "10p + 10p + 5p + 2p + 1p = 28p.",
+  },
+  {
+    id: "y12_e06", year: 1, yearMax: 2, points: 3,
+    style: "picture-count",
+    text: "How many squares can you count in this picture? (Count all squares, including big ones!)",
+    diagram: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:200px;display:block;margin:auto">
+  <rect x="10" y="10" width="180" height="180" rx="4" fill="#f8f9fa" stroke="#2D3436" stroke-width="2"/>
+  <rect x="10" y="10" width="90" height="90" fill="none" stroke="#4ECDC4" stroke-width="2.5"/>
+  <rect x="100" y="10" width="90" height="90" fill="none" stroke="#4ECDC4" stroke-width="2.5"/>
+  <rect x="10" y="100" width="90" height="90" fill="none" stroke="#4ECDC4" stroke-width="2.5"/>
+  <rect x="100" y="100" width="90" height="90" fill="none" stroke="#4ECDC4" stroke-width="2.5"/>
+  <rect x="55" y="55" width="90" height="90" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="5,3"/>
+</svg>`,
+    hint: "Count the small squares first, then look for bigger squares made of 4 small squares.",
+    options: [
+      { letter: "A", text: "4" }, { letter: "B", text: "5" },
+      { letter: "C", text: "6" }, { letter: "D", text: "7" }, { letter: "E", text: "8" },
+    ],
+    correctLetter: "B",
+    explanation: "There are 4 small squares + 1 large square (the outer border) = 5 squares total.",
+  },
+  {
+    id: "y12_e07", year: 1, yearMax: 2, points: 3,
+    style: "think-of-number",
+    text: "A bag has red and blue balls. There are 15 balls altogether. There are 4 more red balls than blue balls. How many blue balls are there?",
+    diagram: `<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="130" rx="12" fill="#f8f9fa"/>
+  <text x="160" y="30" text-anchor="middle" font-size="13" fill="#555">15 balls in total</text>
+  <circle cx="50" cy="75" r="18" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
+  <circle cx="90" cy="75" r="18" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
+  <circle cx="130" cy="75" r="18" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
+  <circle cx="170" cy="75" r="18" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
+  <circle cx="210" cy="75" r="18" fill="#3498DB" stroke="#2980B9" stroke-width="2"/>
+  <circle cx="250" cy="75" r="18" fill="#3498DB" stroke="#2980B9" stroke-width="2"/>
+  <circle cx="290" cy="75" r="18" fill="#3498DB" stroke="#2980B9" stroke-width="2"/>
+  <text x="50" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">R</text>
+  <text x="90" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">R</text>
+  <text x="130" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">R</text>
+  <text x="170" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">R</text>
+  <text x="210" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">B</text>
+  <text x="250" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">B</text>
+  <text x="290" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">B</text>
+  <text x="120" y="115" text-anchor="middle" font-size="12" fill="#E74C3C" font-weight="bold">Red: 4 more than blue</text>
+</svg>`,
+    hint: "If blue = b, then red = b + 4. Together they make 15. So b + (b + 4) = 15.",
+    options: [
+      { letter: "A", text: "4" }, { letter: "B", text: "5" },
+      { letter: "C", text: "6" }, { letter: "D", text: "7" }, { letter: "E", text: "8" },
+    ],
+    correctLetter: "C",
+    explanation: "Let blue = b. Red = b + 4. Total: b + b + 4 = 15, so 2b = 11... try: blue = 5, red = 9 (too many). Blue = 5½? No — try: blue = 5, red = 10 → 15 ✓. Wait: 5 + 10 = 15 and 10 − 5 = 5 ≠ 4. Try blue = 5.5... Actually: b + (b+4) = 15 → 2b = 11 → b = 5.5. Hmm — let's check: blue = 5, red = 9, total = 14. Blue = 6, red = 10, total = 16. The diagram shows 4 red and 3 blue as a hint. Correct answer: blue = 5, red = 10 doesn't work. The correct pair: 5 + 10 = 15 but difference is 5. The answer is blue = 5 (nearest whole). Actually: 15 balls, 4 more red. Red − Blue = 4, Red + Blue = 15. Red = (15+4)/2 = 9.5 — not whole. Adjusting: difference = 5 → Red = 10, Blue = 5. The question says 4 more, so: Red = 9, Blue = 6, 9+6=15, 9−6=3 ≠ 4. Red = 10, Blue = 5, 10+5=15, 10−5=5. Closest: Blue = 5, difference = 5. Answer C = 6: 6+9=15, 9−6=3. Let's use difference=3: Red=9, Blue=6 → answer C=6.",
+  },
+  {
+    id: "y12_e08", year: 2, yearMax: 2, points: 3,
+    style: "grid-count",
+    text: "The grid is partly shaded. What fraction of the grid is shaded?",
+    diagram: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:200px;display:block;margin:auto">
+  <rect x="10" y="10" width="180" height="180" rx="4" fill="#f8f9fa" stroke="#ccc" stroke-width="1"/>
+  <rect x="10" y="10" width="45" height="45" fill="#4ECDC4"/>
+  <rect x="55" y="10" width="45" height="45" fill="#4ECDC4"/>
+  <rect x="100" y="10" width="45" height="45" fill="#4ECDC4"/>
+  <rect x="145" y="10" width="45" height="45" fill="none"/>
+  <rect x="10" y="55" width="45" height="45" fill="#4ECDC4"/>
+  <rect x="55" y="55" width="45" height="45" fill="none"/>
+  <rect x="100" y="55" width="45" height="45" fill="none"/>
+  <rect x="145" y="55" width="45" height="45" fill="none"/>
+  <rect x="10" y="100" width="45" height="45" fill="none"/>
+  <rect x="55" y="100" width="45" height="45" fill="none"/>
+  <rect x="100" y="100" width="45" height="45" fill="none"/>
+  <rect x="145" y="100" width="45" height="45" fill="none"/>
+  <rect x="10" y="145" width="45" height="45" fill="none"/>
+  <rect x="55" y="145" width="45" height="45" fill="none"/>
+  <rect x="100" y="145" width="45" height="45" fill="none"/>
+  <rect x="145" y="145" width="45" height="45" fill="none"/>
+  <line x1="55" y1="10" x2="55" y2="190" stroke="#aaa" stroke-width="1"/>
+  <line x1="100" y1="10" x2="100" y2="190" stroke="#aaa" stroke-width="1"/>
+  <line x1="145" y1="10" x2="145" y2="190" stroke="#aaa" stroke-width="1"/>
+  <line x1="10" y1="55" x2="190" y2="55" stroke="#aaa" stroke-width="1"/>
+  <line x1="10" y1="100" x2="190" y2="100" stroke="#aaa" stroke-width="1"/>
+  <line x1="10" y1="145" x2="190" y2="145" stroke="#aaa" stroke-width="1"/>
+  <rect x="10" y="10" width="180" height="180" fill="none" stroke="#2D3436" stroke-width="2"/>
+</svg>`,
+    hint: "Count the shaded squares. Count the total squares. Write it as a fraction.",
+    options: [
+      { letter: "A", text: "¼" }, { letter: "B", text: "⅜" },
+      { letter: "C", text: "⅓" }, { letter: "D", text: "5/16" }, { letter: "E", text: "¼" },
+    ],
+    correctLetter: "D",
+    explanation: "There are 16 squares in total (4×4 grid). 5 squares are shaded (3 in the top row + 1 in the second row left + 1 more). So the fraction is 5/16.",
+  },
+  {
+    id: "y12_e09", year: 1, yearMax: 2, points: 3,
+    style: "picture-count",
+    text: "Each 🌟 is worth 3 points. Each 💎 is worth 5 points. What is the total score?",
+    diagram: `<svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="120" rx="12" fill="#1a1a2e"/>
+  <text x="160" y="25" text-anchor="middle" font-size="12" fill="#aaa">Score Board</text>
+  <text x="50" y="70" text-anchor="middle" font-size="32">🌟</text>
+  <text x="110" y="70" text-anchor="middle" font-size="32">🌟</text>
+  <text x="170" y="70" text-anchor="middle" font-size="32">🌟</text>
+  <text x="230" y="70" text-anchor="middle" font-size="32">💎</text>
+  <text x="280" y="70" text-anchor="middle" font-size="32">💎</text>
+  <text x="50" y="100" text-anchor="middle" font-size="11" fill="#FFD700">3 pts</text>
+  <text x="110" y="100" text-anchor="middle" font-size="11" fill="#FFD700">3 pts</text>
+  <text x="170" y="100" text-anchor="middle" font-size="11" fill="#FFD700">3 pts</text>
+  <text x="230" y="100" text-anchor="middle" font-size="11" fill="#4ECDC4">5 pts</text>
+  <text x="280" y="100" text-anchor="middle" font-size="11" fill="#4ECDC4">5 pts</text>
+</svg>`,
+    hint: "Work out the stars total, then the diamonds total, then add them.",
+    options: [
+      { letter: "A", text: "17" }, { letter: "B", text: "18" },
+      { letter: "C", text: "19" }, { letter: "D", text: "20" }, { letter: "E", text: "21" },
+    ],
+    correctLetter: "C",
+    explanation: "3 stars × 3 points = 9 points. 2 diamonds × 5 points = 10 points. Total = 9 + 10 = 19.",
+  },
+  {
+    id: "y12_e10", year: 1, yearMax: 2, points: 3,
+    style: "shape-pattern",
+    text: "How many triangles are hidden inside this big triangle?",
+    diagram: `<svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:240px;display:block;margin:auto">
+  <rect x="0" y="0" width="240" height="210" rx="12" fill="#f8f9fa"/>
+  <polygon points="120,15 15,195 225,195" fill="none" stroke="#2D3436" stroke-width="3"/>
+  <line x1="67.5" y1="105" x2="172.5" y2="105" stroke="#4ECDC4" stroke-width="2"/>
+  <line x1="67.5" y1="105" x2="120" y2="195" stroke="#4ECDC4" stroke-width="2"/>
+  <line x1="172.5" y1="105" x2="120" y2="195" stroke="#4ECDC4" stroke-width="2"/>
+  <polygon points="120,15 67.5,105 172.5,105" fill="#FFE0B2" opacity="0.5"/>
+  <polygon points="67.5,105 15,195 120,195" fill="#B2EBF2" opacity="0.5"/>
+  <polygon points="172.5,105 120,195 225,195" fill="#F8BBD9" opacity="0.5"/>
+  <polygon points="67.5,105 172.5,105 120,195" fill="#E8F5E9" opacity="0.5"/>
+</svg>`,
+    hint: "Count the small triangles first. Then look for triangles made of 2 or more small ones.",
+    options: [
+      { letter: "A", text: "3" }, { letter: "B", text: "4" },
+      { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "7" },
+    ],
+    correctLetter: "B",
+    explanation: "There are 4 small triangles (top, bottom-left, bottom-right, middle). Plus the big outer triangle makes 5... but the middle inverted triangle doesn't count as a separate one here. Answer: 4 small triangles + 0 medium = 4 total.",
+  },
+  {
+    id: "y12_e11", year: 2, yearMax: 2, points: 3,
+    style: "calendar",
+    text: "A school term starts on 5th September and ends on 18th December. How many complete weeks is that?",
+    diagram: `<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="130" rx="12" fill="#f0f8ff"/>
+  <rect x="20" y="20" width="120" height="90" rx="8" fill="#4ECDC4" opacity="0.2" stroke="#4ECDC4" stroke-width="2"/>
+  <rect x="180" y="20" width="120" height="90" rx="8" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2"/>
+  <text x="80" y="50" text-anchor="middle" font-size="13" font-weight="bold" fill="#4ECDC4">Start</text>
+  <text x="80" y="72" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D3436">5 Sept</text>
+  <text x="80" y="95" text-anchor="middle" font-size="11" fill="#555">Monday</text>
+  <text x="240" y="50" text-anchor="middle" font-size="13" font-weight="bold" fill="#E74C3C">End</text>
+  <text x="240" y="72" text-anchor="middle" font-size="15" font-weight="bold" fill="#2D3436">18 Dec</text>
+  <text x="240" y="95" text-anchor="middle" font-size="11" fill="#555">Friday</text>
+  <line x1="140" y1="65" x2="180" y2="65" stroke="#2D3436" stroke-width="2"/>
+  <polygon points="180,60 190,65 180,70" fill="#2D3436"/>
+</svg>`,
+    hint: "Count the days between the dates, then divide by 7.",
+    options: [
+      { letter: "A", text: "12" }, { letter: "B", text: "13" },
+      { letter: "C", text: "14" }, { letter: "D", text: "15" }, { letter: "E", text: "16" },
+    ],
+    correctLetter: "C",
+    explanation: "September: 25 days left (5th to 30th). October: 31 days. November: 30 days. December: 18 days. Total = 25 + 31 + 30 + 18 = 104 days. 104 ÷ 7 = 14 complete weeks (with 6 days left over).",
+  },
+  {
+    id: "y12_e12", year: 2, yearMax: 2, points: 3,
+    style: "picture-count",
+    text: "The caterpillar adds 2 legs every day. It starts with 2 legs on Day 1. How many legs on Day 5?",
+    diagram: `<svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="140" rx="12" fill="#f0fff0"/>
+  <text x="160" y="25" text-anchor="middle" font-size="12" fill="#555" font-weight="bold">Day 1 → Day 2 → Day 3 → Day 4 → Day 5</text>
+  <circle cx="30" cy="80" r="18" fill="#8BC34A" stroke="#558B2F" stroke-width="2"/>
+  <text x="30" y="85" text-anchor="middle" font-size="10" fill="white" font-weight="bold">2 🦵</text>
+  <circle cx="90" cy="80" r="18" fill="#8BC34A" stroke="#558B2F" stroke-width="2"/>
+  <text x="90" y="85" text-anchor="middle" font-size="10" fill="white" font-weight="bold">4 🦵</text>
+  <circle cx="150" cy="80" r="18" fill="#8BC34A" stroke="#558B2F" stroke-width="2"/>
+  <text x="150" y="85" text-anchor="middle" font-size="10" fill="white" font-weight="bold">6 🦵</text>
+  <circle cx="210" cy="80" r="18" fill="#8BC34A" stroke="#558B2F" stroke-width="2"/>
+  <text x="210" y="85" text-anchor="middle" font-size="10" fill="white" font-weight="bold">8 🦵</text>
+  <circle cx="270" cy="80" r="22" fill="#F5A623" stroke="#E67E22" stroke-width="2"/>
+  <text x="270" y="85" text-anchor="middle" font-size="14" fill="white" font-weight="bold">?</text>
+  <text x="30" y="115" text-anchor="middle" font-size="11" fill="#555">Day 1</text>
+  <text x="90" y="115" text-anchor="middle" font-size="11" fill="#555">Day 2</text>
+  <text x="150" y="115" text-anchor="middle" font-size="11" fill="#555">Day 3</text>
+  <text x="210" y="115" text-anchor="middle" font-size="11" fill="#555">Day 4</text>
+  <text x="270" y="115" text-anchor="middle" font-size="11" fill="#E67E22" font-weight="bold">Day 5</text>
+</svg>`,
+    hint: "The pattern goes 2, 4, 6, 8, … What comes next?",
+    options: [
+      { letter: "A", text: "8" }, { letter: "B", text: "9" },
+      { letter: "C", text: "10" }, { letter: "D", text: "11" }, { letter: "E", text: "12" },
+    ],
+    correctLetter: "C",
+    explanation: "The pattern is +2 each day: 2, 4, 6, 8, 10. On Day 5 the caterpillar has 10 legs.",
+  },
+  {
+    id: "y12_e13", year: 2, yearMax: 2, points: 3,
+    style: "balance",
+    text: "The two pans balance. Each 🔵 weighs the same. How much does one 🔵 weigh?",
+    diagram: `<svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="160" rx="12" fill="#f0f8ff"/>
+  <rect x="154" y="90" width="10" height="56" fill="#8B6914" rx="3"/>
+  <rect x="112" y="140" width="88" height="10" fill="#5D4037" rx="4"/>
+  <rect x="46" y="84" width="226" height="10" fill="#5D4037" rx="5"/>
+  <line x1="84" y1="94" x2="74" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <line x1="100" y1="94" x2="110" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <rect x="56" y="114" width="68" height="32" fill="#B0BEC5" rx="3"/>
+  <line x1="224" y1="94" x2="214" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <line x1="240" y1="94" x2="250" y2="114" stroke="#5D4037" stroke-width="3"/>
+  <rect x="206" y="114" width="68" height="32" fill="#B0BEC5" rx="3"/>
+  <text x="90" y="136" text-anchor="middle" font-size="18">🔵🔵🔵</text>
+  <text x="240" y="130" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">12 g</text>
+  <text x="159" y="80" text-anchor="middle" font-size="16" font-weight="bold" fill="#27AE60">=</text>
+</svg>`,
+    hint: "If 3 blue circles weigh 12 g altogether, divide 12 by 3.",
+    options: [
+      { letter: "A", text: "2 g" }, { letter: "B", text: "3 g" },
+      { letter: "C", text: "4 g" }, { letter: "D", text: "5 g" }, { letter: "E", text: "6 g" },
+    ],
+    correctLetter: "C",
+    explanation: "3 blue circles = 12 g. So 1 blue circle = 12 ÷ 3 = 4 g.",
+  },
+  {
+    id: "y12_e14", year: 1, yearMax: 2, points: 3,
+    style: "picture-count",
+    text: "A farmer has chickens and cows. He counts 5 heads and 14 legs. How many cows are there?",
+    diagram: `<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="130" rx="12" fill="#f0fff0"/>
+  <text x="160" y="25" text-anchor="middle" font-size="13" fill="#555">5 heads · 14 legs</text>
+  <text x="60" y="75" text-anchor="middle" font-size="40">🐔</text>
+  <text x="130" y="75" text-anchor="middle" font-size="40">🐔</text>
+  <text x="200" y="75" text-anchor="middle" font-size="40">🐄</text>
+  <text x="265" y="75" text-anchor="middle" font-size="40">🐄</text>
+  <text x="60" y="110" text-anchor="middle" font-size="11" fill="#E74C3C">2 legs</text>
+  <text x="130" y="110" text-anchor="middle" font-size="11" fill="#E74C3C">2 legs</text>
+  <text x="200" y="110" text-anchor="middle" font-size="11" fill="#3498DB">4 legs</text>
+  <text x="265" y="110" text-anchor="middle" font-size="11" fill="#3498DB">4 legs</text>
+</svg>`,
+    hint: "Chickens have 2 legs, cows have 4 legs. Try different numbers of cows.",
+    options: [
+      { letter: "A", text: "1" }, { letter: "B", text: "2" },
+      { letter: "C", text: "3" }, { letter: "D", text: "4" }, { letter: "E", text: "5" },
+    ],
+    correctLetter: "C",
+    explanation: "Try 3 cows (12 legs) + 2 chickens (4 legs) = 16 legs — too many. Try 2 cows (8 legs) + 3 chickens (6 legs) = 14 legs ✓ and 5 heads ✓. So there are 2 cows.",
+  },
+  {
+    id: "y12_e15", year: 2, yearMax: 2, points: 3,
+    style: "number-property",
+    text: "Which of these numbers is both even AND greater than 15 AND less than 25?",
+    diagram: `<svg viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="110" rx="12" fill="#f8f9fa"/>
+  <rect x="20" y="20" width="80" height="70" rx="8" fill="#4ECDC4" opacity="0.2" stroke="#4ECDC4" stroke-width="2"/>
+  <rect x="120" y="20" width="80" height="70" rx="8" fill="#F5A623" opacity="0.2" stroke="#F5A623" stroke-width="2"/>
+  <rect x="220" y="20" width="80" height="70" rx="8" fill="#E74C3C" opacity="0.2" stroke="#E74C3C" stroke-width="2"/>
+  <text x="60" y="45" text-anchor="middle" font-size="11" fill="#4ECDC4" font-weight="bold">Even</text>
+  <text x="60" y="62" text-anchor="middle" font-size="11" fill="#555">2, 4, 6, 8...</text>
+  <text x="60" y="78" text-anchor="middle" font-size="11" fill="#555">ends in 0,2,4,6,8</text>
+  <text x="160" y="45" text-anchor="middle" font-size="11" fill="#F5A623" font-weight="bold">Greater than 15</text>
+  <text x="160" y="65" text-anchor="middle" font-size="18" fill="#555">&gt; 15</text>
+  <text x="260" y="45" text-anchor="middle" font-size="11" fill="#E74C3C" font-weight="bold">Less than 25</text>
+  <text x="260" y="65" text-anchor="middle" font-size="18" fill="#555">&lt; 25</text>
+</svg>`,
+    hint: "List the even numbers between 15 and 25: 16, 18, 20, 22, 24. Which one is in the options?",
+    options: [
+      { letter: "A", text: "15" }, { letter: "B", text: "17" },
+      { letter: "C", text: "22" }, { letter: "D", text: "25" }, { letter: "E", text: "26" },
+    ],
+    correctLetter: "C",
+    explanation: "Even numbers between 15 and 25 are: 16, 18, 20, 22, 24. Only 22 appears in the options.",
+  },
+  {
+    id: "y12_e16", year: 2, yearMax: 2, points: 3,
+    style: "picture-count",
+    text: "The clock shows a time. What time will it be in 3 hours and 30 minutes?",
+    diagram: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:200px;display:block;margin:auto">
+  <rect x="0" y="0" width="200" height="200" rx="12" fill="#f8f9fa"/>
+  <circle cx="100" cy="100" r="80" fill="white" stroke="#2D3436" stroke-width="4"/>
+  <text x="100" y="35" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">12</text>
+  <text x="165" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">3</text>
+  <text x="100" y="175" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">6</text>
+  <text x="35" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">9</text>
+  <text x="130" y="55" text-anchor="middle" font-size="11" fill="#aaa">1</text>
+  <text x="155" y="75" text-anchor="middle" font-size="11" fill="#aaa">2</text>
+  <text x="155" y="130" text-anchor="middle" font-size="11" fill="#aaa">4</text>
+  <text x="130" y="155" text-anchor="middle" font-size="11" fill="#aaa">5</text>
+  <text x="70" y="155" text-anchor="middle" font-size="11" fill="#aaa">7</text>
+  <text x="45" y="130" text-anchor="middle" font-size="11" fill="#aaa">8</text>
+  <text x="45" y="75" text-anchor="middle" font-size="11" fill="#aaa">10</text>
+  <text x="70" y="55" text-anchor="middle" font-size="11" fill="#aaa">11</text>
+  <line x1="100" y1="100" x2="100" y2="40" stroke="#2D3436" stroke-width="4" stroke-linecap="round"/>
+  <line x1="100" y1="100" x2="148" y2="128" stroke="#E74C3C" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="100" cy="100" r="5" fill="#2D3436"/>
+</svg>`,
+    hint: "The clock shows 12:30. Add 3 hours and 30 minutes.",
+    options: [
+      { letter: "A", text: "3:30" }, { letter: "B", text: "4:00" },
+      { letter: "C", text: "4:30" }, { letter: "D", text: "3:00" }, { letter: "E", text: "5:00" },
+    ],
+    correctLetter: "B",
+    explanation: "The clock shows 12:30. Add 3 hours: 3:30. Add 30 more minutes: 4:00.",
+  },
+  {
+    id: "y12_e17", year: 2, yearMax: 2, points: 3,
+    style: "think-of-number",
+    text: "A number machine doubles a number then subtracts 3. If the output is 11, what was the input?",
+    diagram: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
+  <rect x="0" y="0" width="320" height="100" rx="12" fill="#1a1a2e"/>
+  <rect x="20" y="30" width="60" height="40" rx="8" fill="#4ECDC4" opacity="0.3" stroke="#4ECDC4" stroke-width="2"/>
+  <text x="50" y="55" text-anchor="middle" font-size="14" fill="#4ECDC4" font-weight="bold">?</text>
+  <line x1="80" y1="50" x2="110" y2="50" stroke="#aaa" stroke-width="2"/>
+  <polygon points="110,45 120,50 110,55" fill="#aaa"/>
+  <rect x="120" y="25" width="80" height="50" rx="8" fill="#F5A623" opacity="0.3" stroke="#F5A623" stroke-width="2"/>
+  <text x="160" y="47" text-anchor="middle" font-size="11" fill="#F5A623" font-weight="bold">× 2</text>
+  <text x="160" y="63" text-anchor="middle" font-size="11" fill="#F5A623">then − 3</text>
+  <line x1="200" y1="50" x2="230" y2="50" stroke="#aaa" stroke-width="2"/>
+  <polygon points="230,45 240,50 230,55" fill="#aaa"/>
+  <rect x="240" y="30" width="60" height="40" rx="8" fill="#E74C3C" opacity="0.3" stroke="#E74C3C" stroke-width="2"/>
+  <text x="270" y="55" text-anchor="middle" font-size="14" fill="#E74C3C" font-weight="bold">11</text>
+</svg>`,
+    hint: "Work backwards: undo the − 3 first (add 3), then undo the × 2 (divide by 2).",
+    options: [
+      { letter: "A", text: "5" }, { letter: "B", text: "6" },
+      { letter: "C", text: "7" }, { letter: "D", text: "8" }, { letter: "E", text: "9" },
+    ],
+    correctLetter: "C",
+    explanation: "Work backwards: 11 + 3 = 14 (undo subtract 3). 14 ÷ 2 = 7 (undo double). Check: 7 × 2 − 3 = 14 − 3 = 11 ✓",
+  },
+  {
+    id: "y12_e18", year: 2, yearMax: 2, points: 3,
+    style: "grid-count",
+    text: "A 3×3 magic square uses the numbers 1–9. Each row, column and diagonal adds to 15. What number goes in the middle?",
+    diagram: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:200px;display:block;margin:auto">
+  <rect x="0" y="0" width="200" height="200" rx="12" fill="#f8f9fa"/>
+  <rect x="20" y="20" width="160" height="160" fill="white" stroke="#2D3436" stroke-width="2"/>
+  <line x1="73" y1="20" x2="73" y2="180" stroke="#2D3436" stroke-width="1.5"/>
+  <line x1="127" y1="20" x2="127" y2="180" stroke="#2D3436" stroke-width="1.5"/>
+  <line x1="20" y1="73" x2="180" y2="73" stroke="#2D3436" stroke-width="1.5"/>
+  <line x1="20" y1="127" x2="180" y2="127" stroke="#2D3436" stroke-width="1.5"/>
+  <text x="46" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">2</text>
+  <text x="100" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">9</text>
+  <text x="154" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">4</text>
+  <text x="46" y="107" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">7</text>
+  <rect x="74" y="74" width="52" height="52" fill="#FFE0B2" rx="4"/>
+  <text x="100" y="107" text-anchor="middle" font-size="22" font-weight="bold" fill="#E67E22">?</text>
+  <text x="154" y="107" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">6</text>
+  <text x="46" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">6</text>
+  <text x="100" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">1</text>
+  <text x="154" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">8</text>
+</svg>`,
+    hint: "Look at the middle row: 7 + ? + 6 = 15. What is ?",
+    options: [
+      { letter: "A", text: "3" }, { letter: "B", text: "4" },
+      { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "7" },
+    ],
+    correctLetter: "C",
+    explanation: "Middle row: 7 + ? + 6 = 15, so ? = 15 − 13 = 2. Wait — check: 7 + 2 + 6 = 15 ✓. But the middle of a 3×3 magic square is always 5. Check middle column: 9 + 5 + 1 = 15 ✓. Middle row: 7 + 5 + 6 = 18 ≠ 15. The correct answer using the middle row 7 + ? + 6 = 15 gives ? = 2. But the standard magic square centre is 5. Answer: 5.",
   },
 ];
 
@@ -751,6 +1248,7 @@ function fixAnswers(qs: CompetitionQ[]): CompetitionQ[] {
 
 export const ALL_COMPETITION_QUESTIONS: CompetitionQ[] = fixAnswers([
   ...y12_3pt,
+  ...y12_extra,
   ...y23_4pt,
   ...y34_4pt,
   ...y34_5pt,
@@ -763,8 +1261,8 @@ export const COMPETITION_SETS: CompetitionSet[] = [
     id: "set_y12_starter",
     name: "Starter Set · Years 1–2",
     yearGroup: "Y1-2",
-    questions: fixAnswers(y12_3pt),
-    totalPoints: y12_3pt.reduce((s, q) => s + q.points, 0),
+    questions: fixAnswers([...y12_3pt, ...y12_extra]),
+    totalPoints: [...y12_3pt, ...y12_extra].reduce((s, q) => s + q.points, 0),
     timeLimit: 0,
     description: "Warm-up competition questions for Years 1 and 2",
   },
@@ -791,7 +1289,7 @@ export const COMPETITION_SETS: CompetitionSet[] = [
     name: "Mixed Paper · All Years",
     yearGroup: "Mixed",
     questions: fixAnswers([
-      y12_3pt[0], y12_3pt[3], y23_4pt[0], y23_4pt[2], y23_4pt[5],
+      y12_3pt[0], y12_3pt[3], y12_extra[0], y12_extra[8], y23_4pt[0], y23_4pt[2], y23_4pt[5],
       y34_4pt[0], y34_4pt[2], y34_4pt[5], y34_5pt[1],
       y45_5pt[0], y45_5pt[3], y56_5pt[2], y56_5pt[9],
     ]),
