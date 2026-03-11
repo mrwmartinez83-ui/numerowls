@@ -302,6 +302,40 @@ function svgSharing(emoji: string, total: number, groups: number) {
   ${boxes.join("")}
 </svg>`;
 }
+function svgHandshakeSmall(n: number) {
+  const W = 320; const cx = W / 2; const cy = 80; const r = 55;
+  const pts = Array.from({ length: n }, (_, i) => {
+    const a = (i * 360 / n - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  });
+  const lines: string[] = [];
+  const dots: string[] = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      lines.push(`<line x1="${pts[i].x.toFixed(1)}" y1="${pts[i].y.toFixed(1)}" x2="${pts[j].x.toFixed(1)}" y2="${pts[j].y.toFixed(1)}" stroke="#4ECDC4" strokeWidth="1.5" opacity="0.6"/>`);
+    }
+    dots.push(`<circle cx="${pts[i].x.toFixed(1)}" cy="${pts[i].y.toFixed(1)}" r="12" fill="#F5A623" stroke="#2D3436" strokeWidth="2"/>`);
+    dots.push(`<text x="${pts[i].x.toFixed(1)}" y="${(pts[i].y + 5).toFixed(1)}" textAnchor="middle" fontSize="13">👤</text>`);
+  }
+  return svgWrap(`${lines.join("")}${dots.join("")}`, 160, "#f0f8ff");
+}
+
+function svgVenn(aOnly: number, bOnly: number, both: number, labelA: string, labelB: string) {
+  return svgWrap(`
+  <circle cx="120" cy="80" r="65" fill="#4ECDC422" stroke="#4ECDC4" strokeWidth="2.5"/>
+  <circle cx="200" cy="80" r="65" fill="#F5A62322" stroke="#F5A623" strokeWidth="2.5"/>
+  <text x="88" y="84" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#4ECDC4">${aOnly}</text>
+  <text x="160" y="84" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#9B59B6">${both}</text>
+  <text x="232" y="84" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#F5A623">${bOnly}</text>
+  <text x="88" y="106" textAnchor="middle" fontSize="10" fill="#555">${labelA} only</text>
+  <text x="160" y="106" textAnchor="middle" fontSize="10" fill="#555">both</text>
+  <text x="232" y="106" textAnchor="middle" fontSize="10" fill="#555">${labelB} only</text>
+  <text x="88" y="22" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#4ECDC4">${labelA}</text>
+  <text x="232" y="22" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#F5A623">${labelB}</text>
+  `, 130, "#f8f9fa");
+}
+
+
 
 // Cube count (3D isometric)
 const svgCubeCount = svgWrap(`
@@ -413,79 +447,177 @@ const lesson1: Lesson = {
   ],
   competitionQuestions: [
     // 3-point
-    { id: "l1-q1", points: 3,
-      text: "What number comes next?\n5, 10, 15, 20, ___",
-      svgDiagram: svgFrogJumps(0, 25, 5, 4),
-      options: [{ letter: "A", text: "22" }, { letter: "B", text: "24" }, { letter: "C", text: "25" }, { letter: "D", text: "26" }, { letter: "E", text: "30" }],
+    {
+      id: "l1-cq1", points: 3,
+      text: "I think of a number, add 8, and the answer is 15. What is my number?",
+      options: [
+        { letter: "A", text: "5" },
+        { letter: "B", text: "6" },
+        { letter: "C", text: "7" },
+        { letter: "D", text: "8" },
+        { letter: "E", text: "9" },
+      ],
       correctLetter: "C",
-      explanation: "The pattern goes up by 5 each time (counting in 5s). 20 + 5 = 25." },
-    { id: "l1-q2", points: 3,
-      text: "A frog jumps 3 spaces at a time from 0. After 4 jumps, where does it land?",
-      svgDiagram: svgFrogJumps(0, 14, 3, 4),
-      options: [{ letter: "A", text: "9" }, { letter: "B", text: "10" }, { letter: "C", text: "12" }, { letter: "D", text: "13" }, { letter: "E", text: "15" }],
-      correctLetter: "C",
-      explanation: "Jumping in 3s from 0: 3, 6, 9, 12. After 4 jumps the frog lands on 12." },
-    { id: "l1-q3", points: 3,
-      text: "24 apples are shared equally into 4 bags. How many apples are in each bag?",
-      svgDiagram: svgSharing("🍎", 24, 4),
-      options: [{ letter: "A", text: "4" }, { letter: "B", text: "5" }, { letter: "C", text: "6" }, { letter: "D", text: "8" }, { letter: "E", text: "10" }],
-      correctLetter: "C",
-      explanation: "24 ÷ 4 = 6. Each bag gets 6 apples." },
-    { id: "l1-q4", points: 3,
-      text: "Which of these numbers is the largest?",
-      options: [{ letter: "A", text: "47" }, { letter: "B", text: "74" }, { letter: "C", text: "44" }, { letter: "D", text: "77" }, { letter: "E", text: "71" }],
+      explanation: "Work backwards: 15 − 8 = 7. Check: 7 + 8 = 15 ✓",
+    },
+    {
+      id: "l1-cq2", points: 3,
+      text: "What comes next in this sequence?\n1, 4, 9, 16, ___",
+      svgDiagram: svgPattern(["1²=1", "2²=4", "3²=9", "4²=16", "?"]),
+      options: [
+        { letter: "A", text: "20" },
+        { letter: "B", text: "23" },
+        { letter: "C", text: "24" },
+        { letter: "D", text: "25" },
+        { letter: "E", text: "30" },
+      ],
       correctLetter: "D",
-      explanation: "77 has 7 tens and 7 ones. It is larger than 74 (7 tens, 4 ones) and all the others." },
+      explanation: "These are square numbers: 1²=1, 2²=4, 3²=9, 4²=16, 5²=25. The next is 25.",
+    },
+    {
+      id: "l1-cq3", points: 3,
+      text: "A bag has 30 marbles. ⅕ are red and the rest are blue. How many blue marbles are there?",
+      options: [
+        { letter: "A", text: "5" },
+        { letter: "B", text: "20" },
+        { letter: "C", text: "24" },
+        { letter: "D", text: "25" },
+        { letter: "E", text: "28" },
+      ],
+      correctLetter: "C",
+      explanation: "⅕ of 30 = 6 red marbles. Blue = 30 − 6 = 24.",
+    },
+    {
+      id: "l1-cq4", points: 3,
+      text: "Two numbers add up to 10 and multiply to give 21. What is the larger number?",
+      options: [
+        { letter: "A", text: "5" },
+        { letter: "B", text: "6" },
+        { letter: "C", text: "7" },
+        { letter: "D", text: "8" },
+        { letter: "E", text: "9" },
+      ],
+      correctLetter: "C",
+      explanation: "Try pairs that sum to 10: 3 + 7 = 10, and 3 × 7 = 21 ✓. The larger number is 7.",
+    },
     // 4-point
-    { id: "l1-q5", points: 4,
-      text: "A staircase is built from blocks. Step 1 has 1 block, step 2 has 2, and so on. How many blocks are needed for a 5-step staircase in total?",
-      svgDiagram: svgStaircase(5, "#FF6B6B"),
-      options: [{ letter: "A", text: "10" }, { letter: "B", text: "12" }, { letter: "C", text: "14" }, { letter: "D", text: "15" }, { letter: "E", text: "20" }],
-      correctLetter: "D",
-      explanation: "1 + 2 + 3 + 4 + 5 = 15 blocks in total." },
-    { id: "l1-q6", points: 4,
-      text: "Anna gives half her stickers to Ben. Ben gives half of his to Cara. Cara now has 6. How many did Anna start with?",
-      svgDiagram: svgChain([{ label: "Anna ?", color: "#FF6B6B" }, { label: "Ben ?/2", color: "#FF8E53" }, { label: "Cara 6", color: "#4ECDC4" }], ["÷2", "÷2"]),
-      options: [{ letter: "A", text: "12" }, { letter: "B", text: "18" }, { letter: "C", text: "24" }, { letter: "D", text: "30" }, { letter: "E", text: "36" }],
+    {
+      id: "l1-cq5", points: 4,
+      text: "A number machine first doubles the input, then subtracts 3. The output is 13. What was the input?",
+      svgDiagram: svgChain(
+        [{ label: "Input ?", color: "#9B59B6" }, { label: "×2", color: "#FF8E53" }, { label: "−3", color: "#FF6B6B" }, { label: "= 13", color: "#4ECDC4" }],
+        ["×2", "−3", "="]
+      ),
+      options: [
+        { letter: "A", text: "5" },
+        { letter: "B", text: "7" },
+        { letter: "C", text: "8" },
+        { letter: "D", text: "10" },
+        { letter: "E", text: "11" },
+      ],
       correctLetter: "C",
-      explanation: "Work backwards: Cara has 6, so Ben had 12 (6×2), so Anna had 24 (12×2)." },
-    { id: "l1-q7", points: 4,
-      text: "The clock shows 3 o'clock. What time will it be in 2 hours and 30 minutes?",
-      svgDiagram: svgClock(3, 0),
-      options: [{ letter: "A", text: "4:30" }, { letter: "B", text: "5:00" }, { letter: "C", text: "5:30" }, { letter: "D", text: "6:00" }, { letter: "E", text: "6:30" }],
-      correctLetter: "C",
-      explanation: "3:00 + 2 hours = 5:00. 5:00 + 30 minutes = 5:30." },
-    { id: "l1-q8", points: 4,
-      text: "A number is doubled and then 5 is added. The answer is 17. What was the original number?",
-      svgDiagram: svgChain([{ label: "? (start)", color: "#9B59B6" }, { label: "×2", color: "#FF8E53" }, { label: "+5 = 17", color: "#4ECDC4" }], ["×2", "+5"]),
-      options: [{ letter: "A", text: "4" }, { letter: "B", text: "6" }, { letter: "C", text: "7" }, { letter: "D", text: "8" }, { letter: "E", text: "11" }],
+      explanation: "Work backwards: 13 + 3 = 16 (undo −3). 16 ÷ 2 = 8 (undo ×2). Check: 8 × 2 − 3 = 13 ✓",
+    },
+    {
+      id: "l1-cq6", points: 4,
+      text: "Today is Tuesday. What day will it be in 20 days' time?",
+      options: [
+        { letter: "A", text: "Monday" },
+        { letter: "B", text: "Tuesday" },
+        { letter: "C", text: "Wednesday" },
+        { letter: "D", text: "Thursday" },
+        { letter: "E", text: "Saturday" },
+      ],
+      correctLetter: "A",
+      explanation: "20 ÷ 7 = 2 remainder 6. After 14 days it's Tuesday again. 6 more days: Wed, Thu, Fri, Sat, Sun, Mon. Answer: Monday.",
+    },
+    {
+      id: "l1-cq7", points: 4,
+      text: "4 children each shake hands with every other child exactly once. How many handshakes happen in total?",
+      svgDiagram: svgHandshakeSmall(4),
+      options: [
+        { letter: "A", text: "4" },
+        { letter: "B", text: "6" },
+        { letter: "C", text: "8" },
+        { letter: "D", text: "10" },
+        { letter: "E", text: "12" },
+      ],
       correctLetter: "B",
-      explanation: "Work backwards: 17 − 5 = 12. 12 ÷ 2 = 6. The original number was 6." },
+      explanation: "Child 1 shakes 3 hands. Child 2 shakes 2 new hands. Child 3 shakes 1 new hand. Total: 3 + 2 + 1 = 6. Or: 4 × 3 ÷ 2 = 6.",
+    },
+    {
+      id: "l1-cq8", points: 4,
+      text: "Anya gives half her stickers to Ben. Ben now has 18 stickers. He had 6 to start with. How many stickers did Anya have?",
+      svgDiagram: svgChain(
+        [{ label: "Anya ?", color: "#9B59B6" }, { label: "Ben 6 + ½Anya", color: "#FF8E53" }, { label: "= 18", color: "#4ECDC4" }],
+        ["÷2 →", "="]
+      ),
+      options: [
+        { letter: "A", text: "12" },
+        { letter: "B", text: "18" },
+        { letter: "C", text: "24" },
+        { letter: "D", text: "30" },
+        { letter: "E", text: "36" },
+      ],
+      correctLetter: "C",
+      explanation: "Ben ends with 18. He started with 6, so he received 18 − 6 = 12 stickers from Anya. That was half of Anya's total. So Anya had 12 × 2 = 24 stickers.",
+    },
     // 5-point
-    { id: "l1-q9", points: 5,
-      text: "Two balance scales are balanced. Scale 1: 2 red = 1 yellow. Scale 2: 2 yellow = 3 blue. How many blue balls balance 4 red balls?",
-      svgDiagram: svgTwoBalances("🔴🔴", "🟡", "2 red = 1 yellow", "🟡🟡", "🔵🔵🔵", "2 yellow = 3 blue"),
-      options: [{ letter: "A", text: "3 blue" }, { letter: "B", text: "4 blue" }, { letter: "C", text: "5 blue" }, { letter: "D", text: "6 blue" }, { letter: "E", text: "8 blue" }],
-      correctLetter: "D",
-      explanation: "2 red = 1 yellow. 4 red = 2 yellow. 2 yellow = 3 blue. So 4 red = 3 blue? Wait: 2R=1Y and 2Y=3B. So 4R=2Y=3B. Answer: 3 blue. But let's recheck: 4R = 2×(2R) = 2Y. 2Y = 3B. So 4R = 3B. Hmm, that's C. Actually: 2R=1Y → 4R=2Y → 2Y=3B → 4R=3B. Answer is A (3 blue)... but let me use the diagram as drawn. Answer: A=3 blue." },
-    { id: "l1-q10", points: 5,
-      text: "The numbers 1 to 9 are placed in a 3×3 magic square. Every row, column, and diagonal adds to the same number. What is that number?",
+    {
+      id: "l1-cq9", points: 5,
+      text: "On a balance scale: 3 apples balance 1 melon. 1 melon balances 5 oranges. How many oranges balance 6 apples?",
+      svgDiagram: svgTwoBalances("🍎🍎🍎", "🍈", "3 apples = 1 melon", "🍈", "🍊🍊🍊🍊🍊", "1 melon = 5 oranges"),
+      options: [
+        { letter: "A", text: "8 oranges" },
+        { letter: "B", text: "9 oranges" },
+        { letter: "C", text: "10 oranges" },
+        { letter: "D", text: "12 oranges" },
+        { letter: "E", text: "15 oranges" },
+      ],
+      correctLetter: "C",
+      explanation: "3 apples = 1 melon = 5 oranges. So 6 apples = 2 melons = 10 oranges.",
+    },
+    {
+      id: "l1-cq10", points: 5,
+      text: "The numbers 1–9 are placed in a 3×3 magic square so that every row, column and diagonal adds to the same total. What is that total?",
       svgDiagram: svgGrid(3, 3, [[1, 1]], "#FFD700"),
-      options: [{ letter: "A", text: "12" }, { letter: "B", text: "13" }, { letter: "C", text: "14" }, { letter: "D", text: "15" }, { letter: "E", text: "16" }],
+      options: [
+        { letter: "A", text: "12" },
+        { letter: "B", text: "13" },
+        { letter: "C", text: "14" },
+        { letter: "D", text: "15" },
+        { letter: "E", text: "16" },
+      ],
       correctLetter: "D",
-      explanation: "Total of 1 to 9 = 45. There are 3 rows, so each row sums to 45 ÷ 3 = 15. This is called a Magic Square!" },
-    { id: "l1-q11", points: 5,
-      text: "5 toys weigh 10g, 15g, 12g, 18g, and 5g. Put them in 2 boxes so each box weighs the same. Which toy is in a box by itself?",
-      svgDiagram: svgToyWeights,
-      options: [{ letter: "A", text: "🎈 Balloon (10g)" }, { letter: "B", text: "🚗 Car (15g)" }, { letter: "C", text: "🧸 Bear (12g)" }, { letter: "D", text: "🎮 Game (18g)" }, { letter: "E", text: "⚽ Ball (5g)" }],
+      explanation: "The numbers 1 to 9 sum to 45. There are 3 rows, so each row must total 45 ÷ 3 = 15.",
+    },
+    {
+      id: "l1-cq11", points: 5,
+      text: "Ali is 3 times as old as his sister Bea. In 4 years, Ali will be twice as old as Bea. How old is Ali now?",
+      options: [
+        { letter: "A", text: "6" },
+        { letter: "B", text: "9" },
+        { letter: "C", text: "12" },
+        { letter: "D", text: "15" },
+        { letter: "E", text: "18" },
+      ],
       correctLetter: "C",
-      explanation: "Total = 60g. Each box needs 30g. Box 1: 10+15+5=30g. Box 2: 12+18=30g. The bear (12g) is in a box with just the game (18g)." },
-    { id: "l1-q12", points: 5,
-      text: "A magic machine doubles any number, then adds 3. If the output is 19, what was the input?",
-      svgDiagram: svgChain([{ label: "Input ?", color: "#9B59B6" }, { label: "×2", color: "#FF8E53" }, { label: "+3", color: "#FF6B6B" }, { label: "= 19", color: "#4ECDC4" }], ["×2", "+3", "="]),
-      options: [{ letter: "A", text: "6" }, { letter: "B", text: "7" }, { letter: "C", text: "8" }, { letter: "D", text: "9" }, { letter: "E", text: "10" }],
+      explanation: "Let Bea = b, Ali = 3b. In 4 years: 3b + 4 = 2(b + 4) → 3b + 4 = 2b + 8 → b = 4. Ali = 3 × 4 = 12. Check: in 4 years, Ali = 16, Bea = 8, and 16 = 2 × 8 ✓",
+    },
+    {
+      id: "l1-cq12", points: 5,
+      text: "How many squares of ALL sizes are there in a 3×3 grid?",
+      svgDiagram: svgGrid(3, 3, [], "#4ECDC4"),
+      options: [
+        { letter: "A", text: "9" },
+        { letter: "B", text: "12" },
+        { letter: "C", text: "14" },
+        { letter: "D", text: "16" },
+        { letter: "E", text: "18" },
+      ],
       correctLetter: "C",
-      explanation: "Work backwards: 19 − 3 = 16. 16 ÷ 2 = 8. The input was 8. Check: 8 × 2 + 3 = 19 ✓." },
+      explanation: "1×1 squares: 9. 2×2 squares: 4. 3×3 squares: 1. Total: 9 + 4 + 1 = 14.",
+    },
   ],
   homeworkItems: [
     { id: "l1-h1", type: "puzzle", text: "Find the value of each emoji!",
@@ -536,9 +668,6 @@ const lesson1: Lesson = {
   ],
 };
 
-// Fix l1-q9 answer
-lesson1.competitionQuestions[8].correctLetter = "A";
-lesson1.competitionQuestions[8].explanation = "2 red = 1 yellow, so 4 red = 2 yellow. 2 yellow = 3 blue. Therefore 4 red = 3 blue balls.";
 
 // ─── Lesson 2: Shapes & Patterns ─────────────────────────────────────────────
 
@@ -589,97 +718,141 @@ const lesson2: Lesson = {
       explanation: "2d+s=14 and d+2s=13. Add: 3d+3s=27 → d+s=9. Subtract: d−s=1. So d=5, s=4." },
   ],
   competitionQuestions: [
-    { id: "l2-q1", points: 3,
-      text: "A flower has 8 petals. Numbers on 7 petals are: 3, 5, 7, 2, 8, 4, 1. The sum of all petals is 30. What number is on the hidden petal?",
-      svgDiagram: svgFlower([3, 5, 7, 2, "?", 8, 4, 1], 30),
-      options: [{ letter: "A", text: "0" }, { letter: "B", text: "1" }, { letter: "C", text: "2" }, { letter: "D", text: "3" }, { letter: "E", text: "4" }],
-      correctLetter: "A",
-      explanation: "3+5+7+2+8+4+1 = 30. So the hidden petal = 30 − 30 = 0." },
-    { id: "l2-q2", points: 3,
-      text: "What comes next in the pattern?\n🔴 🔵 🔵 🔴 🔵 🔵 🔴 🔵 ___",
-      svgDiagram: svgPattern(["🔴", "🔵", "🔵", "🔴", "🔵", "🔵", "🔴", "🔵", "?"]),
-      options: [{ letter: "A", text: "🔴 Red" }, { letter: "B", text: "🔵 Blue" }, { letter: "C", text: "🟡 Yellow" }, { letter: "D", text: "🟢 Green" }, { letter: "E", text: "🟣 Purple" }],
-      correctLetter: "B",
-      explanation: "The pattern is Red, Blue, Blue — repeating every 3. Position 9: 9 ÷ 3 = 3 remainder 0, which is the 3rd in the pattern = Blue." },
-    { id: "l2-q3", points: 3,
-      text: "A square has a perimeter of 20 cm. What is the length of one side?",
-      svgDiagram: `<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" style="width:160px;display:block;margin:auto">
-        <rect x="20" y="20" width="120" height="120" fill="#e8f5e9" stroke="#4ECDC4" strokeWidth="4" rx="4"/>
-        <text x="80" y="12" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#4ECDC4">? cm</text>
-        <text x="80" y="158" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#4ECDC4">? cm</text>
-        <text x="8" y="84" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#4ECDC4">? cm</text>
-        <text x="152" y="84" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#4ECDC4">? cm</text>
-        <text x="80" y="84" textAnchor="middle" fontSize="12" fill="#FF6B6B" fontWeight="bold">P = 20 cm</text>
-      </svg>`,
-      options: [{ letter: "A", text: "4 cm" }, { letter: "B", text: "5 cm" }, { letter: "C", text: "6 cm" }, { letter: "D", text: "8 cm" }, { letter: "E", text: "10 cm" }],
-      correctLetter: "B",
-      explanation: "A square has 4 equal sides. Perimeter = 4 × side. So side = 20 ÷ 4 = 5 cm." },
-    { id: "l2-q4", points: 3,
-      text: "How many small cubes make up this shape?",
-      svgDiagram: svgCubeCount,
-      options: [{ letter: "A", text: "3" }, { letter: "B", text: "4" }, { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "7" }],
+    // 3-point
+    {
+      id: "l2-cq1", points: 3,
+      text: "A number is multiplied by 4 and 7 is added. The answer is 35. What is the number?",
+      options: [
+        { letter: "A", text: "5" },
+        { letter: "B", text: "6" },
+        { letter: "C", text: "7" },
+        { letter: "D", text: "8" },
+        { letter: "E", text: "9" },
+      ],
       correctLetter: "C",
-      explanation: "There are 4 cubes in the 2×2 base and 1 cube on top = 5 cubes total." },
-    { id: "l2-q5", points: 4,
-      text: "4 large sheep and 1 small sheep share 60g of food. The small sheep gets twice as much as each large sheep. How much does the small sheep get?",
-      svgDiagram: svgSheepFeeding,
-      options: [{ letter: "A", text: "10g" }, { letter: "B", text: "12g" }, { letter: "C", text: "15g" }, { letter: "D", text: "20g" }, { letter: "E", text: "24g" }],
+      explanation: "Work backwards: 35 − 7 = 28 (undo +7). 28 ÷ 4 = 7 (undo ×4). Check: 7 × 4 + 7 = 35 ✓",
+    },
+    {
+      id: "l2-cq2", points: 3,
+      text: "Class 4 has 32 pupils. ¾ of them walk to school. How many pupils walk to school?",
+      options: [
+        { letter: "A", text: "8" },
+        { letter: "B", text: "16" },
+        { letter: "C", text: "20" },
+        { letter: "D", text: "24" },
+        { letter: "E", text: "28" },
+      ],
       correctLetter: "D",
-      explanation: "Let large sheep get x each. Small sheep gets 2x. Total: 4x + 2x = 6x = 60g → x = 10g. Small sheep gets 2 × 10 = 20g." },
-    { id: "l2-q6", points: 4,
-      text: "A rectangle has a length of 8 cm and a width of 3 cm. What is its area?",
-      svgDiagram: `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:240px;display:block;margin:auto">
-        <rect x="20" y="20" width="200" height="60" fill="#e8f5e9" stroke="#4ECDC4" strokeWidth="4" rx="4"/>
-        <text x="120" y="14" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#4ECDC4">8 cm</text>
-        <text x="8" y="55" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#4ECDC4">3 cm</text>
-        <text x="120" y="55" textAnchor="middle" fontSize="13" fill="#FF6B6B" fontWeight="bold">Area = ?</text>
-      </svg>`,
-      options: [{ letter: "A", text: "11 cm²" }, { letter: "B", text: "16 cm²" }, { letter: "C", text: "22 cm²" }, { letter: "D", text: "24 cm²" }, { letter: "E", text: "32 cm²" }],
+      explanation: "¾ of 32 = (32 ÷ 4) × 3 = 8 × 3 = 24 pupils walk to school.",
+    },
+    {
+      id: "l2-cq3", points: 3,
+      text: "January 1st is a Thursday. On what day does February 1st fall? (January has 31 days.)",
+      options: [
+        { letter: "A", text: "Thursday" },
+        { letter: "B", text: "Friday" },
+        { letter: "C", text: "Saturday" },
+        { letter: "D", text: "Sunday" },
+        { letter: "E", text: "Monday" },
+      ],
       correctLetter: "D",
-      explanation: "Area = length × width = 8 × 3 = 24 cm²." },
-    { id: "l2-q7", points: 4,
-      text: "A shape is made of 4 identical squares joined edge-to-edge. Which of these is NOT a valid shape you can make?",
-      options: [{ letter: "A", text: "A straight line of 4 squares" }, { letter: "B", text: "An L-shape" }, { letter: "C", text: "A 2×2 square" }, { letter: "D", text: "A T-shape" }, { letter: "E", text: "A diagonal of 4 squares" }],
-      correctLetter: "E",
-      explanation: "Squares must be joined edge-to-edge (not corner-to-corner). A diagonal arrangement is not valid. All others (line, L, 2×2, T) are valid tetrominoes!" },
-    { id: "l2-q8", points: 4,
-      text: "A star has 5 points. How many lines of symmetry does a regular 5-pointed star have?",
-      options: [{ letter: "A", text: "1" }, { letter: "B", text: "2" }, { letter: "C", text: "3" }, { letter: "D", text: "4" }, { letter: "E", text: "5" }],
-      correctLetter: "E",
-      explanation: "A regular 5-pointed star has 5 lines of symmetry — one through each point and the opposite indentation." },
-    { id: "l2-q9", points: 5,
-      text: "A balance scale has 2 stars on the left and 1 square on the right, and they balance. How many stars balance 3 squares?",
-      svgDiagram: svgBalance("⭐⭐", "🟥", "2 stars", "1 square"),
-      options: [{ letter: "A", text: "3 stars" }, { letter: "B", text: "4 stars" }, { letter: "C", text: "5 stars" }, { letter: "D", text: "6 stars" }, { letter: "E", text: "7 stars" }],
+      explanation: "31 = 4 × 7 + 3. After 4 complete weeks we're back to Thursday. Three more days: Friday, Saturday, Sunday. February 1st is a Sunday.",
+    },
+    // 4-point
+    {
+      id: "l2-cq4", points: 4,
+      text: "The product of two numbers is 24 and their sum is 11. What is the DIFFERENCE between the two numbers?",
+      options: [
+        { letter: "A", text: "1" },
+        { letter: "B", text: "3" },
+        { letter: "C", text: "5" },
+        { letter: "D", text: "7" },
+        { letter: "E", text: "9" },
+      ],
+      correctLetter: "C",
+      explanation: "Factor pairs of 24 that sum to 11: 3 and 8 (3 + 8 = 11, 3 × 8 = 24 ✓). Difference: 8 − 3 = 5.",
+    },
+    {
+      id: "l2-cq5", points: 4,
+      text: "A 2-digit number has digit sum 9. When the digits are reversed, the new number is 27 less than the original. What is the original number?",
+      options: [
+        { letter: "A", text: "36" },
+        { letter: "B", text: "45" },
+        { letter: "C", text: "54" },
+        { letter: "D", text: "63" },
+        { letter: "E", text: "72" },
+      ],
       correctLetter: "D",
-      explanation: "2 stars = 1 square. So 1 square = 2 stars. Therefore 3 squares = 3 × 2 = 6 stars." },
-    { id: "l2-q10", points: 5,
-      text: "A grid path starts at the house 🏠. Follow: right 2, up 1, right 1. Where do you end up?",
-      svgDiagram: svgGridPath,
-      options: [{ letter: "A", text: "Row 1, Column 3" }, { letter: "B", text: "Row 2, Column 4" }, { letter: "C", text: "Row 1, Column 4" }, { letter: "D", text: "Row 3, Column 3" }, { letter: "E", text: "Row 2, Column 3" }],
-      correctLetter: "B",
-      explanation: "Start at Row 1, Column 1. Right 2 → Row 1, Column 3. Up 1 → Row 2, Column 3. Right 1 → Row 2, Column 4. You land on the star ⭐!" },
-    { id: "l2-q11", points: 5,
-      text: "A rectangle is cut into two identical pieces. Each piece has a perimeter of 14 cm. What is the perimeter of the original rectangle if it is cut along its length?",
-      svgDiagram: `<svg viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;display:block;margin:auto">
-        <rect x="10" y="20" width="120" height="60" fill="#e8f5e9" stroke="#4ECDC4" strokeWidth="3" rx="4"/>
-        <text x="70" y="55" textAnchor="middle" fontSize="12" fill="#555">Original</text>
-        <text x="155" y="55" textAnchor="middle" fontSize="20">→</text>
-        <rect x="175" y="20" width="90" height="30" fill="#bbdefb" stroke="#4ECDC4" strokeWidth="2" rx="4"/>
-        <text x="220" y="40" textAnchor="middle" fontSize="11" fill="#555">P = 14 cm</text>
-        <rect x="175" y="50" width="90" height="30" fill="#bbdefb" stroke="#4ECDC4" strokeWidth="2" rx="4"/>
-        <text x="220" y="70" textAnchor="middle" fontSize="11" fill="#555">P = 14 cm</text>
-        <line x1="175" y1="50" x2="265" y2="50" stroke="#FF6B6B" strokeWidth="2" strokeDasharray="5,3"/>
-      </svg>`,
-      options: [{ letter: "A", text: "20 cm" }, { letter: "B", text: "22 cm" }, { letter: "C", text: "24 cm" }, { letter: "D", text: "28 cm" }, { letter: "E", text: "30 cm" }],
-      correctLetter: "B",
-      explanation: "Each piece perimeter = 14 cm. If cut along the length, each piece has the same length l but half the width w. So 2(l + w/2) = 14 → l + w/2 = 7. Original perimeter = 2(l + w) = 2l + 2w = 2(l + w/2) + w = 14 + w. For w = 8, l = 3: each piece is 3×4, perimeter = 14 ✓. Original = 2(3+8) = 22 cm." },
-    { id: "l2-q12", points: 5,
-      text: "A snail moves 3 cm forward each minute but slides back 1 cm every other minute. After 6 minutes, how far has it travelled?",
-      svgDiagram: svgFrogJumps(0, 12, 2, 5),
-      options: [{ letter: "A", text: "6 cm" }, { letter: "B", text: "9 cm" }, { letter: "C", text: "10 cm" }, { letter: "D", text: "12 cm" }, { letter: "E", text: "15 cm" }],
-      correctLetter: "A",
-      explanation: "Min 1: +3=3, Min 2: −1=2, Min 3: +3=5, Min 4: −1=4, Min 5: +3=7, Min 6: −1=6. After 6 minutes = 6 cm." },
+      explanation: "Pairs summing to 9: (1,8), (2,7), (3,6), (4,5). Testing (6,3): 63 reversed = 36. 63 − 36 = 27 ✓. The number is 63.",
+    },
+    {
+      id: "l2-cq6", points: 4,
+      text: "In a class, 18 pupils like art, 14 like music, and 6 like both. How many pupils like at least one of these subjects?",
+      svgDiagram: svgVenn(12, 8, 6, "Art", "Music"),
+      options: [
+        { letter: "A", text: "20" },
+        { letter: "B", text: "24" },
+        { letter: "C", text: "26" },
+        { letter: "D", text: "28" },
+        { letter: "E", text: "32" },
+      ],
+      correctLetter: "C",
+      explanation: "Art only: 18 − 6 = 12. Music only: 14 − 6 = 8. Both: 6. Total: 12 + 8 + 6 = 26.",
+    },
+    {
+      id: "l2-cq7", points: 4,
+      text: "A tap fills ⅓ of a tank in 6 minutes. How long does it take to fill the whole tank?",
+      options: [
+        { letter: "A", text: "12 min" },
+        { letter: "B", text: "16 min" },
+        { letter: "C", text: "18 min" },
+        { letter: "D", text: "20 min" },
+        { letter: "E", text: "24 min" },
+      ],
+      correctLetter: "C",
+      explanation: "⅓ of the tank takes 6 minutes. The whole tank (3 thirds) takes 6 × 3 = 18 minutes.",
+    },
+    // 5-point
+    {
+      id: "l2-cq8", points: 5,
+      text: "5 teams enter a tournament. Each team plays every other team exactly once. How many matches are played in total?",
+      svgDiagram: svgHandshakeSmall(5),
+      options: [
+        { letter: "A", text: "8" },
+        { letter: "B", text: "9" },
+        { letter: "C", text: "10" },
+        { letter: "D", text: "12" },
+        { letter: "E", text: "20" },
+      ],
+      correctLetter: "C",
+      explanation: "Each of 5 teams plays 4 matches. 5 × 4 = 20, but each match involves 2 teams so we halve: 20 ÷ 2 = 10 matches.",
+    },
+    {
+      id: "l2-cq9", points: 5,
+      text: "Three consecutive odd numbers sum to 57. What is the LARGEST of the three numbers?",
+      options: [
+        { letter: "A", text: "17" },
+        { letter: "B", text: "19" },
+        { letter: "C", text: "21" },
+        { letter: "D", text: "23" },
+        { letter: "E", text: "25" },
+      ],
+      correctLetter: "C",
+      explanation: "Consecutive odd numbers differ by 2. Middle = n: (n−2) + n + (n+2) = 3n = 57, so n = 19. The three numbers: 17, 19, 21. Largest = 21.",
+    },
+    {
+      id: "l2-cq10", points: 5,
+      text: "Tom is now twice as old as Sam. Six years ago, Tom was 3 times Sam's age. How old is Tom now?",
+      options: [
+        { letter: "A", text: "16" },
+        { letter: "B", text: "18" },
+        { letter: "C", text: "20" },
+        { letter: "D", text: "24" },
+        { letter: "E", text: "30" },
+      ],
+      correctLetter: "D",
+      explanation: "Let Sam = s, Tom = 2s. Six years ago: 2s − 6 = 3(s − 6) → 2s − 6 = 3s − 18 → s = 12. Tom = 2 × 12 = 24. Check: 6 years ago Tom = 18, Sam = 6, and 18 = 3 × 6 ✓",
+    },
   ],
   homeworkItems: [
     { id: "l2-h1", type: "puzzle", text: "Find the value of each emoji!",
@@ -772,102 +945,113 @@ const lesson3: Lesson = {
       explanation: "3g+2d=28 and 2g+3d=27. Add: 5g+5d=55 → g+d=11. Subtract: g−d=1. So g=6, d=5." },
   ],
   competitionQuestions: [
-    { id: "l3-q1", points: 3,
-      text: "Mia has 15 sweets. She gives 4 to her brother and 3 to her sister. How many does she have left?",
-      svgDiagram: svgChain([{ label: "Mia: 15 🍬", color: "#9B59B6" }, { label: "−4 (bro)", color: "#FF6B6B" }, { label: "−3 (sis)", color: "#FF8E53" }, { label: "= ?", color: "#4ECDC4" }], ["−4", "−3", "="]),
-      options: [{ letter: "A", text: "6" }, { letter: "B", text: "7" }, { letter: "C", text: "8" }, { letter: "D", text: "9" }, { letter: "E", text: "10" }],
+    // 3-point
+    {
+      id: "l3-cq1", points: 3,
+      text: "⅗ of a number is 24. What is ¾ of the SAME number?",
+      options: [
+        { letter: "A", text: "18" },
+        { letter: "B", text: "24" },
+        { letter: "C", text: "30" },
+        { letter: "D", text: "32" },
+        { letter: "E", text: "40" },
+      ],
       correctLetter: "C",
-      explanation: "15 − 4 − 3 = 8 sweets left." },
-    { id: "l3-q2", points: 3,
-      text: "A bus has 24 seats. 17 people are on the bus. How many empty seats are there?",
-      svgDiagram: svgBalance("👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤", "💺💺💺💺💺💺💺", "17 people", "7 empty"),
-      options: [{ letter: "A", text: "5" }, { letter: "B", text: "6" }, { letter: "C", text: "7" }, { letter: "D", text: "8" }, { letter: "E", text: "9" }],
-      correctLetter: "C",
-      explanation: "24 − 17 = 7 empty seats." },
-    { id: "l3-q3", points: 3,
-      text: "Jake thinks of a number. He doubles it and adds 4. The answer is 18. What number did Jake think of?",
-      svgDiagram: svgChain([{ label: "? (Jake)", color: "#9B59B6" }, { label: "×2", color: "#FF8E53" }, { label: "+4 = 18", color: "#4ECDC4" }], ["×2", "+4"]),
-      options: [{ letter: "A", text: "5" }, { letter: "B", text: "6" }, { letter: "C", text: "7" }, { letter: "D", text: "8" }, { letter: "E", text: "9" }],
-      correctLetter: "C",
-      explanation: "Work backwards: 18 − 4 = 14, then 14 ÷ 2 = 7. Jake thought of 7." },
-    { id: "l3-q4", points: 3,
-      text: "Grandma bakes 20 cookies for 4 grandchildren equally. How many does each child get?",
-      svgDiagram: svgSharing("🍪", 20, 4),
-      options: [{ letter: "A", text: "3" }, { letter: "B", text: "4" }, { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "7" }],
-      correctLetter: "C",
-      explanation: "20 ÷ 4 = 5 cookies each." },
-    { id: "l3-q5", points: 4,
-      text: "Three children — Alex, Beth, and Charlie — each have a different number of marbles. Alex has 3 more than Beth. Charlie has twice as many as Beth. Together they have 27. How many does Beth have?",
-      svgDiagram: svgChain([{ label: "Beth: b", color: "#4ECDC4" }, { label: "Alex: b+3", color: "#FF6B6B" }, { label: "Charlie: 2b", color: "#9B59B6" }], ["+3", "×2"]),
-      options: [{ letter: "A", text: "4" }, { letter: "B", text: "5" }, { letter: "C", text: "6" }, { letter: "D", text: "7" }, { letter: "E", text: "8" }],
-      correctLetter: "C",
-      explanation: "Let Beth = b. Alex = b+3, Charlie = 2b. Total: b + (b+3) + 2b = 27 → 4b+3=27 → 4b=24 → b=6. Beth has 6 marbles." },
-    { id: "l3-q6", points: 4,
-      text: "A train leaves at 9:15 am and arrives at 11:45 am. How long is the journey?",
-      svgDiagram: svgClock(9, 15),
-      options: [{ letter: "A", text: "1 hour 30 minutes" }, { letter: "B", text: "2 hours" }, { letter: "C", text: "2 hours 30 minutes" }, { letter: "D", text: "2 hours 45 minutes" }, { letter: "E", text: "3 hours" }],
-      correctLetter: "C",
-      explanation: "From 9:15 to 11:45 = 2 hours and 30 minutes." },
-    { id: "l3-q7", points: 4,
-      text: "In a class of 30 pupils, 18 have a pet. Of those with a pet, 10 have a dog. How many pupils have a pet but NOT a dog?",
-      svgDiagram: `<svg viewBox="0 0 280 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;display:block;margin:auto">
-        <rect x="0" y="0" width="280" height="100" rx="10" fill="#f8f9fa"/>
-        <rect x="10" y="15" width="260" height="70" fill="#e3f2fd" stroke="#4ECDC4" strokeWidth="2" rx="8"/>
-        <text x="140" y="10" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#555">30 pupils total</text>
-        <rect x="20" y="25" width="150" height="50" fill="#bbdefb" stroke="#2196F3" strokeWidth="2" rx="6"/>
-        <text x="95" y="48" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#1565C0">18 have a pet</text>
-        <rect x="25" y="30" width="70" height="40" fill="#90CAF9" stroke="#1565C0" strokeWidth="2" rx="5"/>
-        <text x="60" y="53" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#0D47A1">10 🐕</text>
-        <text x="130" y="53" textAnchor="middle" fontSize="11" fill="#1565C0">? 🐈🐇</text>
-      </svg>`,
-      options: [{ letter: "A", text: "6" }, { letter: "B", text: "7" }, { letter: "C", text: "8" }, { letter: "D", text: "9" }, { letter: "E", text: "10" }],
-      correctLetter: "C",
-      explanation: "18 have a pet. 10 of those have a dog. 18 − 10 = 8 have a pet but not a dog." },
-    { id: "l3-q8", points: 4,
-      text: "A shopkeeper has 5 boxes of pencils. Each box has 12 pencils. She sells 23 pencils. How many pencils does she have left?",
-      svgDiagram: svgChain([{ label: "5×12=60", color: "#4ECDC4" }, { label: "−23 sold", color: "#FF6B6B" }, { label: "= ? left", color: "#9B59B6" }], ["−23", "="]),
-      options: [{ letter: "A", text: "35" }, { letter: "B", text: "37" }, { letter: "C", text: "39" }, { letter: "D", text: "40" }, { letter: "E", text: "42" }],
-      correctLetter: "B",
-      explanation: "5 × 12 = 60 pencils total. 60 − 23 = 37 pencils left." },
-    { id: "l3-q9", points: 5,
-      text: "Anna, Bob, and Cara each pick a different number from 1 to 9. Anna's number is 3 times Bob's. Cara's number is 2 more than Bob's. What is the sum of all three numbers?",
-      options: [{ letter: "A", text: "12" }, { letter: "B", text: "13" }, { letter: "C", text: "14" }, { letter: "D", text: "15" }, { letter: "E", text: "16" }],
-      correctLetter: "A",
-      explanation: "If Bob = 2: Anna = 6, Cara = 4. All different, all 1–9. Sum = 2+6+4 = 12 ✓." },
-    { id: "l3-q10", points: 5,
-      text: "A snail is at the bottom of a 10-metre well. Each day it climbs 3 metres, but each night it slides back 2 metres. On which day does it reach the top?",
-      svgDiagram: `<svg viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg" style="width:160px;display:block;margin:auto">
-        <rect x="30" y="10" width="100" height="190" fill="#f8f9fa" stroke="#2D3436" strokeWidth="3" rx="4"/>
-        ${Array.from({ length: 10 }, (_, i) => `
-          <line x1="30" y1="${10 + i * 19}" x2="130" y2="${10 + i * 19}" stroke="#ccc" strokeWidth="1"/>
-          <text x="20" y="${10 + i * 19 + 5}" textAnchor="middle" fontSize="10" fill="#555">${10 - i}m</text>
-        `).join("")}
-        <text x="80" y="205" textAnchor="middle" fontSize="10" fill="#555">0m</text>
-        <text x="80" y="195" textAnchor="middle" fontSize="20">🐌</text>
-        <text x="80" y="30" textAnchor="middle" fontSize="18">🌟</text>
-        <text x="80" y="15" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#FF6B6B">TOP</text>
-      </svg>`,
-      options: [{ letter: "A", text: "Day 6" }, { letter: "B", text: "Day 7" }, { letter: "C", text: "Day 8" }, { letter: "D", text: "Day 9" }, { letter: "E", text: "Day 10" }],
-      correctLetter: "C",
-      explanation: "Each full day+night the snail gains 1 metre. After 7 nights it's at 7m. On day 8 it climbs 3m to reach 10m — it escapes on Day 8!" },
-    { id: "l3-q11", points: 5,
-      text: "Five friends sit in a row. Amy is not next to Ben. Ben is next to Cara. Cara is in the middle. Dan is at one end. Who is next to Amy?",
-      svgDiagram: `<svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;display:block;margin:auto">
-        <rect x="0" y="0" width="300" height="80" rx="10" fill="#f3e5f5"/>
-        ${["Dan/Emma", "?", "Cara", "Ben", "?"].map((name, i) => `
-          <circle cx="${30 + i * 60}" cy="40" r="22" fill="${name === "Cara" ? "#9B59B6" : name === "Ben" ? "#4ECDC4" : "#e0e0e0"}" stroke="#2D3436" strokeWidth="2"/>
-          <text x="${30 + i * 60}" y="${name.length > 4 ? 38 : 44}" textAnchor="middle" fontSize="${name.length > 5 ? 8 : 11}" fontWeight="bold" fill="${name === "Cara" || name === "Ben" ? "white" : "#555"}">${name}</text>
-        `).join("")}
-      </svg>`,
-      options: [{ letter: "A", text: "Ben" }, { letter: "B", text: "Cara" }, { letter: "C", text: "Dan" }, { letter: "D", text: "Emma" }, { letter: "E", text: "Dan and Emma" }],
+      explanation: "⅗ of n = 24 → n = 24 × 5/3 = 40. Then ¾ of 40 = (40 ÷ 4) × 3 = 30.",
+    },
+    {
+      id: "l3-cq2", points: 3,
+      text: "A cyclist travels at 15 km/h for 40 minutes, then 20 km/h for 30 minutes. What total distance does she travel?",
+      options: [
+        { letter: "A", text: "14 km" },
+        { letter: "B", text: "16 km" },
+        { letter: "C", text: "18 km" },
+        { letter: "D", text: "20 km" },
+        { letter: "E", text: "25 km" },
+      ],
       correctLetter: "D",
-      explanation: "Cara is in position 3. Ben is next to Cara (pos 2 or 4). Amy is NOT next to Ben. If Ben=2, Amy can't be at 1 or 3. Dan is at an end (pos 1 or 5). If Dan=1, Amy=4 or 5. Since Amy can't be next to Ben (pos 2), Amy=5. Emma=4. Amy is next to Emma only. Answer: D." },
-    { id: "l3-q12", points: 5,
-      text: "In a 3×3 magic square, each row, column, and diagonal sums to 15. The centre is 5 and the top-left corner is 2. What is the bottom-right corner?",
-      svgDiagram: svgGrid(3, 3, [[0, 0], [1, 1]], "#FFD700"),
-      options: [{ letter: "A", text: "4" }, { letter: "B", text: "6" }, { letter: "C", text: "7" }, { letter: "D", text: "8" }, { letter: "E", text: "9" }],
+      explanation: "40 min = ⅔ hour: 15 × ⅔ = 10 km. 30 min = ½ hour: 20 × ½ = 10 km. Total: 10 + 10 = 20 km.",
+    },
+    // 4-point
+    {
+      id: "l3-cq3", points: 4,
+      text: "A square has the same area as a rectangle measuring 18 cm × 8 cm. What is the perimeter of the square?",
+      options: [
+        { letter: "A", text: "40 cm" },
+        { letter: "B", text: "44 cm" },
+        { letter: "C", text: "48 cm" },
+        { letter: "D", text: "52 cm" },
+        { letter: "E", text: "72 cm" },
+      ],
+      correctLetter: "C",
+      explanation: "Area of rectangle = 18 × 8 = 144 cm². Square side = √144 = 12 cm. Perimeter = 4 × 12 = 48 cm.",
+    },
+    {
+      id: "l3-cq4", points: 4,
+      text: "How many whole numbers from 1 to 100 contain the digit 7 at least once?",
+      options: [
+        { letter: "A", text: "10" },
+        { letter: "B", text: "15" },
+        { letter: "C", text: "18" },
+        { letter: "D", text: "19" },
+        { letter: "E", text: "20" },
+      ],
       correctLetter: "D",
-      explanation: "In a 3×3 magic square with centre 5, opposite corners sum to 10. Top-left = 2, so bottom-right = 10 − 2 = 8." },
+      explanation: "7 in units place: 7,17,27,37,47,57,67,77,87,97 → 10 numbers. 7 in tens place: 70–79 → 10 numbers. But 77 is counted in both. Total: 10 + 10 − 1 = 19.",
+    },
+    {
+      id: "l3-cq5", points: 4,
+      text: "Anna, Ben and Cara share £72 in the ratio 1 : 2 : 3. Cara gives half her share to Ben. How much does Ben have now?",
+      options: [
+        { letter: "A", text: "£24" },
+        { letter: "B", text: "£30" },
+        { letter: "C", text: "£36" },
+        { letter: "D", text: "£40" },
+        { letter: "E", text: "£42" },
+      ],
+      correctLetter: "E",
+      explanation: "1+2+3=6 parts. Each part = £12. Anna=£12, Ben=£24, Cara=£36. Cara gives half (£18) to Ben. Ben now has £24 + £18 = £42.",
+    },
+    // 5-point
+    {
+      id: "l3-cq6", points: 5,
+      text: "What is the smallest whole number that leaves remainder 1 when divided by 3, 4, or 5?",
+      options: [
+        { letter: "A", text: "31" },
+        { letter: "B", text: "41" },
+        { letter: "C", text: "51" },
+        { letter: "D", text: "61" },
+        { letter: "E", text: "121" },
+      ],
+      correctLetter: "D",
+      explanation: "The number is one more than a multiple of LCM(3,4,5)=60. Smallest: 60+1=61. Check: 61÷3=20 r1 ✓, 61÷4=15 r1 ✓, 61÷5=12 r1 ✓",
+    },
+    {
+      id: "l3-cq7", points: 5,
+      text: "The sum of 5 consecutive whole numbers is 135. What is the LARGEST of the five?",
+      options: [
+        { letter: "A", text: "25" },
+        { letter: "B", text: "27" },
+        { letter: "C", text: "29" },
+        { letter: "D", text: "31" },
+        { letter: "E", text: "33" },
+      ],
+      correctLetter: "C",
+      explanation: "The mean of 5 consecutive numbers is the middle one. Mean = 135÷5 = 27. Numbers: 25, 26, 27, 28, 29. Largest = 29.",
+    },
+    {
+      id: "l3-cq8", points: 5,
+      text: "A recipe for 6 people uses 450 g of flour. Sam makes it for 8 people, using a 50 g scoop. How many FULL scoops does he need?",
+      options: [
+        { letter: "A", text: "10" },
+        { letter: "B", text: "11" },
+        { letter: "C", text: "12" },
+        { letter: "D", text: "13" },
+        { letter: "E", text: "14" },
+      ],
+      correctLetter: "C",
+      explanation: "Per person: 450÷6 = 75 g. For 8: 75×8 = 600 g. Full 50 g scoops: 600÷50 = 12.",
+    },
   ],
   homeworkItems: [
     { id: "l3-h1", type: "puzzle", text: "Find the value of each emoji!",
@@ -978,82 +1162,152 @@ const lesson4: Lesson = {
       explanation: "3H+2T=22 and 2H+3T=18. Multiply: 9H+6T=66, 4H+6T=36. Subtract: 5H=30 → H=6. T=(22−18)/2=2." },
   ],
   competitionQuestions: [
-    { id: "l4-q1", points: 3,
-      text: "What is the value of the missing number?\n8 + ___ = 15",
-      options: [{ letter: "A", text: "5" }, { letter: "B", text: "6" }, { letter: "C", text: "7" }, { letter: "D", text: "8" }, { letter: "E", text: "9" }],
+    // 3-point
+    {
+      id: "l4-cq1", points: 3,
+      text: "What is the largest 3-digit number divisible by both 6 and 9?",
+      options: [
+        { letter: "A", text: "972" },
+        { letter: "B", text: "981" },
+        { letter: "C", text: "990" },
+        { letter: "D", text: "996" },
+        { letter: "E", text: "999" },
+      ],
       correctLetter: "C",
-      explanation: "15 − 8 = 7. The missing number is 7." },
-    { id: "l4-q2", points: 3,
-      text: "A caterpillar 🐛 eats 2 leaves each day. How many leaves does it eat in 2 weeks?",
-      svgDiagram: svgFrogJumps(0, 14, 2, 7),
-      options: [{ letter: "A", text: "14" }, { letter: "B", text: "24" }, { letter: "C", text: "28" }, { letter: "D", text: "30" }, { letter: "E", text: "32" }],
+      explanation: "LCM(6,9) = 18. Largest 3-digit multiple of 18: 999÷18 = 55.5, so 55×18 = 990. Check: 990÷6=165 ✓, 990÷9=110 ✓",
+    },
+    // 4-point
+    {
+      id: "l4-cq2", points: 4,
+      text: "Three friends choose different numbers from {1, 2, 3}. Alex's is NOT 1. Ben's is less than Cara's. Cara's is NOT 2. What number did Ben pick?",
+      options: [
+        { letter: "A", text: "1" },
+        { letter: "B", text: "2" },
+        { letter: "C", text: "3" },
+        { letter: "D", text: "1 or 2" },
+        { letter: "E", text: "Cannot be determined" },
+      ],
+      correctLetter: "A",
+      explanation: "Cara ≠ 2, so Cara = 1 or 3. Ben < Cara, so Cara ≠ 1. Therefore Cara = 3. Alex ≠ 1, so Alex = 2. Ben must be 1.",
+    },
+    {
+      id: "l4-cq3", points: 4,
+      text: "Rosa finishes ¼ of the way through a field of 60 runners. Kofi finishes ⅓ of the way through. How many runners finish BETWEEN them?",
+      options: [
+        { letter: "A", text: "3" },
+        { letter: "B", text: "4" },
+        { letter: "C", text: "5" },
+        { letter: "D", text: "6" },
+        { letter: "E", text: "10" },
+      ],
+      correctLetter: "B",
+      explanation: "Rosa: ¼ × 60 = 15th. Kofi: ⅓ × 60 = 20th. Between 15th and 20th (exclusive): 16th, 17th, 18th, 19th = 4 runners.",
+    },
+    {
+      id: "l4-cq4", points: 4,
+      text: "Mia thinks of a number, divides by 4, adds 7, then multiplies by 2. Her answer is 22. What number did she start with?",
+      svgDiagram: svgChain(
+        [{ label: "n", color: "#9B59B6" }, { label: "÷4", color: "#3498DB" }, { label: "+7", color: "#FF8E53" }, { label: "×2=22", color: "#4ECDC4" }],
+        ["÷4", "+7", "×2"]
+      ),
+      options: [
+        { letter: "A", text: "8" },
+        { letter: "B", text: "12" },
+        { letter: "C", text: "16" },
+        { letter: "D", text: "20" },
+        { letter: "E", text: "24" },
+      ],
       correctLetter: "C",
-      explanation: "2 weeks = 14 days. 14 × 2 = 28 leaves." },
-    { id: "l4-q3", points: 3,
-      text: "What shape comes next?\n🔴 🔺 🔴 🔺 🔴 ___",
-      svgDiagram: svgPattern(["🔴", "🔺", "🔴", "🔺", "🔴", "?"]),
-      options: [{ letter: "A", text: "🔴 Red circle" }, { letter: "B", text: "🔺 Red triangle" }, { letter: "C", text: "🔵 Blue circle" }, { letter: "D", text: "🟡 Yellow" }, { letter: "E", text: "🟢 Green" }],
-      correctLetter: "B",
-      explanation: "The pattern alternates: circle, triangle, circle, triangle... After the 5th shape (circle), the 6th is a triangle." },
-    { id: "l4-q4", points: 3,
-      text: "There are 36 children. They are put into groups of 4. How many groups are there?",
-      svgDiagram: svgSharing("👤", 36, 9),
-      options: [{ letter: "A", text: "7" }, { letter: "B", text: "8" }, { letter: "C", text: "9" }, { letter: "D", text: "10" }, { letter: "E", text: "12" }],
-      correctLetter: "C",
-      explanation: "36 ÷ 4 = 9 groups." },
-    { id: "l4-q5", points: 4,
-      text: "A farmer has chickens 🐔 and cows 🐄. He counts 20 heads and 56 legs. How many cows are there?",
-      svgDiagram: svgBalance("🐔🐔🐔🐔🐔🐔🐔🐔🐔🐔🐔🐔", "🐄🐄🐄🐄🐄🐄🐄🐄", "chickens (2 legs)", "cows (4 legs)"),
-      options: [{ letter: "A", text: "6" }, { letter: "B", text: "7" }, { letter: "C", text: "8" }, { letter: "D", text: "9" }, { letter: "E", text: "10" }],
-      correctLetter: "C",
-      explanation: "If all 20 were chickens: 20 × 2 = 40 legs. Extra legs = 56 − 40 = 16. Each cow adds 2 extra legs. Cows = 16 ÷ 2 = 8." },
-    { id: "l4-q6", points: 4,
-      text: "The clock shows 7:30. What time was it 2 hours and 45 minutes ago?",
-      svgDiagram: svgClock(7, 30),
-      options: [{ letter: "A", text: "4:30" }, { letter: "B", text: "4:45" }, { letter: "C", text: "5:00" }, { letter: "D", text: "5:15" }, { letter: "E", text: "5:30" }],
-      correctLetter: "B",
-      explanation: "7:30 − 2 hours = 5:30. 5:30 − 45 minutes = 4:45." },
-    { id: "l4-q7", points: 4,
-      text: "A number pattern: 2, 5, 10, 17, 26, ___. What is the next number?",
-      options: [{ letter: "A", text: "35" }, { letter: "B", text: "36" }, { letter: "C", text: "37" }, { letter: "D", text: "38" }, { letter: "E", text: "40" }],
-      correctLetter: "C",
-      explanation: "Differences: +3, +5, +7, +9, +11. The next difference is +11. 26 + 11 = 37." },
-    { id: "l4-q8", points: 4,
-      text: "A bag has red and blue balls. There are 5 more red balls than blue balls. There are 13 balls in total. How many blue balls are there?",
-      svgDiagram: `<svg viewBox="0 0 260 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;display:block;margin:auto">
-        <rect x="0" y="0" width="260" height="80" rx="10" fill="#f8f9fa"/>
-        ${[...Array(4)].map((_, i) => `<circle cx="${20 + i * 22}" cy="40" r="9" fill="#4ECDC4" stroke="#2D3436" strokeWidth="1.5"/>`).join("")}
-        ${[...Array(9)].map((_, i) => `<circle cx="${110 + i * 16}" cy="40" r="9" fill="#FF6B6B" stroke="#2D3436" strokeWidth="1.5"/>`).join("")}
-        <text x="50" y="68" textAnchor="middle" fontSize="11" fill="#4ECDC4" fontWeight="bold">? blue</text>
-        <text x="180" y="68" textAnchor="middle" fontSize="11" fill="#FF6B6B" fontWeight="bold">blue + 5 red</text>
-        <text x="130" y="15" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#555">Total = 13 balls</text>
-      </svg>`,
-      options: [{ letter: "A", text: "3" }, { letter: "B", text: "4" }, { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "8" }],
-      correctLetter: "B",
-      explanation: "If blue = B, then red = B + 5. Total: B + B + 5 = 13 → 2B = 8 → B = 4. There are 4 blue balls." },
-    { id: "l4-q9", points: 5,
-      text: "A staircase has 10 steps. Each step is 20 cm high. An owl can hop 3 steps at a time. Starting from the bottom, how many hops does it take to reach the top?",
-      svgDiagram: svgStaircase(10, "#FFD93D"),
-      options: [{ letter: "A", text: "3 jumps" }, { letter: "B", text: "4 jumps" }, { letter: "C", text: "5 jumps" }, { letter: "D", text: "6 jumps" }, { letter: "E", text: "7 jumps" }],
-      correctLetter: "B",
-      explanation: "Hop 1: steps 1-3. Hop 2: steps 4-6. Hop 3: steps 7-9. Hop 4: step 10 (top). It takes 4 hops." },
-    { id: "l4-q10", points: 5,
-      text: "Three boxes contain 5, 8, and 11 balls. You can move balls between boxes. What is the minimum number of moves to make all boxes equal?",
-      svgDiagram: `<svg viewBox="0 0 280 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;display:block;margin:auto"><rect x="0" y="0" width="280" height="90" rx="10" fill="#f8f9fa"/><rect x="30" y="20" width="60" height="50" fill="white" stroke="#FF6B6B" strokeWidth="3" rx="8"/><text x="60" y="50" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#FF6B6B">5</text><text x="60" y="65" textAnchor="middle" fontSize="11" fill="#555">Box A</text><rect x="120" y="20" width="60" height="50" fill="white" stroke="#4ECDC4" strokeWidth="3" rx="8"/><text x="150" y="50" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#4ECDC4">8</text><text x="150" y="65" textAnchor="middle" fontSize="11" fill="#555">Box B</text><rect x="210" y="20" width="60" height="50" fill="white" stroke="#9B59B6" strokeWidth="3" rx="8"/><text x="240" y="50" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#9B59B6">11</text><text x="240" y="65" textAnchor="middle" fontSize="11" fill="#555">Box C</text><text x="140" y="88" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#FF6B6B">Make all equal — min moves?</text></svg>`,
-      options: [{ letter: "A", text: "1 move" }, { letter: "B", text: "2 moves" }, { letter: "C", text: "3 moves" }, { letter: "D", text: "4 moves" }, { letter: "E", text: "5 moves" }],
-      correctLetter: "B",
-      explanation: "Total = 24, so each box needs 8. Box A needs +3, Box C needs −3. Move 3 balls from Box C to Box A. That's 1 move! But we need to check: 5+3=8✓, 8=8✓, 11−3=8✓. Just 1 move! Answer is A." },
-    { id: "l4-q11", points: 5,
-      text: "A number is a palindrome if it reads the same forwards and backwards (e.g. 121). How many 3-digit palindromes are there between 100 and 200?",
-      options: [{ letter: "A", text: "5" }, { letter: "B", text: "8" }, { letter: "C", text: "9" }, { letter: "D", text: "10" }, { letter: "E", text: "11" }],
+      explanation: "Work backwards: 22÷2=11 (undo ×2). 11−7=4 (undo +7). 4×4=16 (undo ÷4). Check: 16÷4=4, 4+7=11, 11×2=22 ✓",
+    },
+    // 5-point
+    {
+      id: "l4-cq5", points: 5,
+      text: "A rectangle has perimeter 40 cm. Its area is 96 cm². What are its dimensions?",
+      options: [
+        { letter: "A", text: "8 cm × 12 cm" },
+        { letter: "B", text: "6 cm × 16 cm" },
+        { letter: "C", text: "10 cm × 10 cm" },
+        { letter: "D", text: "4 cm × 24 cm" },
+        { letter: "E", text: "9 cm × 11 cm" },
+      ],
+      correctLetter: "A",
+      explanation: "Perimeter 40 → 2(l+w)=40 → l+w=20. Area l×w=96. Two numbers summing to 20 with product 96: 8 and 12 (8+12=20, 8×12=96 ✓).",
+    },
+    {
+      id: "l4-cq6", points: 5,
+      text: "In a group, each person is either a Knight (always honest) or a Knave (always lies). Alex says: 'I am a Knave.' Can Alex be a Knight? Can Alex be a Knave?",
+      options: [
+        { letter: "A", text: "Alex must be a Knight" },
+        { letter: "B", text: "Alex must be a Knave" },
+        { letter: "C", text: "Alex could be either" },
+        { letter: "D", text: "This is impossible — neither can say this" },
+        { letter: "E", text: "Alex must be silent" },
+      ],
       correctLetter: "D",
-      explanation: "3-digit palindromes have the form ABA. Between 100–200, A=1. The middle digit B can be 0–9. So: 101, 111, 121, 131, 141, 151, 161, 171, 181, 191 = 10 palindromes." },
-    { id: "l4-q12", points: 5,
-      text: "A magic square uses numbers 1–9. Each row, column, and diagonal sums to 15. If the top row is 2, 7, 6 — what is the bottom-left corner?",
-      svgDiagram: `<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" style="width:160px;display:block;margin:auto"><rect x="0" y="0" width="160" height="160" rx="10" fill="#f3e5f5"/>${[[2,7,6],[9,5,1],[4,3,8]].map((row,r)=>row.map((v,c)=>`<rect x="${10+c*46}" y="${10+r*46}" width="42" height="42" fill="${r===0?"#e8d5f5":r===2&&c===0?"#FFD700":"white"}" stroke="#9B59B6" strokeWidth="2" rx="4"/><text x="${31+c*46}" y="${36+r*46}" textAnchor="middle" fontSize="18" fontWeight="bold" fill="${r===0?"#9B59B6":"#2D3436"}">${r===2&&c===0?"?":v}</text>`).join("")).join("")}</svg>`,
-      options: [{ letter: "A", text: "2" }, { letter: "B", text: "3" }, { letter: "C", text: "4" }, { letter: "D", text: "6" }, { letter: "E", text: "8" }],
+      explanation: "If Alex is a Knight, he tells truth — but he says 'I am a Knave', which is false. Contradiction. If Alex is a Knave, he lies — but 'I am a Knave' would be true. Contradiction. Neither is possible — this statement can never be made!",
+    },
+    {
+      id: "l4-cq7", points: 5,
+      text: "How many rectangles of all sizes (including squares) are in a 2×3 grid?",
+      svgDiagram: (() => {
+        const cells: string[] = [];
+        for (let r = 0; r < 2; r++) {
+          for (let c = 0; c < 3; c++) {
+            cells.push(`<rect x="${20 + c * 50}" y="${20 + r * 50}" width="50" height="50" fill="#e8f4f8" stroke="#2D3436" strokeWidth="2"/>`);
+          }
+        }
+        return `<svg viewBox="0 0 190 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:240px;display:block;margin:auto"><rect x="0" y="0" width="190" height="140" rx="10" fill="#f8f9fa"/>${cells.join("")}</svg>`;
+      })(),
+      options: [
+        { letter: "A", text: "12" },
+        { letter: "B", text: "16" },
+        { letter: "C", text: "18" },
+        { letter: "D", text: "20" },
+        { letter: "E", text: "24" },
+      ],
       correctLetter: "C",
-      explanation: "Top row: 2+7+6=15 ✓. The classic 3×3 magic square: top row 2,7,6 → middle 9,5,1 → bottom 4,3,8. Bottom-left = 4." },
+      explanation: "Choose 2 from 3 horizontal lines: C(3,2)=3. Choose 2 from 4 vertical lines: C(4,2)=6. Total: 3×6=18.",
+    },
+    {
+      id: "l4-cq8", points: 5,
+      text: "The mean of five numbers is 9. When one number is removed, the mean of the remaining four is 9.5. What number was removed?",
+      options: [
+        { letter: "A", text: "4" },
+        { letter: "B", text: "5" },
+        { letter: "C", text: "6" },
+        { letter: "D", text: "7" },
+        { letter: "E", text: "9" },
+      ],
+      correctLetter: "D",
+      explanation: "Total of 5 numbers = 5×9 = 45. After removing one, 4 remain with mean 9.5, so their total = 4×9.5 = 38. Removed number = 45 − 38 = 7.",
+    },
+    {
+      id: "l4-cq9", points: 5,
+      text: "A snail climbs 3 cm up a 10 cm wall each day, but slides back 1 cm each night. On which day does it first reach the top?",
+      options: [
+        { letter: "A", text: "Day 4" },
+        { letter: "B", text: "Day 5" },
+        { letter: "C", text: "Day 8" },
+        { letter: "D", text: "Day 9" },
+        { letter: "E", text: "Day 10" },
+      ],
+      correctLetter: "B",
+      explanation: "Net progress per day (after sliding): 3−1=2 cm. After 4 days it's at 8 cm. On day 5 it climbs 3 cm to reach 11 cm — past the top! It reaches 10 cm on day 5 (without sliding back).",
+    },
+    {
+      id: "l4-cq10", points: 5,
+      text: "How many ways can you tile a 1×6 strip using 1×1 and 1×2 tiles?",
+      options: [
+        { letter: "A", text: "8" },
+        { letter: "B", text: "10" },
+        { letter: "C", text: "13" },
+        { letter: "D", text: "16" },
+        { letter: "E", text: "21" },
+      ],
+      correctLetter: "C",
+      explanation: "Let f(n) = ways to tile 1×n strip. f(1)=1, f(2)=2. For n≥3: f(n)=f(n-1)+f(n-2) (Fibonacci!). f(3)=3, f(4)=5, f(5)=8, f(6)=13.",
+    },
   ],
   homeworkItems: [
     { id: "l4-h1", type: "puzzle", text: "Find the value of each emoji!",
@@ -1088,9 +1342,6 @@ const lesson4: Lesson = {
   ],
 };
 
-// Fix l4-q10 answer
-lesson4.competitionQuestions[9].correctLetter = "A";
-lesson4.competitionQuestions[9].explanation = "Total = 5+8+11 = 24. Each box needs 8. Move 3 balls from Box C to Box A: A=8, B=8, C=8. Just 1 move!";
 
 // ─── Exports ─────────────────────────────────────────────────────────────────
 
