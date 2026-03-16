@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import NavBar from "@/components/NavBar";
+import { toast } from "sonner";
 import { COMPETITION_SETS, ALL_COMPETITION_QUESTIONS, type CompetitionQ, type CompetitionSet, type YearGroup } from "@/lib/competitionBank";
 import { fireCorrectConfetti, fireBigCelebration, firePerfectScore } from "@/hooks/useConfetti";
 
@@ -291,11 +292,23 @@ function QuestionCard({
           }}>
             Year {q.year}{q.yearMax !== q.year ? `–${q.yearMax}` : ""}
           </div>
-          {answered && (
-            <span style={{ fontSize: 20, marginLeft: "auto" }}>
-              {isCorrect ? "✅" : "❌"}
-            </span>
-          )}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`${window.location.origin}/question/${q.id}`);
+                toast.success("Link copied!", { duration: 1500 });
+              }}
+              title="Copy shareable link to this question"
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 16, opacity: 0.5, padding: "2px 4px" }}
+            >
+              🔗
+            </button>
+            {answered && (
+              <span style={{ fontSize: 20 }}>
+                {isCorrect ? "✅" : "❌"}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Question text */}
@@ -405,8 +418,8 @@ function QuestionCard({
           })}
         </div>
 
-        {/* Hint button */}
-        {!answered && (
+        {/* Hint button with penalty warning */}
+        {!answered && q.hint && (
           <div>
             {!hintUsed ? (
               <button
@@ -423,6 +436,11 @@ function QuestionCard({
                 }}
               >
                 💡 Show Hint
+                {q.points > 3 && (
+                  <span style={{ fontSize: 11, color: "rgba(245,166,35,0.65)", marginLeft: 8, fontWeight: 600 }}>
+                    ({q.points}pt → {Math.max(3, q.points - 2)}pt penalty)
+                  </span>
+                )}
               </button>
             ) : (
               <div style={{
@@ -431,9 +449,16 @@ function QuestionCard({
                 borderRadius: 12,
                 padding: "12px 16px",
               }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.gold }}>
-                  💡 Hint: {q.hint}
-                </span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.gold }}>
+                    💡 Hint: {q.hint}
+                  </span>
+                  {q.points > 3 && (
+                    <span style={{ fontSize: 11, color: "rgba(231,76,60,0.8)", fontWeight: 700, whiteSpace: "nowrap", flexShrink: 0 }}>
+                      ⚠️ {q.points}pt→{Math.max(3, q.points - 2)}pt
+                    </span>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -472,6 +497,12 @@ function QuestionCard({
   );
 }
 
+// ── Hint penalty: 5pt → 3pt, 4pt → 3pt when hint used ──────────────────────
+function effectivePoints(q: CompetitionQ, hintUsed: boolean): number {
+  if (!hintUsed) return q.points;
+  return Math.max(3, q.points - 2);
+}
+
 // ── Results Screen ───────────────────────────────────────────────────────────
 function ResultsScreen({
   set,
@@ -487,7 +518,8 @@ function ResultsScreen({
   onHome: () => void;
 }) {
   const score = set.questions.reduce((s, q) => {
-    return s + (answers[q.id] === q.correctLetter ? q.points : 0);
+    const pts = effectivePoints(q, hintsUsed.has(q.id));
+    return s + (answers[q.id] === q.correctLetter ? pts : 0);
   }, 0);
   const pct = Math.round((score / set.totalPoints) * 100);
   const stars = getStars(pct);
@@ -544,6 +576,22 @@ function ResultsScreen({
         </div>
       </div>
 
+      {/* Hint penalty summary */}
+      {hintsUsed.size > 0 && (
+        <div style={{
+          background: "rgba(231,76,60,0.06)",
+          border: "1px solid rgba(231,76,60,0.2)",
+          borderRadius: 14,
+          padding: "12px 18px",
+          marginBottom: 20,
+          fontSize: 13,
+          color: "rgba(231,76,60,0.9)",
+          fontWeight: 700,
+        }}>
+          ⚠️ Hints used on {hintsUsed.size} question{hintsUsed.size > 1 ? "s" : ""} — points reduced where applicable.
+        </div>
+      )}
+
       {/* Per-question review */}
       <div style={{ marginBottom: 32 }}>
         <h3 style={{
@@ -588,12 +636,14 @@ function ResultsScreen({
                     )}
                   </div>
                 </div>
-                <span style={{
+<span style={{
                   fontSize: 12, fontWeight: 800,
                   color: isCorrect ? COLORS.green : COLORS.muted,
                   flexShrink: 0,
                 }}>
-                  {isCorrect ? `+${q.points}` : "+0"}
+                  {isCorrect
+                    ? `+${effectivePoints(q, wasHinted)}${wasHinted && q.points > 3 ? ` (was ${q.points})` : ""}`
+                    : "+0"}
                 </span>
               </div>
             );

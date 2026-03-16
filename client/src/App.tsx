@@ -14,8 +14,12 @@ import ProblemOfTheWeek from "@/pages/ProblemOfTheWeek";
 import ProblemOfTheWeekArchive from "@/pages/ProblemOfTheWeekArchive";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import Badges from "./pages/Badges";
+import BadgesPage from "./pages/BadgesPage";
+import TimedPaper from "./pages/TimedPaper";
+import PrintWorksheet from "./pages/PrintWorksheet";
 import ShapeValuePuzzles from "./pages/ShapeValuePuzzles";
 import QuestionBrowser from "./pages/QuestionBrowser";
+import QuestionPermalink from "./pages/QuestionPermalink";
 import CompetitionMode from "./pages/CompetitionMode";
 import GamesHub from "./pages/GamesHub";
 import EscapeRooms from "./pages/EscapeRooms";
@@ -29,18 +33,22 @@ function Router() {
       <Route path="/" component={Landing} />
       <Route path="/dashboard" component={PupilDashboard} />
       <Route path="/practice/:skillId?" component={SkillPractice} />
-      <Route path="/test" component={TimedTest} />
+      <Route path="/test" component={TimedPaper} />
       <Route path="/leaderboard" component={Leaderboard} />
       <Route path="/potw" component={ProblemOfTheWeek} />
       <Route path="/potw/archive" component={ProblemOfTheWeekArchive} />
       <Route path="/teacher" component={TeacherDashboard} />
-      <Route path="/badges" component={Badges} />
+      <Route path="/badges" component={BadgesPage} />
+      <Route path="/badges/legacy" component={Badges} />
       <Route path="/puzzles" component={ShapeValuePuzzles} />
       <Route path="/competition" component={CompetitionMode} />
+      <Route path="/test/legacy" component={TimedTest} />
+      <Route path="/print" component={PrintWorksheet} />
       <Route path="/games" component={GamesHub} />
       <Route path="/escape-rooms" component={EscapeRooms} />
       <Route path="/escape-rooms/:tier" component={EscapeRoomPlayer} />
       <Route path="/admin/questions" component={QuestionBrowser} />
+      <Route path="/question/:id" component={QuestionPermalink} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -75,7 +83,7 @@ function ProfileGate({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark">
+      <ThemeProvider defaultTheme="dark" switchable={true}>
         <TooltipProvider>
           <Toaster />
           <ProfileGate>

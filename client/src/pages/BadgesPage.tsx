@@ -1,324 +1,354 @@
-import { Link } from "wouter";
-import Layout from "@/components/Layout";
-import { useProgress } from "@/hooks/useProgress";
-import { lessons } from "@/lib/lessonData";
+import NavBar from "@/components/NavBar";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
+import { getLoginUrl } from "@/const";
+import { useState } from "react";
 
-interface BadgeDef {
-  id: string;
-  icon: string;
-  name: string;
-  desc: string;
-  tier: "bronze" | "silver" | "gold";
-}
+// ── Badge Definitions — tied to REAL mathematical milestones ────────────────
+// Each badge has: what you DO to earn it, not just a count
 
-const ALL_BADGES: BadgeDef[] = [
-  { id: "first_hoot", icon: "🦉", name: "First Hoot", desc: "Complete your first Starter Activity", tier: "bronze" },
-  { id: "puzzle_starter", icon: "🧩", name: "Puzzle Starter", desc: "Attempt your first Shape Puzzle", tier: "bronze" },
-  { id: "bookworm", icon: "📚", name: "Bookworm", desc: "Complete a Homework section", tier: "bronze" },
-  { id: "star_pupil", icon: "⭐", name: "Star Pupil", desc: "Get 5 or more Competition questions correct", tier: "bronze" },
-  { id: "sharp_shooter", icon: "🎯", name: "Sharp Shooter", desc: "Get 10 or more questions correct in total", tier: "silver" },
-  { id: "puzzle_master", icon: "🔮", name: "Puzzle Master", desc: "Complete all Shape Puzzles in a lesson", tier: "silver" },
-  { id: "gold_standard", icon: "🥇", name: "Gold Standard", desc: "Score 80% or more on Competition questions", tier: "gold" },
-  { id: "top_of_tree", icon: "🌳", name: "Top of the Tree", desc: "Get 100% in every section of a lesson", tier: "gold" },
-  { id: "night_owl", icon: "🌙", name: "Night Owl", desc: "Complete all 4 lessons fully", tier: "gold" },
-  { id: "diamond_owl", icon: "💎", name: "Diamond Owl", desc: "Complete all homework in every lesson", tier: "gold" },
+export const ALL_BADGES = [
+  // ── Bronze — first achievements ──────────────────────────────────────────
+  {
+    id: "first_question", icon: "🌟", name: "First Steps",
+    desc: "Answer your very first question",
+    howTo: "Just start! Answer any question.",
+    tier: "bronze", category: "milestone",
+  },
+  {
+    id: "work_backwards_3", icon: "⏪", name: "Time Traveller",
+    desc: "Solve 3 'work backwards' problems correctly",
+    howTo: "Look for questions with function machines and work from the output back.",
+    tier: "bronze", category: "skill",
+  },
+  {
+    id: "first_5pt", icon: "💥", name: "Big Brain",
+    desc: "Answer a 5-point question correctly (no hint)",
+    howTo: "Attempt a 5-point question without using the hint button.",
+    tier: "bronze", category: "skill",
+  },
+  {
+    id: "streak_3", icon: "🔥", name: "Hat-Trick",
+    desc: "Get 3 questions in a row correct",
+    howTo: "Answer three consecutive questions correctly in any session.",
+    tier: "bronze", category: "streak",
+  },
+  {
+    id: "all_skill_types", icon: "🗺️", name: "Explorer",
+    desc: "Attempt at least one question from all 9 skill areas",
+    howTo: "Try every skill category — addition, shapes, fractions, and all the rest.",
+    tier: "bronze", category: "breadth",
+  },
+  {
+    id: "potw_enter", icon: "📬", name: "Weekly Regular",
+    desc: "Enter the Problem of the Week",
+    howTo: "Submit an answer to any Problem of the Week competition.",
+    tier: "bronze", category: "engagement",
+  },
+
+  // ── Silver — developing competition skills ────────────────────────────────
+  {
+    id: "logic_ace", icon: "🧠", name: "Logic Master",
+    desc: "Get 5 logic/deduction problems correct",
+    howTo: "Solve logic problems — Knights & Knaves, ordering clues, tournament tables.",
+    tier: "silver", category: "skill",
+  },
+  {
+    id: "handshakes_insight", icon: "🤝", name: "Social Butterfly",
+    desc: "Solve a handshakes/counting problem using the n(n-1)/2 method",
+    howTo: "Correctly answer a handshakes or matches-in-a-tournament problem.",
+    tier: "silver", category: "skill",
+  },
+  {
+    id: "consecutive_5", icon: "📶", name: "In Sequence",
+    desc: "Solve 5 consecutive-numbers problems",
+    howTo: "Answer questions about consecutive numbers, triangular numbers, and sequences.",
+    tier: "silver", category: "skill",
+  },
+  {
+    id: "timed_pass", icon: "⏱️", name: "Under Pressure",
+    desc: "Score 60% or more in Timed Paper Mode",
+    howTo: "Complete a timed exam paper and achieve at least 60%.",
+    tier: "silver", category: "exam",
+  },
+  {
+    id: "no_hints_10", icon: "🎯", name: "Pure Thinking",
+    desc: "Answer 10 questions correctly without using a single hint",
+    howTo: "Resist the hint button! Trust your reasoning.",
+    tier: "silver", category: "strategy",
+  },
+  {
+    id: "potw_correct", icon: "⭐", name: "Star of the Week",
+    desc: "Solve the Problem of the Week correctly",
+    howTo: "Submit the correct answer to a weekly competition problem.",
+    tier: "silver", category: "engagement",
+  },
+  {
+    id: "streak_7", icon: "🏅", name: "7-Day Champion",
+    desc: "Practise 7 days in a row",
+    howTo: "Come back every day for a week — even one question counts!",
+    tier: "silver", category: "streak",
+  },
+
+  // ── Gold — competition-ready ──────────────────────────────────────────────
+  {
+    id: "timed_merit", icon: "🥇", name: "Gold Standard",
+    desc: "Score 80% or more in Timed Paper Mode",
+    howTo: "Complete a timed exam paper and achieve 80% or above.",
+    tier: "gold", category: "exam",
+  },
+  {
+    id: "all_styles_correct", icon: "🔮", name: "All-Rounder",
+    desc: "Get at least one question right in every question style",
+    howTo: "Correctly answer questions across all different problem types.",
+    tier: "gold", category: "breadth",
+  },
+  {
+    id: "pmc_ready", icon: "🏆", name: "PMC Ready",
+    desc: "Score 80%+ on a full Y5-6 paper in Timed Mode",
+    howTo: "Complete the Senior Timed Paper and score 80% or above.",
+    tier: "gold", category: "exam",
+  },
+  {
+    id: "top_10", icon: "🌟", name: "Top 10",
+    desc: "Reach the top 10 on the leaderboard",
+    howTo: "Keep practising and climbing the rankings!",
+    tier: "gold", category: "social",
+  },
+  {
+    id: "perfect_paper", icon: "💎", name: "Perfect Paper",
+    desc: "Score 100% on any Timed Paper",
+    howTo: "Get every single question right in a timed exam. The ultimate challenge!",
+    tier: "gold", category: "exam",
+  },
+  {
+    id: "kangaroo_spirit", icon: "🦘", name: "Kangourou Spirit",
+    desc: "Answer 25 competition-style questions correctly (no hints)",
+    howTo: "Work through 25 competition questions without any hints across any number of sessions.",
+    tier: "gold", category: "skill",
+  },
 ];
 
-const TIER_STYLES: Record<string, { bg: string; border: string; label: string; glow: string }> = {
-  bronze: { bg: "rgba(205, 127, 50, 0.12)", border: "rgba(205, 127, 50, 0.4)", label: "#CD7F32", glow: "rgba(205, 127, 50, 0.3)" },
-  silver: { bg: "rgba(192, 192, 192, 0.1)", border: "rgba(192, 192, 192, 0.4)", label: "#C0C0C0", glow: "rgba(192, 192, 192, 0.25)" },
-  gold: { bg: "rgba(245, 166, 35, 0.12)", border: "rgba(245, 166, 35, 0.45)", label: "#F5A623", glow: "rgba(245, 166, 35, 0.35)" },
+const TIER_CONFIG = {
+  gold:   { color: "#F5A623", glow: "rgba(245,166,35,0.3)", label: "🥇 Gold Badges", subtitle: "Competition-ready achievements" },
+  silver: { color: "#B0BEC5", glow: "rgba(176,190,197,0.2)", label: "🥈 Silver Badges", subtitle: "Developing competition skills" },
+  bronze: { color: "#CD7F32", glow: "rgba(205,127,50,0.2)", label: "🥉 Bronze Badges", subtitle: "Getting started" },
+} as const;
+
+const CATEGORY_ICONS: Record<string, string> = {
+  milestone: "🎯", skill: "🧩", streak: "🔥",
+  breadth: "🗺️", engagement: "📅", exam: "⏱️",
+  strategy: "💡", social: "👥",
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
 export default function BadgesPage() {
-  const { getEarnedBadges, getTotalScore, getLessonCompletion, getLessonProgress } = useProgress();
-  const earnedIds = getEarnedBadges();
-  const { correct, attempted } = getTotalScore();
+  const { isAuthenticated } = useAuth();
+  const { data: myBadges } = trpc.badges.myBadges.useQuery(undefined, { enabled: isAuthenticated });
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [filter, setFilter] = useState<"all" | "earned" | "locked">("all");
 
-  const earnedBadges = ALL_BADGES.filter((b) => earnedIds.includes(b.id));
-  const lockedBadges = ALL_BADGES.filter((b) => !earnedIds.includes(b.id));
+  const earnedIds = new Set(myBadges?.map(b => b.badgeId) ?? []);
+  const earnedCount = earnedIds.size;
+  const totalCount = ALL_BADGES.length;
+
+  const filteredBadges = (tier: keyof typeof TIER_CONFIG) => {
+    return ALL_BADGES.filter(b => {
+      if (b.tier !== tier) return false;
+      if (filter === "earned") return earnedIds.has(b.id);
+      if (filter === "locked") return !earnedIds.has(b.id);
+      return true;
+    });
+  };
 
   return (
-    <Layout>
-      {/* Header */}
-      <div
-        style={{
-          background: "linear-gradient(135deg, #1A2E4A 0%, #243B55 100%)",
-          borderBottom: "1px solid rgba(245, 166, 35, 0.2)",
-          padding: "40px 0 32px",
-        }}
-      >
-        <div className="container">
-          <div className="no-section-pill" style={{ marginBottom: 16 }}>🏆 Your Achievements</div>
-          <h1 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: "clamp(28px, 4vw, 44px)", color: "white", marginBottom: 8 }}>
-            Badge Collection
-          </h1>
-          <p style={{ fontSize: 16, color: "#B0C4DE", fontWeight: 600, maxWidth: 520 }}>
-            Earn badges by completing activities and getting questions right. Can you collect them all?
-          </p>
-        </div>
-      </div>
+    <div style={{ minHeight: "100vh", background: "#0F1B2D", fontFamily: "'Nunito', sans-serif" }}>
+      <NavBar />
+      <div className="container" style={{ paddingTop: 40, paddingBottom: 80 }}>
 
-      <div className="container" style={{ paddingTop: 40, paddingBottom: 60 }}>
-
-        {/* ── Overall Stats ── */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: 16,
-            marginBottom: 40,
-          }}
-        >
-          {[
-            { icon: "🏆", value: earnedIds.length, total: ALL_BADGES.length, label: "Badges Earned", color: "#F5A623" },
-            { icon: "✅", value: correct, total: attempted, label: "Questions Correct", color: "#2ECC71" },
-            { icon: "📊", value: attempted, total: null, label: "Questions Attempted", color: "#4ECDC4" },
-            {
-              icon: "📚",
-              value: lessons.filter((l) => getLessonCompletion(l.id) === 100).length,
-              total: lessons.length,
-              label: "Lessons Completed",
-              color: "#9B59B6",
-            },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="no-card"
-              style={{ textAlign: "center", padding: "20px 16px" }}
-            >
-              <div style={{ fontSize: 32, marginBottom: 8 }}>{stat.icon}</div>
-              <div
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 32,
-                  color: stat.color,
-                  lineHeight: 1,
-                  marginBottom: 4,
-                }}
-              >
-                {stat.value}{stat.total !== null ? `/${stat.total}` : ""}
-              </div>
-              <div style={{ fontSize: 13, color: "#B0C4DE", fontWeight: 600 }}>{stat.label}</div>
+        {/* Header */}
+        <div style={{ marginBottom: 36 }}>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+            <div>
+              <h1 style={{ fontWeight: 900, fontSize: 32, color: "white", margin: "0 0 6px" }}>
+                🎖️ Badges
+              </h1>
+              <p style={{ color: "#B0C4DE", fontSize: 14, fontWeight: 600, margin: 0 }}>
+                Earn badges by developing real competition maths skills — not just answering more questions
+              </p>
             </div>
+            {isAuthenticated && (
+              <div style={{
+                background: "rgba(245,166,35,0.1)",
+                border: "2px solid rgba(245,166,35,0.3)",
+                borderRadius: 14, padding: "12px 20px", textAlign: "center",
+              }}>
+                <div style={{ fontSize: 28, fontWeight: 900, color: "#F5A623" }}>
+                  {earnedCount}<span style={{ fontSize: 16, color: "#B0C4DE" }}>/{totalCount}</span>
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "#B0C4DE" }}>badges earned</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Sign-in prompt */}
+        {!isAuthenticated && (
+          <div style={{
+            background: "rgba(78,205,196,0.06)",
+            border: "2px solid rgba(78,205,196,0.2)",
+            borderRadius: 16, padding: "20px 24px",
+            marginBottom: 32, textAlign: "center",
+          }}>
+            <p style={{ color: "#B0C4DE", fontWeight: 600, marginBottom: 12 }}>
+              Sign in to track which badges you've earned!
+            </p>
+            <a href={getLoginUrl()}>
+              <button style={{
+                background: "linear-gradient(135deg, #F5A623, #E8941A)",
+                border: "none", borderRadius: 12, padding: "10px 24px",
+                fontSize: 14, fontWeight: 800, color: "#0F1B2D", cursor: "pointer",
+              }}>
+                Sign In Free →
+              </button>
+            </a>
+          </div>
+        )}
+
+        {/* Filter */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 32 }}>
+          {(["all", "earned", "locked"] as const).map(f => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                background: filter === f ? "rgba(245,166,35,0.15)" : "rgba(255,255,255,0.04)",
+                border: `2px solid ${filter === f ? "rgba(245,166,35,0.4)" : "rgba(255,255,255,0.1)"}`,
+                borderRadius: 10, padding: "8px 18px",
+                fontSize: 13, fontWeight: 800,
+                color: filter === f ? "#F5A623" : "#B0C4DE",
+                cursor: "pointer", textTransform: "capitalize",
+              }}
+            >
+              {f === "all" ? `All (${totalCount})` : f === "earned" ? `✅ Earned (${earnedCount})` : `🔒 Locked (${totalCount - earnedCount})`}
+            </button>
           ))}
         </div>
 
-        {/* ── Per-Lesson Progress ── */}
-        <div style={{ marginBottom: 48 }}>
-          <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: 22, color: "white", marginBottom: 20 }}>
-            Lesson Progress
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
-            {lessons.map((lesson) => {
-              const completion = getLessonCompletion(lesson.id);
-              const lp = getLessonProgress(lesson.id);
-              return (
-                <div
-                  key={lesson.id}
-                  className="no-card"
-                  style={{
-                    borderColor: completion === 100 ? "rgba(46,204,113,0.4)" : `${lesson.color}33`,
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+        {/* Tiers */}
+        {(["gold", "silver", "bronze"] as const).map(tier => {
+          const cfg = TIER_CONFIG[tier];
+          const badges = filteredBadges(tier);
+          if (badges.length === 0) return null;
+          return (
+            <div key={tier} style={{ marginBottom: 48 }}>
+              <div style={{ marginBottom: 20 }}>
+                <h2 style={{ fontWeight: 900, fontSize: 22, color: cfg.color, margin: "0 0 4px" }}>
+                  {cfg.label}
+                </h2>
+                <p style={{ fontSize: 13, color: "#B0C4DE", fontWeight: 600, margin: 0 }}>
+                  {cfg.subtitle}
+                </p>
+              </div>
+
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: 14,
+              }}>
+                {badges.map(b => {
+                  const earned = earnedIds.has(b.id);
+                  const isHovered = hoveredId === b.id;
+                  return (
                     <div
+                      key={b.id}
+                      onMouseEnter={() => setHoveredId(b.id)}
+                      onMouseLeave={() => setHoveredId(null)}
                       style={{
-                        width: 44,
-                        height: 44,
-                        borderRadius: 12,
-                        background: `${lesson.color}22`,
-                        border: `2px solid ${lesson.color}44`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 22,
+                        background: earned
+                          ? `${cfg.color}12`
+                          : isHovered ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.025)",
+                        border: `2px solid ${earned ? cfg.color + "50" : isHovered ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)"}`,
+                        borderRadius: 18,
+                        padding: "22px 18px",
+                        transition: "all 0.2s",
+                        boxShadow: earned ? `0 0 30px ${cfg.glow}` : "none",
+                        opacity: earned ? 1 : 0.65,
+                        position: "relative",
                       }}
                     >
-                      {lesson.emoji}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 800, fontSize: 15, color: "white" }}>{lesson.title}</div>
-                      <div style={{ fontSize: 12, color: "#B0C4DE", fontWeight: 600 }}>{lesson.subtitle}</div>
-                    </div>
-                    {completion === 100 && (
-                      <span style={{ marginLeft: "auto", fontSize: 20 }}>✅</span>
-                    )}
-                  </div>
+                      {/* Earned checkmark */}
+                      {earned && (
+                        <div style={{
+                          position: "absolute", top: 10, right: 10,
+                          background: cfg.color,
+                          borderRadius: "50%", width: 20, height: 20,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 11, fontWeight: 900, color: "#0F1B2D",
+                        }}>
+                          ✓
+                        </div>
+                      )}
 
-                  {/* Section breakdown */}
-                  {lp && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                      {[
-                        { key: "starter" as const, label: "Starter", icon: "🎯" },
-                        { key: "puzzles" as const, label: "Puzzles", icon: "🧩" },
-                        { key: "competition" as const, label: "Competition", icon: "🦉" },
-                        { key: "homework" as const, label: "Homework", icon: "📚" },
-                      ].map((s) => {
-                        const sec = lp[s.key];
-                        const pct = sec.total > 0 ? Math.round((sec.attempted / sec.total) * 100) : 0;
-                        return (
-                          <div key={s.key}>
-                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                              <span style={{ fontSize: 12, fontWeight: 700, color: "#B0C4DE" }}>
-                                {s.icon} {s.label}
-                              </span>
-                              <span style={{ fontSize: 12, fontWeight: 700, color: pct === 100 ? "#2ECC71" : "#B0C4DE" }}>
-                                {sec.attempted}/{sec.total}
-                              </span>
-                            </div>
-                            <div className="no-progress-track" style={{ height: 6 }}>
-                              <div
-                                className="no-progress-fill"
-                                style={{
-                                  width: `${pct}%`,
-                                  background: pct === 100 ? "#2ECC71" : lesson.color,
-                                  height: "100%",
-                                }}
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                      {/* Icon */}
+                      <div style={{
+                        fontSize: 40, marginBottom: 12,
+                        filter: earned ? `drop-shadow(0 0 8px ${cfg.color}60)` : "grayscale(60%)",
+                        transition: "filter 0.2s",
+                      }}>
+                        {b.icon}
+                      </div>
 
-                  {!lp && (
-                    <div style={{ fontSize: 13, color: "#B0C4DE", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>
-                      Not started yet
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── Earned Badges ── */}
-        {earnedBadges.length > 0 && (
-          <div style={{ marginBottom: 48 }}>
-            <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: 22, color: "white", marginBottom: 20 }}>
-              🏆 Earned Badges ({earnedBadges.length})
-            </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
-              {earnedBadges.map((badge) => {
-                const ts = TIER_STYLES[badge.tier];
-                return (
-                  <div
-                    key={badge.id}
-                    style={{
-                      background: ts.bg,
-                      border: `2px solid ${ts.border}`,
-                      borderRadius: 16,
-                      padding: "24px 16px",
-                      textAlign: "center",
-                      boxShadow: `0 0 20px ${ts.glow}`,
-                    }}
-                  >
-                    <div style={{ fontSize: 48, marginBottom: 12 }}>{badge.icon}</div>
-                    <div
-                      style={{
-                        background: `${ts.label}22`,
-                        border: `1px solid ${ts.label}44`,
-                        borderRadius: 99,
-                        fontSize: 10,
-                        fontWeight: 800,
-                        color: ts.label,
-                        padding: "2px 10px",
-                        display: "inline-block",
+                      {/* Category tag */}
+                      <div style={{
+                        display: "inline-flex", alignItems: "center", gap: 4,
+                        background: "rgba(255,255,255,0.06)",
+                        borderRadius: 99, padding: "2px 8px",
+                        fontSize: 10, fontWeight: 700, color: "#B0C4DE",
                         marginBottom: 8,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.08em",
-                      }}
-                    >
-                      {badge.tier}
+                      }}>
+                        {CATEGORY_ICONS[b.category]} {b.category}
+                      </div>
+
+                      <h3 style={{
+                        fontWeight: 900, fontSize: 16,
+                        color: earned ? "white" : "#B0C4DE",
+                        margin: "0 0 6px",
+                      }}>
+                        {b.name}
+                      </h3>
+
+                      <p style={{ fontSize: 13, color: "#B0C4DE", lineHeight: 1.5, margin: "0 0 10px" }}>
+                        {b.desc}
+                      </p>
+
+                      {/* How to earn (shown on hover or if not earned) */}
+                      {!earned && (
+                        <p style={{
+                          fontSize: 11, color: cfg.color + "cc",
+                          fontWeight: 700, lineHeight: 1.4,
+                          margin: 0, fontStyle: "italic",
+                        }}>
+                          💡 {b.howTo}
+                        </p>
+                      )}
+
+                      {earned && (
+                        <div style={{
+                          fontSize: 12, fontWeight: 800, color: cfg.color,
+                          marginTop: 4,
+                        }}>
+                          ✓ Earned!
+                        </div>
+                      )}
                     </div>
-                    <div style={{ fontWeight: 800, fontSize: 16, color: "white", marginBottom: 6 }}>{badge.name}</div>
-                    <p style={{ fontSize: 13, color: "#B0C4DE", lineHeight: 1.5, fontWeight: 600 }}>{badge.desc}</p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* ── Locked Badges ── */}
-        <div>
-          <h2 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: 22, color: "white", marginBottom: 20 }}>
-            🔒 Badges to Unlock ({lockedBadges.length})
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
-            {lockedBadges.map((badge) => {
-              const ts = TIER_STYLES[badge.tier];
-              return (
-                <div
-                  key={badge.id}
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "2px solid rgba(255,255,255,0.08)",
-                    borderRadius: 16,
-                    padding: "24px 16px",
-                    textAlign: "center",
-                    opacity: 0.65,
-                  }}
-                >
-                  <div style={{ fontSize: 48, marginBottom: 12, filter: "grayscale(1) opacity(0.4)" }}>{badge.icon}</div>
-                  <div
-                    style={{
-                      background: "rgba(255,255,255,0.06)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: 99,
-                      fontSize: 10,
-                      fontWeight: 800,
-                      color: "#B0C4DE",
-                      padding: "2px 10px",
-                      display: "inline-block",
-                      marginBottom: 8,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    {badge.tier}
-                  </div>
-                  <div style={{ fontWeight: 800, fontSize: 16, color: "#B0C4DE", marginBottom: 6 }}>{badge.name}</div>
-                  <p style={{ fontSize: 13, color: "rgba(176,196,222,0.7)", lineHeight: 1.5, fontWeight: 600 }}>{badge.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── CTA ── */}
-        {earnedIds.length === 0 && (
-          <div
-            style={{
-              marginTop: 48,
-              textAlign: "center",
-              background: "rgba(245,166,35,0.06)",
-              border: "1px solid rgba(245,166,35,0.2)",
-              borderRadius: 20,
-              padding: "40px 24px",
-            }}
-          >
-            <div style={{ fontSize: 56, marginBottom: 16 }}>🦉</div>
-            <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 900, fontSize: 24, color: "white", marginBottom: 12 }}>
-              No badges yet — let's fix that!
-            </h3>
-            <p style={{ fontSize: 16, color: "#B0C4DE", fontWeight: 600, marginBottom: 24 }}>
-              Start with the Warm-Up activity to earn your first badge.
-            </p>
-            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-              <Link href="/starter">
-                <button className="no-btn-gold">🎯 Start Warm-Up</button>
-              </Link>
-              <Link href="/practice">
-                <button className="no-btn-teal">🧩 Go to Practice</button>
-              </Link>
-            </div>
-          </div>
-        )}
+          );
+        })}
       </div>
-    </Layout>
+    </div>
   );
 }

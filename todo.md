@@ -73,3 +73,23 @@
 - [ ] Polish GameNumberPyramid: animated block fill, celebration on solve
 - [ ] Polish GameOrderingChallenge: smooth drag animation, confetti on correct order
 - [ ] Polish GameFunctionMachine: animated cog/gear, dramatic reveal
+
+## User Feedback — 12 Improvements (March 2026)
+
+### High Impact
+- [ ] 1. Enhanced POTW: weekly schedule, submission window, "solution reveal on Friday", POTW-specific leaderboard
+- [ ] 2. Animated SVG step-by-step solution walkthroughs (especially for 5-point questions)
+- [ ] 3. Adaptive difficulty: track weak question styles per pupil, surface more of those
+- [x] 4. Timed paper mode: 25Qs/60min, flag-and-return, paper-style multi-question layout
+
+### Medium Impact
+- [x] 5. Landing page rewrite: lead with Kangaroo/PMC prep messaging, not generic "interactive maths"
+- [ ] 6. Teacher heatmap: per-pupil progress on question types, "class struggling with X" view
+- [ ] 7. Mobile-friendly shape puzzles: larger emoji rows, tap-to-input for simultaneous equations
+- [x] 8. Hint penalty scoring: using a hint reduces points (5pt→3pt), creates meaningful decision
+
+### Smaller but Worthwhile
+- [x] 9. Question permalinks: /question/:id route with clean shareable card for teachers
+- [x] 10. Print-as-worksheet: PDF export of question sets (with/without answers)
+- [x] 11. Meaningful badges: tie to mathematical milestones ("Solved 5 work-backwards problems")
+- [x] 12. Surface dark/light mode toggle in navbar (ThemeContext exists but toggle hidden)
