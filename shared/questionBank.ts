@@ -277,8 +277,8 @@ const additionQuestions: Question[] = [
   {
     id: "add_y6_01", skill: "addition", year: 6, difficulty: 3, type: "mcq",
     text: "A cinema sold 3,456 tickets on Saturday and 2,987 on Sunday. Tickets cost £8 each. What was the total ticket revenue over the weekend?",
-    options: ["£51,152", "£51,552", "£52,152", "£52,552", "£53,152"],
-    answer: "£51,552", explanation: "3456 + 2987 = 6443 tickets. 6443 × 8 = £51,544. Nearest answer: £51,552.", points: 5,
+    options: ["£51,144", "£51,344", "£51,544", "£51,744", "£51,944"],
+    answer: "£51,544", explanation: "3456 + 2987 = 6443 tickets. 6443 × 8 = £51,544.", points: 5,
   },
   {
     id: "add_y6_02", skill: "addition", year: 6, difficulty: 3, type: "mcq",

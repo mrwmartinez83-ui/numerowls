@@ -647,13 +647,13 @@ export const compLogicQuestions: Question[] = [
     text: "I have exactly 3 coins totalling 16p. What are the coins? (UK denominations: 1p, 2p, 5p, 10p, 20p, 50p)",
     options: [
       "10p, 5p, 1p",
-      "10p, 4p, 2p",
-      "5p, 5p, 6p",
-      "10p, 3p, 3p",
-      "10p, 2p, 4p",
+      "10p, 2p, 2p",
+      "5p, 5p, 5p",
+      "20p, 1p, 1p",
+      "5p, 2p, 2p",
     ],
     answer: "10p, 5p, 1p",
-    explanation: "10 + 5 + 1 = 16p using valid UK coin denominations. ✓",
+    explanation: "10 + 5 + 1 = 16p ✓. Check the others: 10+2+2=14p ✗. 5+5+5=15p ✗. 20+1+1=22p ✗. 5+2+2=9p ✗.",
     style: "coin-combinations", source: "pmc", points: 3,
   },
   {

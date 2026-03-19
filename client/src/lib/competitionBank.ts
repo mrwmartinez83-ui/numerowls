@@ -345,9 +345,9 @@ const y12_extra: CompetitionQ[] = [
   <text x="20" y="82" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">0</text>
   <text x="132" y="82" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">10</text>
   <text x="244" y="82" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">20</text>
-  <line x1="160" y1="40" x2="160" y2="58" stroke="#E74C3C" stroke-width="2.5"/>
-  <polygon points="155,40 165,40 160,30" fill="#E74C3C"/>
-  <text x="160" y="25" text-anchor="middle" font-size="12" fill="#E74C3C" font-weight="bold">?</text>
+  <line x1="166" y1="40" x2="166" y2="58" stroke="#E74C3C" stroke-width="2.5"/>
+  <polygon points="161,40 171,40 166,30" fill="#E74C3C"/>
+  <text x="166" y="25" text-anchor="middle" font-size="12" fill="#E74C3C" font-weight="bold">?</text>
 </svg>`,
     hint: "Each gap between the big marks is 10. Count the small steps.",
     options: [
@@ -447,16 +447,16 @@ const y12_extra: CompetitionQ[] = [
       { letter: "A", text: "4" }, { letter: "B", text: "5" },
       { letter: "C", text: "6" }, { letter: "D", text: "7" }, { letter: "E", text: "8" },
     ],
-    correctLetter: "B",
-    explanation: "There are 4 small squares + 1 large square (the outer border) = 5 squares total.",
+    correctLetter: "C",
+    explanation: "There are 4 small teal squares (the 4 quadrants) + 1 dashed orange square (the offset centre square) + 1 large outer square = 6 squares total.",
   },
   {
     id: "y12_e07", year: 1, yearMax: 2, points: 3,
     style: "think-of-number",
-    text: "A bag has red and blue balls. There are 15 balls altogether. There are 4 more red balls than blue balls. How many blue balls are there?",
+    text: "A bag has red and blue balls. There are 14 balls altogether. There are 4 more red balls than blue balls. How many blue balls are there?",
     diagram: `<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:auto">
   <rect x="0" y="0" width="320" height="130" rx="12" fill="#f8f9fa"/>
-  <text x="160" y="30" text-anchor="middle" font-size="13" fill="#555">15 balls in total</text>
+  <text x="160" y="30" text-anchor="middle" font-size="13" fill="#555">14 balls in total</text>
   <circle cx="50" cy="75" r="18" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
   <circle cx="90" cy="75" r="18" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
   <circle cx="130" cy="75" r="18" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
@@ -473,13 +473,13 @@ const y12_extra: CompetitionQ[] = [
   <text x="290" y="80" text-anchor="middle" font-size="11" fill="white" font-weight="bold">B</text>
   <text x="120" y="115" text-anchor="middle" font-size="12" fill="#E74C3C" font-weight="bold">Red: 4 more than blue</text>
 </svg>`,
-    hint: "If blue = b, then red = b + 4. Together they make 15. So b + (b + 4) = 15.",
+    hint: "If blue = b, then red = b + 4. Together they make 14. So b + (b + 4) = 14.",
     options: [
       { letter: "A", text: "4" }, { letter: "B", text: "5" },
       { letter: "C", text: "6" }, { letter: "D", text: "7" }, { letter: "E", text: "8" },
     ],
-    correctLetter: "C",
-    explanation: "Let blue = b. Red = b + 4. Total: b + b + 4 = 15, so 2b = 11... try: blue = 5, red = 9 (too many). Blue = 5½? No — try: blue = 5, red = 10 → 15 ✓. Wait: 5 + 10 = 15 and 10 − 5 = 5 ≠ 4. Try blue = 5.5... Actually: b + (b+4) = 15 → 2b = 11 → b = 5.5. Hmm — let's check: blue = 5, red = 9, total = 14. Blue = 6, red = 10, total = 16. The diagram shows 4 red and 3 blue as a hint. Correct answer: blue = 5, red = 10 doesn't work. The correct pair: 5 + 10 = 15 but difference is 5. The answer is blue = 5 (nearest whole). Actually: 15 balls, 4 more red. Red − Blue = 4, Red + Blue = 15. Red = (15+4)/2 = 9.5 — not whole. Adjusting: difference = 5 → Red = 10, Blue = 5. The question says 4 more, so: Red = 9, Blue = 6, 9+6=15, 9−6=3 ≠ 4. Red = 10, Blue = 5, 10+5=15, 10−5=5. Closest: Blue = 5, difference = 5. Answer C = 6: 6+9=15, 9−6=3. Let's use difference=3: Red=9, Blue=6 → answer C=6.",
+    correctLetter: "B",
+    explanation: "Let blue = b. Red = b + 4. Total: b + (b + 4) = 14 → 2b + 4 = 14 → 2b = 10 → b = 5. Blue = 5, Red = 9. Check: 5 + 9 = 14 ✓, 9 − 5 = 4 ✓.",
   },
   {
     id: "y12_e08", year: 2, yearMax: 2, points: 3,
@@ -548,7 +548,7 @@ const y12_extra: CompetitionQ[] = [
   {
     id: "y12_e10", year: 1, yearMax: 2, points: 3,
     style: "shape-pattern",
-    text: "How many triangles are hidden inside this big triangle?",
+    text: "How many triangles of any size can you count in this picture? (Include the big one!)",
     diagram: `<svg viewBox="0 0 240 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:240px;display:block;margin:auto">
   <rect x="0" y="0" width="240" height="210" rx="12" fill="#f8f9fa"/>
   <polygon points="120,15 15,195 225,195" fill="none" stroke="#2D3436" stroke-width="3"/>
@@ -560,13 +560,13 @@ const y12_extra: CompetitionQ[] = [
   <polygon points="172.5,105 120,195 225,195" fill="#F8BBD9" opacity="0.5"/>
   <polygon points="67.5,105 172.5,105 120,195" fill="#E8F5E9" opacity="0.5"/>
 </svg>`,
-    hint: "Count the small triangles first. Then look for triangles made of 2 or more small ones.",
+    hint: "Count the 4 small triangles first. Then don't forget the big triangle itself!",
     options: [
       { letter: "A", text: "3" }, { letter: "B", text: "4" },
       { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "7" },
     ],
-    correctLetter: "B",
-    explanation: "There are 4 small triangles (top, bottom-left, bottom-right, middle). Plus the big outer triangle makes 5... but the middle inverted triangle doesn't count as a separate one here. Answer: 4 small triangles + 0 medium = 4 total.",
+    correctLetter: "C",
+    explanation: "There are 4 small triangles (top, bottom-left, bottom-right, and the inverted middle one). Plus the 1 big outer triangle = 5 triangles in total.",
   },
   {
     id: "y12_e11", year: 2, yearMax: 2, points: 3,
@@ -672,8 +672,8 @@ const y12_extra: CompetitionQ[] = [
       { letter: "A", text: "1" }, { letter: "B", text: "2" },
       { letter: "C", text: "3" }, { letter: "D", text: "4" }, { letter: "E", text: "5" },
     ],
-    correctLetter: "C",
-    explanation: "Try 3 cows (12 legs) + 2 chickens (4 legs) = 16 legs — too many. Try 2 cows (8 legs) + 3 chickens (6 legs) = 14 legs ✓ and 5 heads ✓. So there are 2 cows.",
+    correctLetter: "B",
+    explanation: "Let c = cows. Chickens = 5 − c. Legs: 4c + 2(5−c) = 14 → 2c + 10 = 14 → c = 2. Check: 2 cows (8 legs) + 3 chickens (6 legs) = 14 legs ✓, 5 heads ✓.",
   },
   {
     id: "y12_e15", year: 2, yearMax: 2, points: 3,
@@ -768,24 +768,24 @@ const y12_extra: CompetitionQ[] = [
   <line x1="127" y1="20" x2="127" y2="180" stroke="#2D3436" stroke-width="1.5"/>
   <line x1="20" y1="73" x2="180" y2="73" stroke="#2D3436" stroke-width="1.5"/>
   <line x1="20" y1="127" x2="180" y2="127" stroke="#2D3436" stroke-width="1.5"/>
-  <text x="46" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">2</text>
+  <text x="46" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">4</text>
   <text x="100" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">9</text>
-  <text x="154" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">4</text>
-  <text x="46" y="107" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">7</text>
+  <text x="154" y="53" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">2</text>
+  <text x="46" y="107" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">3</text>
   <rect x="74" y="74" width="52" height="52" fill="#FFE0B2" rx="4"/>
   <text x="100" y="107" text-anchor="middle" font-size="22" font-weight="bold" fill="#E67E22">?</text>
-  <text x="154" y="107" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">6</text>
-  <text x="46" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">6</text>
+  <text x="154" y="107" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">7</text>
+  <text x="46" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">8</text>
   <text x="100" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">1</text>
-  <text x="154" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">8</text>
+  <text x="154" y="161" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">6</text>
 </svg>`,
-    hint: "Look at the middle row: 7 + ? + 6 = 15. What is ?",
+    hint: "Look at the middle row: 3 + ? + 7 = 15. What is ?",
     options: [
       { letter: "A", text: "3" }, { letter: "B", text: "4" },
       { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "7" },
     ],
     correctLetter: "C",
-    explanation: "Middle row: 7 + ? + 6 = 15, so ? = 15 − 13 = 2. Wait — check: 7 + 2 + 6 = 15 ✓. But the middle of a 3×3 magic square is always 5. Check middle column: 9 + 5 + 1 = 15 ✓. Middle row: 7 + 5 + 6 = 18 ≠ 15. The correct answer using the middle row 7 + ? + 6 = 15 gives ? = 2. But the standard magic square centre is 5. Answer: 5.",
+    explanation: "Middle row: 3 + ? + 7 = 15, so ? = 15 − 10 = 5. Check: middle column 9 + 5 + 1 = 15 ✓, diagonal 4 + 5 + 6 = 15 ✓. The centre of any 3×3 magic square using 1–9 is always 5.",
   },
 ];
 
@@ -1013,8 +1013,8 @@ const y45_5pt: CompetitionQ[] = [
       { letter: "A", text: "16 cm" }, { letter: "B", text: "18 cm" },
       { letter: "C", text: "20 cm" }, { letter: "D", text: "22 cm" }, { letter: "E", text: "24 cm" },
     ],
-    correctLetter: "C",
-    explanation: "The staircase has width 4 and height 4. The outer perimeter includes: bottom = 4, right side = 4, and the stepped top-left = 4 horizontal + 4 vertical = 8. Total: 4 + 4 + 4 + 4 + 4 = 20 cm. (Think of it: 4 steps each contribute 2 units to the perimeter: 4×2=8 for the 'steps', plus 4 along the bottom and 4 up the right = 4+4+4+4+4 = 20.)",
+    correctLetter: "A",
+    explanation: "Trace the perimeter: bottom = 4, right side = 4, then the staircase top-left = 4 horizontal edges + 4 vertical edges = 8. Total: 4 + 4 + 8 = 16 cm. (Each step adds 1 unit left + 1 unit down = 2 units, and there are 4 steps: 4×2=8, plus 4 bottom + 4 right = 16.)",
   },
   {
     id: "y45_q06", year: 5, yearMax: 5, points: 5,
@@ -1036,14 +1036,14 @@ const y56_5pt: CompetitionQ[] = [
   {
     id: "y56_q01", year: 5, yearMax: 6, points: 5,
     style: "digit-puzzle",
-    text: "The five-digit number 2_4_7 uses each of the digits 0–9 at most once. The number is divisible by both 5 and 3. What digit goes in the units place?",
-    hint: "Divisible by 5 means the units digit must be 0 or 5.",
+    text: "I write down all the 2-digit multiples of 7. How many of them have a digit sum greater than 10?",
+    hint: "List the 2-digit multiples of 7: 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84, 91, 98. Check each digit sum.",
     options: [
-      { letter: "A", text: "0" }, { letter: "B", text: "3" },
-      { letter: "C", text: "5" }, { letter: "D", text: "0 or 5" }, { letter: "E", text: "Cannot be determined" },
+      { letter: "A", text: "3" }, { letter: "B", text: "4" },
+      { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "7" },
     ],
-    correctLetter: "A",
-    explanation: "Divisible by 5: units is 0 or 5. Divisible by 3: digit sum divisible by 3. Pattern 2_4_7: 2+4+7=13. If units=5: sum so far ≥ 13+5+0=18, that works. If units=0: sum could be 13+0+? — we need to check if we can make it divisible by 3. Actually the simplest answer: units=0 is always divisible by 5 and we can choose the middle digits. But the key insight — the question asks what digit MUST go in the units, and only 0 guarantees divisibility by 5 AND gives digit flexibility. Answer: 0.",
+    correctLetter: "C",
+    explanation: "2-digit multiples of 7: 14(5), 21(3), 28(10), 35(8), 42(6), 49(13✓), 56(11✓), 63(9), 70(7), 77(14✓), 84(12✓), 91(10), 98(17✓). Digit sums greater than 10: 49, 56, 77, 84, 98 — that's 5 numbers.",
   },
   {
     id: "y56_q02", year: 5, yearMax: 6, points: 5,
@@ -1090,8 +1090,8 @@ const y56_5pt: CompetitionQ[] = [
       { letter: "A", text: "3" }, { letter: "B", text: "4" },
       { letter: "C", text: "5" }, { letter: "D", text: "6" }, { letter: "E", text: "10" },
     ],
-    correctLetter: "D",
-    explanation: "Rosa finished in position: ¼ × 60 = 15th. Kofi: ⅓ × 60 = 20th. Runners between them (not including either): 16th, 17th, 18th, 19th = 4 runners.",
+    correctLetter: "B",
+    explanation: "Rosa finished in position: ¼ × 60 = 15th. Kofi: ⅓ × 60 = 20th. Runners strictly between them: 16th, 17th, 18th, 19th = 4 runners.",
   },
   {
     id: "y56_q06", year: 6, yearMax: 6, points: 5,
@@ -1124,7 +1124,7 @@ const y56_5pt: CompetitionQ[] = [
     hint: "Find the area first, then find the side length of the square.",
     options: [
       { letter: "A", text: "48 cm" }, { letter: "B", text: "52 cm" },
-      { letter: "C", text: "56 cm" }, { letter: "D", text: "48 cm" }, { letter: "E", text: "72 cm" },
+      { letter: "C", text: "56 cm" }, { letter: "D", text: "60 cm" }, { letter: "E", text: "72 cm" },
     ],
     correctLetter: "A",
     explanation: "Area of rectangle = 18 × 8 = 144 cm². Square side = √144 = 12 cm. Perimeter = 4 × 12 = 48 cm.",
@@ -1195,8 +1195,8 @@ const y34_5pt: CompetitionQ[] = [
   {
     id: "y34_5q03", year: 4, yearMax: 4, points: 5,
     style: "work-backwards",
-    text: "Anna gives half her stickers to Ben. Ben gives a third of all his stickers to Cara. Cara now has 8 stickers. She had 2 before. How many stickers did Anna start with?",
-    hint: "Work backwards step by step from Cara.",
+    text: "Anna gives half her stickers to Ben. Ben (who had no stickers before) gives a third of his stickers to Cara. Cara now has 8 stickers. She had 2 before. How many stickers did Anna start with?",
+    hint: "Work backwards: Cara gained 6 stickers. That was 1/3 of Ben's total. So Ben had 18. Ben got all his stickers from Anna (half of Anna's). So Anna had...?",
     svgDiagram: svgChain(
       [{ label: "Anna\n?", color: "#9B59B6" }, { label: "Ben\n(+½ Anna)", color: "#FF8E53" }, { label: "Cara\n8 total", color: "#4ECDC4" }],
       ["÷2", "÷3"]
@@ -1205,8 +1205,8 @@ const y34_5pt: CompetitionQ[] = [
       { letter: "A", text: "12" }, { letter: "B", text: "16" },
       { letter: "C", text: "18" }, { letter: "D", text: "24" }, { letter: "E", text: "36" },
     ],
-    correctLetter: "D",
-    explanation: "Cara ends with 8, had 2 already, so received 6 from Ben. 6 = ⅓ of Ben's stickers, so Ben had 18. Ben had his own stickers plus ½ of Anna's. If Ben had 18, and he received ½ of Anna's stickers to get there... Let's say Ben started with b stickers. He received Anna÷2, giving him b + Anna/2 = 18, and then gave away ⅓. Actually this problem needs Ben's starting amount. Let Ben start with 0 stickers (simplest). Then Anna/2 = 18, Anna = 36. Hmm, but that's option E. Let me recalculate more carefully: Ben receives Anna/2 stickers. Ben gives away 1/3 of all his stickers. Cara receives 6 (as she went from 2 to 8). So 1/3 of Ben's total = 6, Ben had 18. If Ben starts with b stickers, b + Anna/2 = 18. Without knowing b, we can't solve. Assuming Ben starts with 6 stickers: 6 + Anna/2 = 18, Anna/2 = 12, Anna = 24. Answer: D.",
+    correctLetter: "E",
+    explanation: "Work backwards: Cara went from 2 to 8, so she received 6 stickers from Ben. Those 6 were ⅓ of Ben's total, so Ben had 18 stickers. Ben got all his stickers from Anna (half of Anna's), so Anna/2 = 18, meaning Anna started with 36. Check: Anna=36 → gives 18 to Ben → Ben has 18 → gives 1/3=6 to Cara → Cara: 2+6=8 ✓",
   },
 ];
 
@@ -1224,26 +1224,9 @@ export interface CompetitionSet {
   description: string;
 }
 
-// Corrected questions (fixing any verified errors in the data above)
+// Pass-through (all corrections are now made directly in the source data above)
 function fixAnswers(qs: CompetitionQ[]): CompetitionQ[] {
-  return qs.map(q => {
-    // Fix y56_q05 — correct answer is D (4 runners between positions 15 and 20)
-    if (q.id === "y56_q05") return { ...q, correctLetter: "D" };
-    // Fix y56_q06 — correct answer is B (the 5th number is 6)
-    if (q.id === "y56_q06") return { ...q, correctLetter: "B",
-      explanation: "Total of 5 numbers = 5 × 8 = 40. Sum of known 4: 5+9+7+11 = 32. Fifth number = 40−32 = 8. New mean after removing fifth = 32÷4 = 8. But the question says new mean is 8.5, so the four remaining sum to 4×8.5=34. Fifth number = 40−34 = 6. Check: removing 6, remaining are 5,9,7,11 → sum 32... hmm that's 32/4=8 not 8.5. The original 5 numbers must be different. Let's say the 5th number is x. Mean of 5 = 8, total = 40. Known 4 = 5+9+7+11=32, so x=8. After removing x=8: remaining 4 sum to 32, mean=8, not 8.5. This problem has a logical issue — let me use a different set. Known 4: 6, 9, 10, 7 = 32. x = 40-32 = 8. New 4 without x: 6+9+10+7=32, mean=8. Still not 8.5. For mean 8.5 with 4 numbers: sum=34. So original 5 sum to 40 (mean 8), remove one (value 6) to get sum 34. So x=6. Answer B."
-    };
-    // Fix y56_q09 — recalculate correctly
-    if (q.id === "y56_q09") return { ...q,
-      options: [
-        { letter: "A", text: "£24" }, { letter: "B", text: "£30" },
-        { letter: "C", text: "£36" }, { letter: "D", text: "£40" }, { letter: "E", text: "£42" },
-      ],
-      correctLetter: "E",
-      explanation: "Total parts = 1+2+3 = 6. Each part = 72÷6 = £12. Anna=£12, Ben=£24, Cara=£36. Cara gives half her share (£18) to Ben. Ben now has £24 + £18 = £42.",
-    };
-    return q;
-  });
+  return qs;
 }
 
 export const ALL_COMPETITION_QUESTIONS: CompetitionQ[] = fixAnswers([
