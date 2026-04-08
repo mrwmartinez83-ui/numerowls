@@ -747,9 +747,9 @@ const shapesQuestions: Question[] = [
   },
   {
     id: "shp_comp_03", skill: "shapes", year: 4, difficulty: 3, type: "mcq",
-    text: "A rectangle has a perimeter of 40 cm. Its length is twice its width. What is the area?",
-    options: ["100 cm²", "120 cm²", "128 cm²", "150 cm²", "200 cm²"],
-    answer: "128 cm²", explanation: "2(2w + w) = 40, so 6w = 40, w = 40/6 ≈ 6.67. Actually: 2(l+w)=40, l=2w, so 2(3w)=40, w=40/6. Hmm — let me use whole numbers: w=6 2/3 doesn't work. Correct: 2(2w+w)=40 → w=40/6. Nearest: w=6.67, l=13.33, area=88.9. Closest answer is 128 cm²... Let me recalculate: 2(l+w)=40, l=2w: 2(2w+w)=40, 6w=40, w=6.67. This gives non-integer. Better version: perimeter 36, l=2w: 2(3w)=36, w=6, l=12, area=72.", points: 4,
+    text: "A rectangle has a perimeter of 36 cm. Its length is twice its width. What is the area?",
+    options: ["48 cm²", "60 cm²", "72 cm²", "84 cm²", "96 cm²"],
+    answer: "72 cm²", explanation: "2(l+w)=36, l=2w. So 2(3w)=36, 6w=36, w=6 cm, l=12 cm. Area = 12 × 6 = 72 cm².", points: 4,
   },
   {
     id: "shp_comp_04", skill: "shapes", year: 2, difficulty: 2, type: "mcq",
@@ -917,8 +917,8 @@ const patternsQuestions: Question[] = [
   {
     id: "pat_comp_07", skill: "patterns", year: 4, difficulty: 3, type: "mcq",
     text: "In a sequence, every term after the second is the sum of the two terms before it. If the first two terms are 2 and 5, what is the 6th term?",
-    options: ["29", "34", "39", "44", "49"],
-    answer: "39", explanation: "2, 5, 7, 12, 19, 31... wait: 2, 5, 7, 12, 19, 31. The 6th term is 31. Hmm let me recount: term1=2, term2=5, term3=7, term4=12, term5=19, term6=31.", points: 5,
+    options: ["21", "26", "31", "36", "41"],
+    answer: "31", explanation: "term1=2, term2=5, term3=2+5=7, term4=5+7=12, term5=7+12=19, term6=12+19=31.", points: 5,
   },
 ];
 
@@ -1019,9 +1019,9 @@ const logicQuestions: Question[] = [
   },
   {
     id: "log_comp_02", skill: "logic", year: 3, difficulty: 3, type: "mcq",
-    text: "A number is both a multiple of 3 and a factor of 36. It is greater than 6 and less than 18. What is the number?",
-    options: ["9", "10", "11", "12", "15"],
-    answer: "12", explanation: "Factors of 36 greater than 6 and less than 18: 9, 12, 18. Of these, multiples of 3: 9, 12. Both qualify — but 9 is also a factor. Both 9 and 12 work. 12 is the only one that is also a factor of 36 and a multiple of 4... The question as stated has two answers. Best answer: 12.", points: 4,
+    text: "A number is both a multiple of 4 and a factor of 36. It is greater than 6 and less than 18. What is the number?",
+    options: ["8", "9", "10", "12", "16"],
+    answer: "12", explanation: "Factors of 36 between 6 and 18: 9, 12. Multiples of 4 in that range: 8, 12, 16. The only number that is both a factor of 36 AND a multiple of 4 is 12.", points: 4,
   },
   {
     id: "log_comp_03", skill: "logic", year: 2, difficulty: 2, type: "mcq",
@@ -1079,9 +1079,9 @@ const logicQuestions: Question[] = [
   },
   {
     id: "log_comp_12", skill: "logic", year: 4, difficulty: 3, type: "mcq",
-    text: "The sum of the ages of a mother and her daughter is 46. In 4 years' time, the mother will be 3 times as old as the daughter. How old is the daughter now?",
-    options: ["9", "10", "11", "12", "13"],
-    answer: "9", explanation: "Let daughter = d, mother = 46−d. In 4 years: (46−d+4) = 3(d+4). 50−d = 3d+12. 38 = 4d. d = 9.5 ≈ 9 (rounding). Best answer: 9.", points: 5,
+    text: "The sum of the ages of a mother and her daughter is 44. In 4 years' time, the mother will be 3 times as old as the daughter. How old is the daughter now?",
+    options: ["8", "9", "10", "11", "12"],
+    answer: "9", explanation: "Let daughter = d, mother = 44−d. In 4 years: (44−d+4) = 3(d+4). 48−d = 3d+12. 36 = 4d. d = 9. Mother = 35. Check: in 4 years, daughter=13, mother=39=3×13 ✓.", points: 5,
   },
   {
     id: "log_comp_13", skill: "logic", year: 3, difficulty: 2, type: "mcq",
@@ -1115,9 +1115,9 @@ const puzzleQuestions: Question[] = [
   },
   {
     id: "puz_y1_03", skill: "puzzles", year: 1, difficulty: 2, type: "puzzle",
-    text: "🐱 + 🐱 = 8\n🐱 + 🐶 = 11\n🐶 = ?",
+    text: "🐱 + 🐱 = 8\n🐱 + 🐶 = 7\n🐶 = ?",
     options: ["2", "3", "4", "5"],
-    answer: "3", explanation: "🐱 = 4 (since 4+4=8). 4 + 🐶 = 11, so 🐶 = 7. Wait: 4 + 🐶 = 11 → 🐶 = 7. But 7 isn't in the options. Let me fix: 🐱+🐱=8 → 🐱=4. 🐱+🐶=7 → 🐶=3.", points: 3,
+    answer: "3", explanation: "🐱 + 🐱 = 8, so 🐱 = 4. Then 4 + 🐶 = 7, so 🐶 = 3.", points: 3,
   },
   {
     id: "puz_y2_01", skill: "puzzles", year: 2, difficulty: 1, type: "puzzle",
@@ -1135,7 +1135,7 @@ const puzzleQuestions: Question[] = [
     id: "puz_y2_03", skill: "puzzles", year: 2, difficulty: 2, type: "puzzle",
     text: "🍕 + 🍕 + 🍕 = 18\n🍕 + 🍦 + 🍦 = 14\n🍦 = ?",
     options: ["2", "3", "4", "5"],
-    answer: "3", explanation: "🍕 = 6. 6 + 2🍦 = 14. 2🍦 = 8. 🍦 = 4. Wait: 6 + 2×4=14 ✓. Answer is 4.", points: 3,
+    answer: "4", explanation: "🍕 + 🍕 + 🍕 = 18, so 🍕 = 6. Then 6 + 🍦 + 🍦 = 14, so 2🍦 = 8, 🍦 = 4.", points: 3,
   },
   {
     id: "puz_y2_04", skill: "puzzles", year: 2, difficulty: 2, type: "puzzle",
@@ -1193,15 +1193,15 @@ const puzzleQuestions: Question[] = [
   },
   {
     id: "puz_y5_02", skill: "puzzles", year: 5, difficulty: 3, type: "puzzle",
-    text: "🐉 + 🐉 + 🔮 + 🔮 = 30\n🐉 + 🔮 = 13\n🐉 − 🔮 = ?",
+    text: "🐉 + 🐉 + 🔮 = 22\n🐉 + 🔮 = 14\n🐉 − 🔮 = ?",
     options: ["2", "3", "4", "5"],
-    answer: "4", explanation: "2D+2M=30 → D+M=15. But D+M=13... contradiction. Let me fix: 🐉+🐉+🔮=30 → 2D+M=30. D+M=13 → D=30−13=17... Let me use: 🐉+🐉+🔮=26, 🐉+🔮=14. 2D+M=26, D+M=14. Subtract: D=12, M=2. D−M=10. Better: 2D+M=19, D+M=13. D=6, M=7. D−M=−1. Let me just set: 🐉+🐉+🔮=25, 🐉+🔮=13. 2D+M=25, D+M=13. D=12, M=1. D−M=11. Use: 2D+M=22, D+M=14. D=8, M=6. D−M=2.", points: 5,
+    answer: "2", explanation: "2🐉 + 🔮 = 22 and 🐉 + 🔮 = 14. Subtract: 🐉 = 8. Then 🔮 = 14 − 8 = 6. 🐉 − 🔮 = 8 − 6 = 2.", points: 5,
   },
   {
     id: "puz_y6_01", skill: "puzzles", year: 6, difficulty: 3, type: "puzzle",
-    text: "🏰 + 🏰 + 🗡️ = 35\n🏰 + 🗡️ + 🗡️ = 31\n🏰 × 🗡️ = ?",
+    text: "🏰 + 🏰 + 🗡️ = 32\n🏰 + 🗡️ + 🗡️ = 28\n🏰 × 🗡️ = ?",
     options: ["72", "84", "96", "108"],
-    answer: "96", explanation: "2C+S=35, C+2S=31. Subtract: C−S=4, C=S+4. Sub: 2(S+4)+S=35 → 3S=27 → S=9. C=13. C×S=117... Let me fix: 2C+S=29, C+2S=25. C−S=4, C=S+4. 3S+8=29 → S=7. C=11. C×S=77. Use: 2C+S=27, C+2S=24. C−S=3, C=S+3. 3S+6=27 → S=7. C=10. C×S=70. Use: 2C+S=30, C+2S=27. C−S=3. 3S+6=30 → S=8. C=11. C×S=88. Use: 2C+S=32, C+2S=28. C−S=4. 3S+8=32 → S=8. C=12. C×S=96 ✓", points: 5,
+    answer: "96", explanation: "2🏰 + 🗡️ = 32 and 🏰 + 2🗡️ = 28. Subtract: 🏰 − 🗡️ = 4. Add equations: 3🏰 + 3🗡️ = 60 → 🏰 + 🗡️ = 20. So 🏰 = 12, 🗡️ = 8. 🏰 × 🗡️ = 12 × 8 = 96.", points: 5,
   },
   {
     id: "puz_comp_01", skill: "puzzles", year: 2, difficulty: 2, type: "puzzle",
